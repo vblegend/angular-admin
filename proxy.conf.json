@@ -1,0 +1,13 @@
+{
+  "/service/*": {
+    "target": "http://localhost:8000",
+    "pathRewrite": {
+      "^/service": ""
+    },
+    "secure": false
+  },
+  "/api/*": {
+    "target": "http://localhost:8000",
+    "secure": false
+  }
+}

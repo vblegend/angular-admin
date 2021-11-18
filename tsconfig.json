@@ -1,0 +1,33 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "importHelpers": true,
+    "module": "es2020",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "target": "es2015",
+    // 允许编译javascript文件
+    "allowJs": true,
+    // 报告.js文件中的错误。与allowJs一起使用
+    "checkJs": false,
+    // 跳过默认库检查
+    "skipLibCheck": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "./typings.d.ts"
+    ],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "plugins": [{
+      "name": "tslint-language-service"
+    }]
+  },
+  "exclude": [
+
+  ],
+}

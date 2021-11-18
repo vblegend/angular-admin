@@ -1,0 +1,20 @@
+<nb-layout>
+  <nb-layout-column class="background">
+  </nb-layout-column>
+  <nb-layout-column>
+    <div class="pos-center">
+      <label class="mb-30 title-label no-select ts-5">Administrator System</label>
+      <form class="login-form">
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label no-select ts-2">enter your password</label>
+          <input class="form-control pwd-imput" name="password" type="password" nbInput fullWidth
+            id="exampleInputPassword1" [(ngModel)]="password" placeholder="Password">
+        </div>
+        <button class="btn btn-primary" type="submit" (click)="login()"  [nbSpinner]="loadingWait" nbSpinnerStatus="primary" nbButton status="danger">
+          login
+          <!-- <nb-icon icon="chaosong" pack="grace" ></nb-icon> -->
+        </button>
+      </form>
+    </div>
+  </nb-layout-column>
+</nb-layout>
