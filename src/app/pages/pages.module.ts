@@ -1,25 +1,27 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonModule, NbCardModule, NbIconModule, NbMenuModule } from '@nebular/theme';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
 import { PagesRoutingModule } from './pages-routing.module';
-import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { ButtonsComponent } from './buttons/buttons.component';
 
 
 @NgModule({
   imports: [
-    PagesRoutingModule,
+    NbIconModule,
+    NbCardModule,
+    NbActionsModule,
+    NbButtonModule,
     ThemeModule,
     NbMenuModule,
     DashboardModule,
-    ECommerceModule,
-    MiscellaneousModule
+    PagesRoutingModule,
   ],
   declarations: [
-    PagesComponent
+    PagesComponent,
+    ButtonsComponent,
   ],
   providers: [
     // otherProviders...

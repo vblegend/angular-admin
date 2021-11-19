@@ -44,6 +44,7 @@ import { TranslatorPipe } from './pipes/translator.pipe';
 import { DocumentTitleService } from './services/document.title.service';
 import { NetWorkService } from './services/network.sevrice';
 import { Exception } from './common/exception';
+import { NotFoundComponent } from './components/notfound/not-found.component';
 
 
 const PIPES = [
@@ -71,6 +72,7 @@ const SERVICES = [
  */
 const EXPORT_COMPONENTS = [
   LoginPageComponent,
+  NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
 ];

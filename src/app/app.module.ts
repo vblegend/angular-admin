@@ -12,7 +12,7 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
-import { NbDialogService, NbIconLibraries, NbThemeService } from '@nebular/theme';
+import { NbDialogService, NbIconLibraries, NbIconModule, NbThemeService } from '@nebular/theme';
 
 
 import {
