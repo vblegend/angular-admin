@@ -20,6 +20,6 @@ if (environment.production) {
 registerLocaleData(zh);
 
 platformBrowserDynamic().bootstrapModule(AppModule, {
-  providers: [{provide: LOCALE_ID, useValue: 'zh-cn' }]
+
 })
 .catch(err => console.error(err));

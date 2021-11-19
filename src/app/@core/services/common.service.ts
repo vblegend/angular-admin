@@ -21,7 +21,9 @@ export class CommonService {
         this._sessionManager = new SessionManager();
     }
 
-
+    public get tickCount(): number {
+        return (typeof performance === 'undefined' ? Date : performance).now();
+    }
 
 
     /**

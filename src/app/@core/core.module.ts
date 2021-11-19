@@ -5,10 +5,8 @@ import { NbAuthModule } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 
 import {
-  AnalyticsService,
   LayoutService,
   PlayerService,
-  SeoService,
   StateService,
 } from './utils';
 
@@ -44,6 +42,8 @@ import { CommonService } from './services/common.service';
 import { DefaultPipe } from './pipes/default.pipe';
 import { TranslatorPipe } from './pipes/translator.pipe';
 import { DocumentTitleService } from './services/document.title.service';
+import { NetWorkService } from './services/network.sevrice';
+import { Exception } from './common/exception';
 
 
 const PIPES = [
@@ -62,7 +62,8 @@ const SERVICES = [
   DialogService,
   AccountService,
   EarningService,
-  CommonService
+  CommonService,
+  NetWorkService
 ];
 
 /**
@@ -99,10 +100,8 @@ export const NB_CORE_PROVIDERS = [
   { provide: NbRoleProvider, useClass: GuestRoleProvider },
   ...NbAuthModule.forRoot().providers,
   NbSecurityModule.forRoot({ accessControl: { guest: { view: '*' } } }).providers,
-  AnalyticsService,
   LayoutService,
   PlayerService,
-  SeoService,
   StateService
 ];
 
@@ -144,7 +143,7 @@ export const NB_CORE_PROVIDERS = [
 })
 
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, documentTitleService: DocumentTitleService) {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
     // documentTitleService.globalSuffix = { value: 'Hello ', needsTranslator: false };
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
     // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
@@ -152,10 +151,35 @@ export class CoreModule {
     documentTitleService.register();
 
 
+    this.test();
+
+
+
+
     if (parentModule) {
       throw new Error(`${'CoreModule'} has already been loaded. Import Core modules in the AppModule only.`);
     }
+
   }
+
+
+
+  private async test() {
+    try {
+      await this.networkService.send('dasds', '12345', 10000);
+    } catch (e) {
+      if (e instanceof Exception) {
+        console.error(e.toString());
+      } else {
+        console.error(e);
+      }
+    }
+  }
+
+
+
+
+
 
   public static forRoot(): ModuleWithProviders<CoreModule> {
     return {
