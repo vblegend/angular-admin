@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@akveo/ng2-completer": "^9.0.1",
-    "@angular/animations": "^13.0.2",
+    "@angular/animations": "^12.1.0",
     "@angular/cdk": "13.0.2",
     "@angular/common": "^13.0.1",
     "@angular/compiler": "^13.0.1",
@@ -32,7 +32,6 @@
     "echarts": "^5.2.2",
     "intl": "1.2.5",
     "ionicons": "^6.0.0",
-    "ng2-smart-table": "^1.7.2",
     "ngx-echarts": "^8.0.0",
     "normalize.css": "8.0.1",
     "roboto-fontface": "0.10.0",
