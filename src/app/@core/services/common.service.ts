@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, RouterState, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { map, filter } from "rxjs/operators";
-import { NbThemeService, NbToastrConfig, NbToastrService } from '@nebular/theme';
+
 import { SessionManager } from '../common/sessionmanager';
 import { RouteTitle } from '../models/RouteTitle';
 
@@ -15,8 +15,7 @@ export class CommonService {
 
     constructor(private router: Router,
         public activatedRoute: ActivatedRoute,
-        public toastrService: NbToastrService,
-        public themeService: NbThemeService,
+
         public titleService: Title) {
         this._sessionManager = new SessionManager();
     }
@@ -71,8 +70,8 @@ export class CommonService {
      * @param title 
      * @param userConfig 
      */
-    public toastr(message: any, title?: any, userConfig?: Partial<NbToastrConfig>): void {
-        this.toastrService.show(message, title, userConfig)
+    public toastr(message: any, title?: any): void {
+
     }
 
 }

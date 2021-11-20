@@ -3,12 +3,12 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from
 import { map, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NbAuthService } from '@nebular/auth';
+// import { NbAuthService } from '@nebular/auth';
 import { CommonService } from './common.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private authService: NbAuthService, public commonService: CommonService) {
+  constructor(public commonService: CommonService) {
 
   }
 

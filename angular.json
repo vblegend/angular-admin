@@ -20,16 +20,19 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/favicon.png"
+              "src/favicon.png",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/@ant-design/icons-angular/src/inline-svg/",
+                "output": "/assets/"
+              }
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
-
               "src/app/@core/styles/style.scss",
               "src/app/@theme/styles/styles.scss",
-              "node_modules/xterm/css/xterm.css",
-              "node_modules/ionicons/scss/ionicons.scss"
+              "node_modules/xterm/css/xterm.css"
             ],
             "scripts": [
               "node_modules/echarts/dist/echarts.min.js",
@@ -52,10 +55,18 @@
           },
           "configurations": {
             "production": {
-              "budgets": [{
-                "type": "anyComponentStyle",
-                "maximumWarning": "6kb"
-              }],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -69,18 +80,9 @@
               }]
             },
             "development": {
-              "optimization": true,
-              "namedChunks": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "aot": true,
-              "sourceMap": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "3mb",
-                "maximumError": "5mb"
-              }]
+              "optimization": false,
+              "buildOptimizer": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -89,7 +91,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "defaultConfiguration": "development",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "ngx-admin-demo:build:development"
           },
           "configurations": {
             "production": {

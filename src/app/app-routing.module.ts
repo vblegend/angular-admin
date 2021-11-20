@@ -1,42 +1,20 @@
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
-import { AuthGuardService } from './@core/services/auth.guard.service';
-import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 
+const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
 
-
-export const routes: Routes = [
-  {
-    data: { title: "" },
-    path: 'pages',
-    title: { value: 'pages' },
-    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
-    canActivate: [AuthGuardService]
-  },
   {
     path: 'login',
-    title: { value: 'login' },
+    title: { value: 'login', needsTranslator: true },
     component: LoginPageComponent
   },
-  { path: 'pages', redirectTo: 'pages', pathMatch: 'full' },
-  {
-    path: 'notfound',
-    title: { value: 'not found' },
-    component: NotFoundComponent
-  },
-  { path: '**', redirectTo: 'notfound' }
-
-
+  { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) }
 ];
 
-const config: ExtraOptions = {
-  useHash: false
-};
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes, config)],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
-import { NbThemeService, NbWindowRef } from '@nebular/theme';
+
 import { StringNameValue } from '../../../../../typings';
 
 
@@ -40,13 +40,13 @@ export class ThemeSettingComponent implements OnInit, OnDestroy {
       name: 'Material Dark'
     }
   ];
-  public constructor(public windowRef: NbWindowRef, public themeService: NbThemeService) {
+  public constructor() {
 
   }
 
   public changeTheme(themeName: string): void {
-    this.themeService.changeTheme(themeName);
-    this.windowRef.close();
+    // this.themeService.changeTheme(themeName);
+    // this.windowRef.close();
   }
 
 

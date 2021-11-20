@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild,ComponentFactoryResolver } from '@angular/core';
-import { NbWindowComponent, NbWindowRef } from '@nebular/theme';
+
 import { Terminal } from 'xterm';
 import { AttachAddon } from 'xterm-addon-attach';
 
@@ -16,7 +16,7 @@ export class TerminalComponent  implements OnInit, OnDestroy {
   @ViewChild('TerminalParent', { static: true }) public terminalDiv: ElementRef;
   public term: Terminal;
   private command: string;
-  public constructor(public windowRef: NbWindowRef) {
+  public constructor() {
    
   }
 
