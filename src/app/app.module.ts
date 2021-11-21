@@ -5,10 +5,9 @@
  */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
-// import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
@@ -24,8 +23,9 @@ import { FormsModule } from '@angular/forms';
 import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { WelcomeModule } from './pages/welcome/welcome.module';
-
+import { BootstrapService } from './@core/services/bootstrap.service';
+import { NetWorkService } from './@core/services/network.sevrice';
+import { PagesModule } from './pages/pages.module';
 registerLocaleData(zh);
 
 
@@ -43,25 +43,27 @@ registerLocaleData(zh);
     FormsModule,
     IconsProviderModule,
     NzLayoutModule,
-    NzMenuModule,
-    WelcomeModule
+    NzMenuModule
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'zh-CN' }, // replace "de-at" with your locale
-    { provide: NZ_I18N, useValue: zh_CN }
+    { provide: NZ_I18N, useValue: zh_CN },
+
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
 
+  constructor(bootstrapService: BootstrapService, netWorkService: NetWorkService) {
+    bootstrapService.loadingElement = document.getElementById('global-spinner');
+
+    netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
+    netWorkService.connection();
 
 
-  constructor() {
     // this.iconLibraries.registerFontPack('ion', { iconClassPrefix: 'ion' });
     // this.iconLibraries.registerFontPack('grace', { packClass: 'graceicon', iconClassPrefix: 'grace' });
     // this.iconLibraries.setDefaultPack('grace');
     // this.themeService.changeTheme('dark');
   }
-
-
 }

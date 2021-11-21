@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 // import { NbAuthModule } from '@nebular/auth';
@@ -11,9 +11,8 @@ import { DialogService } from './services/dialog.service';
 import { AccountService } from './services/account.service';
 import { EarningService } from './services/earning.service';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-// import { ThemeModule } from '../@theme/theme.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { LoginPageComponent } from './components/login/loginpage.component';
@@ -29,6 +28,19 @@ import { NetWorkService } from './services/network.sevrice';
 import { Exception } from './common/exception';
 import { NotFoundComponent } from './components/notfound/not-found.component';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { ThemeService } from './services/theme.service';
+import { BootstrapService } from './services/bootstrap.service';
+import { ErrorComponent } from './components/error/error.component';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { SidebarService } from './services/sidebar.service';
+
 
 
 const PIPES = [
@@ -48,7 +60,10 @@ const SERVICES = [
   AccountService,
   EarningService,
   CommonService,
-  NetWorkService
+  NetWorkService,
+  ThemeService,
+  BootstrapService,
+  SidebarService
 ];
 
 /**
@@ -59,6 +74,7 @@ const EXPORT_COMPONENTS = [
   NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
+  ErrorComponent
 ];
 
 
@@ -94,9 +110,18 @@ export const NB_CORE_PROVIDERS = [
     // NbAlertModule,
     // NbInputModule,
     // NbButtonModule,
+    NzIconModule,
+    NzMenuModule,
     NzLayoutModule,
+    NzGridModule,
+    NzInputModule,
     RouterModule,
     FormsModule,
+    NzSpaceModule,
+    NzButtonModule,
+    NzFormModule,
+    ReactiveFormsModule,
+    NzMessageModule,
     // ThemeModule,
     // NbCardModule,
     // NbUserModule,
@@ -114,14 +139,16 @@ export const NB_CORE_PROVIDERS = [
   ],
   exports: [
     // NbAuthModule
+    ...EXPORT_COMPONENTS,
   ],
   declarations: [
-    ...EXPORT_COMPONENTS
+    ...EXPORT_COMPONENTS,
+
   ],
 })
 
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
     // documentTitleService.globalSuffix = { value: 'Hello ', needsTranslator: false };
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
     // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
@@ -166,6 +193,18 @@ export class CoreModule {
         ...NB_CORE_PROVIDERS,
         ...SERVICES,
         ...PIPES,
+        {
+          provide: APP_BOOTSTRAP_LISTENER,
+          useFactory: BootstrapService.BootstrapFactory,
+          deps: [BootstrapService],
+          multi: true
+        },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: BootstrapService.InitializerFactory,
+          deps: [BootstrapService],
+          multi: true
+        }
       ]
     };
   }

@@ -1,0 +1,33 @@
+:host {
+  height: 64px;
+  line-height: 64px;
+  display: flex;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+nz-header{
+  width: 100%;
+  padding: 0px;
+}
+
+
+
+.header-trigger {
+  height: 64px;
+  padding: 20px 24px;
+
+  font-size: 20px;
+  cursor: pointer;
+  transition: all .3s, padding 0s;
+
+}
+
+.action {
+  vertical-align: middle;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}

@@ -1,18 +1,73 @@
-@import '../@theme/styles/themes';
-
-@include nb-install-component() {
-  ::ng-deep router-outlet + * {
-    display: block;
-    animation: fade 1s;
-
-    @keyframes fade {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-  }
+:host {
+  width: 100%;
+  display: flex;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+.app-layout {
+  height: 100vh;
+}
+
+.inner-content {
+  padding: 24px;
+  background: #fff;
+  height: 100%;
+}
+
+nz-content {
+  margin: 0px;
+}
+
+app-header {
+  padding: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+nz-sider {
+  min-height: 100vh;
+  max-height: 100vh;
+  width: 250px;
+}
+
+.sidebar-form {
+  overflow-y: auto;
+  height: calc(100vh - 64px);
+}
+
+.sidebar-form::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+
+.sidebar-form::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: #535353;
+}
+
+.sidebar-form::-webkit-scrollbar-thumb:hover {
+  /*滚动条里面小方块*/
+  background: #157DCF;
+}
+
+.sidebar-form::-webkit-scrollbar-thumb:active {
+  /*滚动条里面小方块*/
+  background: #141414;
+}
+
+
+
+.sidebar-form::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+
+}
+
+

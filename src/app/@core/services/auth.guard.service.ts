@@ -5,10 +5,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 // import { NbAuthService } from '@nebular/auth';
 import { CommonService } from './common.service';
+import { NetWorkService } from './network.sevrice';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(public commonService: CommonService) {
+  constructor(public commonService: CommonService, private netWorkService: NetWorkService) {
 
   }
 
@@ -25,11 +26,23 @@ export class AuthGuardService implements CanActivate {
     //   );
 
     const userCookie = this.commonService.session.get<{ userName: string }>("user");
-    if (userCookie && userCookie.userName) {
-      return true;
-    } else {
+    if (!this.verifyLoginState(userCookie) || !this.verifyNetWorkState()) {
       this.commonService.navigateByUrl('/login');
       return false;
+    } else {
+      return true;
     }
   }
+
+
+  private verifyNetWorkState(): boolean {
+    return this.netWorkService.isConnect;
+  }
+
+  private verifyLoginState(state: { userName: string }): boolean {
+    return state != null && state.userName != null;
+  }
+
+
+
 }

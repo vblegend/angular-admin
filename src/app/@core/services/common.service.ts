@@ -5,6 +5,8 @@ import { map, filter } from "rxjs/operators";
 
 import { SessionManager } from '../common/sessionmanager';
 import { RouteTitle } from '../models/RouteTitle';
+import { NzMessageDataOptions, NzMessageService } from 'ng-zorro-antd/message';
+import { MessageType } from '../common/messagetype';
 
 @Injectable({
     providedIn: 'root'
@@ -15,7 +17,7 @@ export class CommonService {
 
     constructor(private router: Router,
         public activatedRoute: ActivatedRoute,
-
+        private message: NzMessageService,
         public titleService: Title) {
         this._sessionManager = new SessionManager();
     }
@@ -64,14 +66,20 @@ export class CommonService {
     }
 
 
-    /**
-     * show toastr dialog
-     * @param message 
-     * @param title 
-     * @param userConfig 
-     */
-    public toastr(message: any, title?: any): void {
 
+
+    /**
+     * show global message
+     * @param message text message
+     * @param type Message Type
+     * @param options Message Data Options
+     */
+    public showMessage(message: string, type: MessageType, options?: NzMessageDataOptions): void {
+        this.message.create(type, message, options);
     }
+
+
+
+
 
 }

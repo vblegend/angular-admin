@@ -1,8 +1,13 @@
 .flex-centered {
+  padding: 0;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  height: 200px;
   margin: auto;
-}
-nb-card-body {
-  display: flex;
+  text-align: center
 }
 
 .title {

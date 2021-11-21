@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'ngx-not-found',
@@ -7,11 +9,11 @@ import { Component } from '@angular/core';
 })
 export class NotFoundComponent {
 
-  constructor() {
+  constructor(private _location: Location) {
 
   }
 
-  goToHome() {
-
+  goBack() {
+    this._location.back();
   }
 }

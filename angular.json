@@ -7,6 +7,11 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -16,7 +21,9 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles/themes"]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -31,8 +38,22 @@
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "src/app/@core/styles/style.scss",
-              "src/app/@theme/styles/styles.scss",
-              "node_modules/xterm/css/xterm.css"
+              "node_modules/xterm/css/xterm.css",
+              {
+                "input": "src/styles/default.scss",
+                "bundleName": "theme-default",
+                "inject": true
+              },
+              {
+                "input": "src/styles/white.scss",
+                "bundleName": "theme-white",
+                "inject": false
+              },
+              {
+                "input": "src/styles/dark.scss",
+                "bundleName": "theme-dark",
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/echarts/dist/echarts.min.js",
@@ -53,10 +74,10 @@
             "optimization": false,
             "namedChunks": true
           },
+
           "configurations": {
             "production": {
-              "budgets": [
-                {
+              "budgets": [{
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"

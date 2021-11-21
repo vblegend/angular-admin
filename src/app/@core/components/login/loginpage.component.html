@@ -4,16 +4,19 @@
   <nz-layout>
     <div class="pos-center">
       <label class="mb-30 title-label no-select ts-5">Administrator System</label>
-      <form class="login-form">
-        <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label no-select ts-2">enter your password</label>
-          <input class="form-control pwd-imput" name="password" type="password" nbInput fullWidth
-            id="exampleInputPassword1" [(ngModel)]="password" placeholder="Password">
-        </div>
-        <button class="btn btn-primary" type="submit" (click)="login()" status="danger">
-          login
-          <!-- <nb-icon icon="chaosong" pack="grace" ></nb-icon> -->
-        </button>
+      <form nz-form  class="login-form">
+        <label for="exampleInputPassword1" class="form-label no-select ts-2">enter your password</label>
+        <nz-form-item>
+          <nz-space>
+            <input *nzSpaceItem nz-input [nzSize]="'default'" class="pwd-imput" name="password" type="password"
+              id="exampleInputPassword1" [(ngModel)]="password" placeholder="Password">
+            <button *nzSpaceItem nz-button [nzType]="'danger'" [nzSize]="'default'" [nzLoading]="loadingWait" type="submit" (click)="login()">
+              <i nz-icon nzType="poweroff"></i>
+              login
+            </button>
+          </nz-space>
+        </nz-form-item>
+
       </form>
     </div>
   </nz-layout>

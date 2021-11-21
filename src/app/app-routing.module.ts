@@ -1,16 +1,44 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ErrorComponent } from './@core/components/error/error.component';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
+import { NotFoundComponent } from './@core/components/notfound/not-found.component';
+import { AuthGuardService } from './@core/services/auth.guard.service';
+import { PagesComponent } from './pages/pages.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/welcome' },
-
   {
     path: 'login',
-    title: { value: 'login', needsTranslator: true },
+    title: { value: 'login', needsTranslator: false },
     component: LoginPageComponent
   },
-  { path: 'welcome', loadChildren: () => import('./pages/welcome/welcome.module').then(m => m.WelcomeModule) }
+  {
+    path: 'notfound',
+    title: { value: 'not found', needsTranslator: false },
+    component: NotFoundComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'error',
+    title: { value: 'error', needsTranslator: false },
+    component: ErrorComponent,
+  },
+  {
+    path: 'pages',
+    loadChildren: () => import('./pages/pages.module')
+      .then(m => m.PagesModule),
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: '',
+    redirectTo: 'pages',
+    pathMatch: 'full'
+  },
+  {
+    path: '**',
+    component: NotFoundComponent,
+    canActivate: [AuthGuardService]
+  },
 ];
 
 @NgModule({

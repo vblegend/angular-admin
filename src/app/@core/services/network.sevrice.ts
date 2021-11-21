@@ -19,15 +19,18 @@ export interface WebSocketMessage<T> {
     providedIn: 'root'
 })
 export class NetWorkService {
-
+    private _connectPromise: Promise<boolean>;
+    private connectTasks: WebSocketTask[]
     private webSocket: WebSocket;
     private serialNumber: number;
     private tasklist: Map<number, WebSocketTask>;
     public timeout = 120000;
+    private _url: string;
 
     constructor() {
         this.serialNumber = 0;
         this.tasklist = new Map();
+        this.connectTasks = [];
     }
 
     private getSerialNumber(): number {
@@ -35,33 +38,51 @@ export class NetWorkService {
         return this.serialNumber;
     }
 
+    public get url(): string {
+        return this._url;
+    }
+
+    public set url(value: string) {
+        if (this._connectPromise) throw Exception.build('websocket url must be modified when the connection request is not established.');
+        this._url = value;
+    }
+
+    /**
+     * connect to server
+     * @param url 
+     * @returns 
+     */
+    public async connection(): Promise<boolean> {
+        if (this._connectPromise) return this._connectPromise;
+        this._connectPromise = this.connectionAsync(this._url);
+    }
 
 
 
-    private connection() {
-
+    private async connectionAsync(url: string): Promise<boolean> {
         if (this.webSocket) {
-            if (this.webSocket.readyState === WebSocket.OPEN) return;
+            if (this.webSocket.readyState === WebSocket.OPEN) return Promise.resolve(true);
             if (this.webSocket.readyState === WebSocket.CONNECTING) {
                 this.close();
             }
             this.webSocket = null;
         }
-
-
-        // this.webSocket.readyState
-        // WebSocket.CONNECTING
-        // WebSocket.OPEN
-        // WebSocket.CLOSING
-        // WebSocket.CLOSED
-        this.webSocket = new WebSocket('ws://localhost:8080');
-        this.webSocket.onerror = this.socket_error.bind(this);
-        this.webSocket.onclose = this.socket_closed.bind(this);
-        this.webSocket.onopen = this.socket_opend.bind(this);
-        this.webSocket.onmessage = this.socket_message.bind(this);
-
-
+        return new Promise((resolve, reject) => {
+            this.webSocket = new WebSocket(url);
+            this.webSocket.onopen = (_ev: Event) => {
+                resolve(true);
+                this.socket_opend(_ev);
+            };
+            this.webSocket.onerror = (_ev: Event) => {
+                reject(_ev);
+                this.socket_error(_ev);
+                this._connectPromise = null;
+            };
+            this.webSocket.onclose = this.socket_closed.bind(this);
+            this.webSocket.onmessage = this.socket_message.bind(this);
+        });
     }
+
 
 
 
@@ -87,7 +108,7 @@ export class NetWorkService {
     }
 
 
-    private socket_message(socket: WebSocket, ev: MessageEvent): void {
+    private socket_message(ev: MessageEvent): void {
         if (typeof ev.data != 'string') return;
         const message: WebSocketMessage<any> = JSON.parse(ev.data);
         if (message.sn == null) return;
@@ -124,18 +145,18 @@ export class NetWorkService {
 
 
 
-    private socket_opend(socket: WebSocket, ev: Event): void {
+    private socket_opend(_ev: Event): void {
 
     }
 
-    private socket_closed(socket: WebSocket, ev: CloseEvent): void {
+    private socket_closed(ev: CloseEvent): void {
         var code = ev.code;
         var reason = ev.reason;
         var wasClean = ev.wasClean;
 
     }
 
-    private socket_error(socket: WebSocket, ev: Event): void {
+    private socket_error(_ev: Event): void {
 
     }
 

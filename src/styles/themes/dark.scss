@@ -1,0 +1,23 @@
+@import "ng-zorro-antd/ng-zorro-antd.dark.css";
+// @import '~@nebular/theme/styles/core/functions';
+// @import '~@nebular/theme/styles/core/mixins';
+
+@import 'base.scss';
+// $primary-color: #f5222d;
+
+
+// @import './themes.scss';
+
+// @mixin themeify {
+//   @each $theme-name, $theme-map in $themes {//$theme-name 主题样式类名， $theme-map样式
+//     $theme-map: $theme-map !global; //!global 把局部变量强升为全局变量
+//     body[data-theme=#{$theme-name}] & { //判断html的data-theme的属性值  #{}是sass的插值表达式   & sass嵌套里的父容器标识
+//       @content;// @content是混合器插槽，像vue的slot
+//     }
+//   }
+// }
+
+// //声明一个根据Key获取颜色的function
+// @function themed($key) {
+//   @return map-get($theme-map, $key);//从相应主题中拿到相应key对应的值
+// }

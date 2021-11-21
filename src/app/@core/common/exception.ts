@@ -23,6 +23,12 @@ export class Exception {
         return new Exception(message, code);
     }
 
+    public static fromCatch(ex: any, message: string): Exception {
+        const exc = new Exception(message);
+        return Object.assign(ex, exc);
+    }
+
+
     public toString(): string {
         return `[${this._code}]${this._message}`;
     }
