@@ -24,59 +24,130 @@ export class SidebarService {
 
     public menus: RouteConfigure[] = [
         {
-            title: 'Mail Group',
+            title: '首页',
+            icon: 'bars',
+            link: 'welcome',
+        },
+        {
+            title: '主控面板',
+            icon: 'bars',
+            link: 'welcome',
+        },
+        {
+            title: '健康监控',
+            icon: 'bars',
+            link: 'welcome',
+        },
+        {
+            title: '服务进程',
+            icon: 'bars',
+            link: 'welcome',
+        },
+        {
+            title: '在线终端',
+            icon: 'bars',
+            link: 'welcome',
+        },
+        {
+            title: '日志管理',
             icon: 'mail',
-            open: true,
+            open: false,
+            selected: false,
             children: [
                 {
-                    title: 'Group 1',
+                    title: '服务日志',
                     icon: 'bars',
-                    open: true,
-                    children: [
-                        {
-                            title: 'Option 1',
-                            link: 'welcome?id=1',
-                        },
-                        {
-                            title: 'Option 2',
-                            link: 'welcome?id=2',
-                        }
-                    ]
+                    link: 'dashboard',
                 },
                 {
-                    title: 'Group 2',
+                    title: '聊天日志',
                     icon: 'bars',
                     link: 'welcome?id=3',
                 },
                 {
-                    title: 'Group 3',
+                    title: '列表',
                     icon: 'bars',
                     link: 'welcome?id=4',
                 }
             ]
         },
         {
-            title: 'Group 443',
-            icon: 'bars',
-            link: 'welcome?id=5',
-        },
-        {
-            title: 'Team Group',
+            title: '数据管理',
             icon: 'team',
-            open: true,
+            open: false,
+            selected: false,
             children: [
                 {
-                    title: 'User 1',
+                    title: '数据库',
                     icon: 'user',
                     link: 'welcome?id=6',
                 },
                 {
-                    title: 'User 2',
+                    title: '账号管理',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                },
+                {
+                    title: '角色管理',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                },
+                {
+                    title: '功能管理',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                },
+                {
+                    title: '文件管理',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                }
+            ]
+        },
+        {
+            title: '工具箱',
+            icon: 'team',
+            open: false,
+            selected: false,
+            children: [
+                {
+                    title: '邮件',
+                    icon: 'user',
+                    link: 'welcome?id=6',
+                },
+                {
+                    title: '在线消息',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                },
+                {
+                    title: '广播消息',
+                    icon: 'user',
+                    link: 'welcome?id=7',
+                }
+            ]
+        },
+        {
+            title: '部署',
+            icon: 'team',
+            open: false,
+            selected: false,
+            children: [
+                {
+                    title: '服务部署',
+                    icon: 'user',
+                    link: 'welcome?id=6',
+                },
+                {
+                    title: '列表',
                     icon: 'user',
                     link: 'welcome?id=7',
                 }
             ]
         }
+
+
+
     ];
 
 

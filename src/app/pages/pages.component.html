@@ -1,16 +1,21 @@
 <nz-layout>
-  <nz-sider nzCollapsible  [nzCollapsedWidth]="64" [(nzCollapsed)]="sidebarService.isCollapsed" [nzTrigger]="null">
+  <nz-sider nzCollapsible [nzCollapsedWidth]="64" [(nzCollapsed)]="sidebarService.isCollapsed" [nzTrigger]="null">
     <app-logo></app-logo>
     <div class="sidebar-form">
       <app-sidebar></app-sidebar>
     </div>
   </nz-sider>
   <nz-layout>
-    <app-header></app-header>
+    <nz-header>
+      <app-header></app-header>
+    </nz-header>
     <nz-content>
       <router-outlet></router-outlet>
     </nz-content>
-    <nz-footer>Footer</nz-footer>
+    <nz-footer>
+      <app-footer></app-footer>
+    </nz-footer>
+
   </nz-layout>
 </nz-layout>
 

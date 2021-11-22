@@ -7,7 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { CoreModule } from './@core/core.module';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
@@ -25,25 +25,28 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { BootstrapService } from './@core/services/bootstrap.service';
 import { NetWorkService } from './@core/services/network.sevrice';
-import { PagesModule } from './pages/pages.module';
+import { CoreModule } from './@core/core.module';
+import { DocumentTitleService } from './@core/services/document.title.service';
+import { Exception } from './@core/common/exception';
+import { ThemeService, ThemeStyle } from './@core/services/theme.service';
 registerLocaleData(zh);
 
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+  ],
   imports: [
-    BrowserModule,
     CommonModule,
+    CoreModule.forRoot(),
+    BrowserModule,
+    AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppRoutingModule,
-    CoreModule.forRoot(),
-    // ThemeModule.forRoot(),
-    FormsModule,
     IconsProviderModule,
-    NzLayoutModule,
-    NzMenuModule
+
+
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'zh-CN' }, // replace "de-at" with your locale
@@ -54,16 +57,37 @@ registerLocaleData(zh);
 })
 export class AppModule {
 
-  constructor(bootstrapService: BootstrapService, netWorkService: NetWorkService) {
+  constructor(bootstrapService: BootstrapService,
+    netWorkService: NetWorkService,
+    themeService: ThemeService,
+    documentTitleService: DocumentTitleService,
+    private networkService: NetWorkService) {
+      themeService.changeTheme(ThemeStyle.Dark);
+    console.warn('initialization App Module');
     bootstrapService.loadingElement = document.getElementById('global-spinner');
+
+    documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
+    // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
+    documentTitleService.register();
 
     netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
     netWorkService.connection();
 
-
-    // this.iconLibraries.registerFontPack('ion', { iconClassPrefix: 'ion' });
-    // this.iconLibraries.registerFontPack('grace', { packClass: 'graceicon', iconClassPrefix: 'grace' });
-    // this.iconLibraries.setDefaultPack('grace');
-    // this.themeService.changeTheme('dark');
+    this.test();
   }
+
+
+  private async test() {
+    try {
+      await this.networkService.connection();
+      await this.networkService.send('dasds', '12345', 10000);
+    } catch (e) {
+      if (e instanceof Exception) {
+        console.error(e.toString());
+      } else {
+        console.error(e);
+      }
+    }
+  }
+
 }

@@ -9,18 +9,12 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 // import { ButtonsComponent } from './buttons/buttons.component';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { CoreModule } from '../@core/core.module';
 import { LayoutModule } from '../layouts/layout.module';
+import { CoreModule } from '../@core/core.module';
 
 @NgModule({
   imports: [
-    // NbIconModule,
-    // NbCardModule,
-    // NbActionsModule,
-    // NbButtonModule,
-    // ThemeModule,
-    // NbMenuModule,
-    // DashboardModule,
+    CoreModule,
     LayoutModule.forRoot(),
     NzIconModule,
     NzMenuModule,
@@ -29,14 +23,11 @@ import { LayoutModule } from '../layouts/layout.module';
   ],
   declarations: [
     PagesComponent,
-    WelcomeComponent,
-    // SidebarComponent,
-    // HeaderComponent,
-    // FooterComponent,
-    // ButtonsComponent,
+    WelcomeComponent
   ],
   providers: [
     // otherProviders...
+    
   ]
 })
 export class PagesModule {

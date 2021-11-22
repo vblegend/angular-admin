@@ -1,4 +1,4 @@
-import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 // import { NbAuthModule } from '@nebular/auth';
@@ -40,19 +40,35 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { SidebarService } from './services/sidebar.service';
+import { HoverDirective } from './directives/HoverDirective';
 
-
-
-const PIPES = [
+const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
   TranslatorPipe
+];
+
+
+const EXPORT_DIRECTIVES: Provider[] = [
+  HoverDirective
+];
+
+
+/**
+ * EXPORT CONPONENTS
+ */
+ const EXPORT_COMPONENTS = [
+  LoginPageComponent,
+  NotFoundComponent,
+  ThemeSettingComponent,
+  TerminalComponent,
+  ErrorComponent
 ];
 
 
 /**
  * custom providers services
  */
-const SERVICES = [
+const PROVIDERS: Provider[] = [
   DocumentTitleService,
   RestfulService,
   AuthGuardService,
@@ -66,50 +82,13 @@ const SERVICES = [
   SidebarService
 ];
 
-/**
- * EXPORT CONPONENTS
- */
-const EXPORT_COMPONENTS = [
-  LoginPageComponent,
-  NotFoundComponent,
-  ThemeSettingComponent,
-  TerminalComponent,
-  ErrorComponent
-];
 
 
-/**
- * theme material modules
- */
-const THEME_MATERIAL_MODULES = [
-
-];
-
-/**
- *  nb core services
- */
-export const NB_CORE_PROVIDERS = [
-  // { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useExisting: RippleService },
-  // { provide: NbRoleProvider, useClass: GuestRoleProvider },
-  // ...NbAuthModule.forRoot().providers,
-  // NbSecurityModule.forRoot({ accessControl: { guest: { view: '*' } } }).providers,
-  // LayoutService,
-  // PlayerService,
-  // StateService
-];
 
 
 @NgModule({
   imports: [
     CommonModule,
-    // NbActionsModule,
-    // NbRadioModule,
-    // NbDatepickerModule,
-    // NbLayoutModule,
-    // NbCheckboxModule,
-    // NbAlertModule,
-    // NbInputModule,
-    // NbButtonModule,
     NzIconModule,
     NzMenuModule,
     NzLayoutModule,
@@ -122,77 +101,29 @@ export const NB_CORE_PROVIDERS = [
     NzFormModule,
     ReactiveFormsModule,
     NzMessageModule,
-    // ThemeModule,
-    // NbCardModule,
-    // NbUserModule,
-    // NbIconModule,
-    // NbTabsetModule,
-    // NbSelectModule,
-    // NbListModule,
-    // ChartModule,
-    // NbSpinnerModule,
     DragDropModule,
-    // NbProgressBarModule,
-    NgxEchartsModule.forRoot({ echarts }),
-    // NgxChartsModule,
-    ...THEME_MATERIAL_MODULES,
   ],
   exports: [
-    // NbAuthModule
-    ...EXPORT_COMPONENTS,
+    EXPORT_COMPONENTS,
+    EXPORT_DIRECTIVES,
+    EXPORT_PIPES
   ],
   declarations: [
-    ...EXPORT_COMPONENTS,
-
-  ],
+    EXPORT_COMPONENTS,
+    EXPORT_DIRECTIVES,
+    EXPORT_PIPES
+  ]
 })
 
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
-    // documentTitleService.globalSuffix = { value: 'Hello ', needsTranslator: false };
-    documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
-    // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
-
-    documentTitleService.register();
-
-
-    this.test();
-
-
-
-
-    if (parentModule) {
-      throw new Error(`${'CoreModule'} has already been loaded. Import Core modules in the AppModule only.`);
-    }
-
-  }
-
-
-
-  private async test() {
-    try {
-      await this.networkService.send('dasds', '12345', 10000);
-    } catch (e) {
-      if (e instanceof Exception) {
-        console.error(e.toString());
-      } else {
-        console.error(e);
-      }
-    }
-  }
-
-
-
-
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) { }
 
 
   public static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [
-        ...NB_CORE_PROVIDERS,
-        ...SERVICES,
-        ...PIPES,
+        ...PROVIDERS,
         {
           provide: APP_BOOTSTRAP_LISTENER,
           useFactory: BootstrapService.BootstrapFactory,

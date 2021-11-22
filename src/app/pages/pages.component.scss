@@ -4,7 +4,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+
+
 }
+
 
 .app-layout {
   height: 100vh;
@@ -20,10 +24,10 @@ nz-content {
   margin: 0px;
 }
 
-app-header {
-  padding: 0;
-  width: 100%;
-  z-index: 2;
+nz-header {
+
+  padding: 0px 10px;
+
 }
 
 nz-sider {
@@ -46,19 +50,19 @@ nz-sider {
 
 .sidebar-form::-webkit-scrollbar-thumb {
   /*滚动条里面小方块*/
-  border-radius: 5px;
+  border-radius: 2px;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   background: #535353;
 }
 
 .sidebar-form::-webkit-scrollbar-thumb:hover {
   /*滚动条里面小方块*/
-  background: #157DCF;
+  background: #164a72;
 }
 
 .sidebar-form::-webkit-scrollbar-thumb:active {
   /*滚动条里面小方块*/
-  background: #141414;
+  background: #157DCF;
 }
 
 
@@ -67,7 +71,5 @@ nz-sider {
   /*滚动条里面轨道*/
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-
+  background: #1D1D1D;
 }
-
-

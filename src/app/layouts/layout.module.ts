@@ -9,31 +9,18 @@ import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import { LogoComponent } from './logo/logo.component';
-
+import { CoreModule } from "../@core/core.module";
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 @NgModule({
     imports: [
         CommonModule,
-        // NbActionsModule,
-        // NbRadioModule,
-        // NbDatepickerModule,
-        // NbLayoutModule,
-        // NbCheckboxModule,
-        // NbAlertModule,
-        // NbInputModule,
-        // NbButtonModule,
+        CoreModule,
         RouterModule,
         NzIconModule,
         NzMenuModule,
         NzLayoutModule,
         NzGridModule,
-        //   NzInputModule,
-        //   RouterModule,
-        //   FormsModule,
-        //   NzSpaceModule,
-        //   NzButtonModule,
-        //   NzFormModule,
-        //   ReactiveFormsModule,
-        //   NzMessageModule,
+        NzToolTipModule
     ],
     exports: [
         FooterComponent,

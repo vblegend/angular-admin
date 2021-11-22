@@ -31,6 +31,7 @@ export class NetWorkService {
         this.serialNumber = 0;
         this.tasklist = new Map();
         this.connectTasks = [];
+        console.log('NetWorkService');
     }
 
     private getSerialNumber(): number {

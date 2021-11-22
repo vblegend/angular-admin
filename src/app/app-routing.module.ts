@@ -4,7 +4,6 @@ import { ErrorComponent } from './@core/components/error/error.component';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
 import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 import { AuthGuardService } from './@core/services/auth.guard.service';
-import { PagesComponent } from './pages/pages.component';
 
 const routes: Routes = [
   {
@@ -42,7 +41,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

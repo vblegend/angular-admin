@@ -4,5 +4,5 @@
 
 <div>
     <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo">
-    <h1 *ngIf="!sidebarService.isCollapsed">Administrator</h1>
+    <h1  [style.visibility]="sidebarService.isCollapsed? 'hidden' : 'visible'">Administrator</h1>
 </div>

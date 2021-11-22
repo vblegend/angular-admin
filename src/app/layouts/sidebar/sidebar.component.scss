@@ -7,3 +7,20 @@
   z-index: 10;
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 }
+
+.ant-menu-item {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  border-bottom: solid 1px #333 !important;
+
+
+}
+
+
+::ng-deep {
+  .ant-menu-submenu-title {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    border-bottom: solid 1px #333 !important;
+  }
+}

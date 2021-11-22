@@ -13,6 +13,7 @@ const routes: Routes = [{
   children: [
     {
       path: 'welcome',
+      title: { value: 'Wel Come', needsTranslator: false },
       component: WelcomeComponent
     },
     {

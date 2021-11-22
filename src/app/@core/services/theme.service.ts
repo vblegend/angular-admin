@@ -5,9 +5,10 @@ import { ThemeConfigure } from '../common/themeconfigure';
 
 
 
-enum ThemeType {
-    dark = 'dark',
-    default = 'default',
+export enum ThemeStyle {
+    Default = 'default',
+    Dark = 'dark',
+    White = 'white'
 }
 
 
@@ -18,11 +19,11 @@ enum ThemeType {
     providedIn: 'root',
 })
 export class ThemeService {
-    private _themes: Record<string, string>;
-    private _currentTheme: string;
- 
+    private _themes: Record<ThemeStyle, string>;
+    private _currentTheme: ThemeStyle;
 
-    public get currentTheme():string{
+
+    public get currentTheme(): ThemeStyle {
         return this._currentTheme;
     }
 
@@ -34,7 +35,7 @@ export class ThemeService {
             white: '亮色主题'
         }
 
-        this.changeTheme('white');
+        this.changeTheme(ThemeStyle.White);
 
     }
 
@@ -43,7 +44,7 @@ export class ThemeService {
      * 移除一个主题
      * @param themeId 
      */
-    private removeTheme(themeId: string) {
+    private removeTheme(themeId: ThemeStyle) {
         const themeClass = `theme-${themeId}`;
         document.documentElement.classList.remove(themeClass);
         const removedThemeStyle = document.getElementById(themeClass);
@@ -58,7 +59,7 @@ export class ThemeService {
      * @param themeId 
      * #throw Exception
      */
-    public async changeTheme(themeId: string): Promise<void> {
+    public async changeTheme(themeId: ThemeStyle): Promise<void> {
         if (this._themes[themeId] == null) throw Exception.build("don't try to load an undeclared theme");
         try {
             await this.loadTheme(themeId);
