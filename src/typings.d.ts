@@ -10,7 +10,7 @@ import { RouteTitle } from './app/@core/models/RouteTitle'
 // interface NodeModule {
 //   id: string;
 // }
-export declare type Tyoe = {};
+
 
 export interface StringNameValue {
     name: string;
@@ -27,3 +27,5 @@ declare module '@angular/router' {
         title?: RouteTitle;
     }
 }
+
+

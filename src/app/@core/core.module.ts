@@ -9,7 +9,6 @@ import { RestfulService } from './services/restful.service';
 import { AuthGuardService } from './services/auth.guard.service';
 import { DialogService } from './services/dialog.service';
 import { AccountService } from './services/account.service';
-import { EarningService } from './services/earning.service';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -74,7 +73,6 @@ const PROVIDERS: Provider[] = [
   AuthGuardService,
   DialogService,
   AccountService,
-  EarningService,
   CommonService,
   NetWorkService,
   ThemeService,

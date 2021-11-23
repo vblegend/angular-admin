@@ -57,37 +57,42 @@ registerLocaleData(zh);
 })
 export class AppModule {
 
-  constructor(bootstrapService: BootstrapService,
-    netWorkService: NetWorkService,
-    themeService: ThemeService,
-    documentTitleService: DocumentTitleService,
-    private networkService: NetWorkService) {
-      themeService.changeTheme(ThemeStyle.Dark);
+  constructor(private bootstrapService: BootstrapService, private netWorkService: NetWorkService, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
+    themeService.changeTheme(ThemeStyle.Dark);
     console.warn('initialization App Module');
     bootstrapService.loadingElement = document.getElementById('global-spinner');
 
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
-    // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
     documentTitleService.register();
 
-    netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
-    netWorkService.connection();
-
-    this.test();
+    bootstrapService.runAtBootstrap(this.init, this);
+    //
   }
 
 
-  private async test() {
+  private async init(): Promise<void> {
+    this.netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
     try {
-      await this.networkService.connection();
-      await this.networkService.send('dasds', '12345', 10000);
-    } catch (e) {
-      if (e instanceof Exception) {
-        console.error(e.toString());
-      } else {
-        console.error(e);
+      const state = await this.netWorkService.connection();
+      if (!state) throw Exception.build('failed to connect to server!');
+      console.time('websocket');
+      const list: Promise<string>[] = [];
+
+      for (let i = 0; i < 1000; i++) {
+        list.push(this.networkService.send<string, string>('dasds', `data-${i}`, 10000));
+        // .then(result => {
+        //   console.log(`result：${result}`);
+        // });
       }
+
+      await Promise.all(list);
+      console.timeEnd('websocket');
+
+
+    } catch (e) {
+      console.log(e);
     }
   }
+
 
 }

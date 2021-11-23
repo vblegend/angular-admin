@@ -5,6 +5,8 @@ import { Exception } from '../common/exception';
 export interface WebSocketTask {
     tickcount: number;
     timeout: number;
+    complate: boolean;
+    timer: number;
     resolve: (data: any) => void;
     rejects: (data: any) => void;
 }
@@ -20,7 +22,6 @@ export interface WebSocketMessage<T> {
 })
 export class NetWorkService {
     private _connectPromise: Promise<boolean>;
-    private connectTasks: WebSocketTask[]
     private webSocket: WebSocket;
     private serialNumber: number;
     private tasklist: Map<number, WebSocketTask>;
@@ -30,7 +31,6 @@ export class NetWorkService {
     constructor() {
         this.serialNumber = 0;
         this.tasklist = new Map();
-        this.connectTasks = [];
         console.log('NetWorkService');
     }
 
@@ -56,6 +56,7 @@ export class NetWorkService {
     public async connection(): Promise<boolean> {
         if (this._connectPromise) return this._connectPromise;
         this._connectPromise = this.connectionAsync(this._url);
+        return this._connectPromise;
     }
 
 
@@ -87,6 +88,9 @@ export class NetWorkService {
 
 
 
+
+
+
     /**
      * 
      * @param method 
@@ -95,28 +99,48 @@ export class NetWorkService {
      * @returns 
      */
     public async send<D, T>(method: string, data: D, timeout?: number): Promise<T> {
-        const sn = this.getSerialNumber();
+
         if (timeout == null) timeout = this.timeout;
         const promise = new Promise<T>((resolve, rejects) => {
+ 
+            const sn = this.getSerialNumber();
+
             if (this.webSocket == null) return rejects(Exception.build('websocket is not initialized!'));
             if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('websocket is not connected!'));
-            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout };
-            this.tasklist.set(sn, task);
             const message: WebSocketMessage<D> = { sn, method, data };
             this.webSocket.send(JSON.stringify(message));
+            // console.log(sn);
+            // check timeout
+            const timer = window.setTimeout(() => {
+                if (!task.complate) {
+                    task.rejects(Exception.build('websocket call timeout!'));
+                    task.complate = true;
+                    this.tasklist.delete(sn);
+                }
+            }, timeout);
+            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout, complate: false, timer: timer };
+            this.tasklist.set(sn, task);
         });
         return promise;
     }
 
 
+
     private socket_message(ev: MessageEvent): void {
-        if (typeof ev.data != 'string') return;
-        const message: WebSocketMessage<any> = JSON.parse(ev.data);
-        if (message.sn == null) return;
-        const task = this.tasklist.get(message.sn);
-        if (task) {
-            this.tasklist.delete(message.sn);
-            task.resolve(message.data);
+        try {
+            if (typeof ev.data != 'string') return;
+            const message: WebSocketMessage<any> = JSON.parse(ev.data);
+            if (message.sn == null) return;
+            const task = this.tasklist.get(message.sn);
+            if (task) {
+                window.clearTimeout(task.timer);
+                task.complate = true;
+                this.tasklist.delete(message.sn);
+                task.resolve(message.data);
+
+            }
+        } catch (e) {
+
         }
     }
 

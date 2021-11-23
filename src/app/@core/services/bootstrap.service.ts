@@ -1,5 +1,8 @@
+import { Action } from '@angular-devkit/schematics';
 import { ComponentRef, Inject, Injectable } from '@angular/core';
+
 import { AppComponent } from '../../app.component';
+import { Delegate, DelegateContext } from '../common/delegate';
 import { CommonService } from './common.service';
 
 @Injectable({
@@ -11,9 +14,19 @@ export class BootstrapService {
      */
     public loadingElement: HTMLElement;
 
-    constructor(private commonService: CommonService) {
 
+    private _bootstrapInits: DelegateContext[];
+
+
+    constructor(private commonService: CommonService) {
+        this._bootstrapInits = [];
     }
+
+
+    public runAtBootstrap(delegate: Delegate, context: any) {
+        this._bootstrapInits.push({ delegate, context });
+    }
+
 
     /**
      * Angular bootstrap completion trigger  
@@ -28,7 +41,18 @@ export class BootstrapService {
      */
     private async initializer(): Promise<void> {
         if (this.loadingElement) this.loadingElement.style.display = '';
+        console.warn('initialization Bootstrap');
         await this.commonService.sleep(1000);
+        const promises: Promise<void>[] = [];
+        for (const init of this._bootstrapInits) {
+            const result = <any>init.delegate.apply(init.context);
+            if (result instanceof Promise) {
+                promises.push(result);
+            }
+        }
+        if (promises.length > 0) {
+            await Promise.all(promises);
+        }
     }
 
     /**
