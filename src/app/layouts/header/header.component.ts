@@ -10,8 +10,9 @@ export class HeaderComponent implements OnInit {
   isCollapsed = false;
   constructor(public sidebarService: SidebarService) { }
 
-  ngOnInit(): void {
 
+  public ngOnInit(): void {
+    // console.log(`app-header ngOnInit`);
   }
 
 }

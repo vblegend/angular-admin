@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent } from '@angular/router';
+import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RouteTitle } from '../models/RouteTitle';
 import { Subscription } from 'rxjs';
@@ -53,10 +53,36 @@ export class DocumentTitleService {
      * load page default title from router
      */
     public register(): void {
+        // override the route reuse strategy 复用路由
+        // this.router.routeReuseStrategy.shouldReuseRoute = (future, curr) => {
+        //     const a = this.getUrl(future);
+        //     const b = this.getUrl(curr);
+        //     return a == b;
+        // };
         if (this.subscription == null) {
             this.subscription = this.router.events.subscribe(this.router_event.bind(this));
         }
     }
+
+
+    public getUrl(route: ActivatedRouteSnapshot): string {
+        let next = this.getTruthRoute(route);
+        const segments: string[] = [];
+        while (next) {
+            segments.unshift(...next.url.map(e => e.path));
+            next = next.parent;
+        }
+        return segments.join('/');
+    }
+
+    private getTruthRoute(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+        let next = route;
+        while (next.firstChild) {
+            next = next.firstChild;
+        }
+        return next;
+    }
+
 
 
     public unRegister(): void {

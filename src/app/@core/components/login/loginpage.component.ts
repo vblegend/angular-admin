@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MessageType } from '../../common/messagetype';
 // import { NbAuthService } from '@nebular/auth';
 import { AccountService } from '../../services/account.service';
@@ -26,11 +26,11 @@ export class LoginPageComponent extends GenericComponent {
     public netWorkService: NetWorkService,
     protected activatedRoute: ActivatedRoute,
     protected router: Router) {
-    super(commonService);
+    super(activatedRoute, commonService);
     this.password = '';
   }
 
-  ngOnInit(): void {
+  protected onRouter() {
 
   }
 
@@ -43,7 +43,7 @@ export class LoginPageComponent extends GenericComponent {
 
     if (this.loadingWait) return;
     this.loadingWait = true;
-    this.commonService.showMessage("密码错误。", MessageType.Error);
+    this.commonService.showMessage("login successful.", MessageType.Success);
     this.commonService.sleep(1000).then(() => {
       this.commonService.session.set('user', { userName: '姑嘚423^$%#12f阀手动阀3' });
       this.commonService.navigate('/');

@@ -16,7 +16,6 @@ export class CommonService {
     private _sessionManager: SessionManager;
 
     constructor(private router: Router,
-        public activatedRoute: ActivatedRoute,
         private message: NzMessageService,
         public titleService: Title) {
         this._sessionManager = new SessionManager();

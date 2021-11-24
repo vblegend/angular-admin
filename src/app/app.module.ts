@@ -79,7 +79,7 @@ export class AppModule {
       const list: Promise<string>[] = [];
 
       for (let i = 0; i < 1000; i++) {
-        list.push(this.networkService.send<string, string>('dasds', `data-${i}`, 10000));
+        list.push(this.networkService.send<string, string>('dasds', `data-${Math.random() * 1000000}`, 10000));
         // .then(result => {
         //   console.log(`result：${result}`);
         // });

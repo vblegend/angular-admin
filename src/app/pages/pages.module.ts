@@ -27,8 +27,9 @@ import { CoreModule } from '../@core/core.module';
   ],
   providers: [
     // otherProviders...
-    
+
   ]
 })
 export class PagesModule {
+
 }

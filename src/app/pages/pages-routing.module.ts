@@ -12,7 +12,7 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
-      path: 'welcome',
+      path: 'welcome/:id',
       title: { value: 'Wel Come', needsTranslator: false },
       component: WelcomeComponent
     },

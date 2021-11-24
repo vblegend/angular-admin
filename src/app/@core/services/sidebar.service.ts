@@ -26,27 +26,27 @@ export class SidebarService {
         {
             title: '首页',
             icon: 'bars',
-            link: 'welcome',
+            link: 'welcome/1',
         },
         {
             title: '主控面板',
             icon: 'bars',
-            link: 'welcome',
+            link: 'welcome/2',
         },
         {
             title: '健康监控',
             icon: 'bars',
-            link: 'welcome',
+            link: 'welcome/3',
         },
         {
             title: '服务进程',
             icon: 'bars',
-            link: 'welcome',
+            link: 'welcome/4',
         },
         {
             title: '在线终端',
             icon: 'bars',
-            link: 'welcome',
+            link: 'welcome/5',
         },
         {
             title: '日志管理',
@@ -57,17 +57,17 @@ export class SidebarService {
                 {
                     title: '服务日志',
                     icon: 'bars',
-                    link: 'dashboard',
+                    link: 'welcome/6',
                 },
                 {
                     title: '聊天日志',
                     icon: 'bars',
-                    link: 'welcome?id=3',
+                    link: 'welcome/7',
                 },
                 {
                     title: '列表',
                     icon: 'bars',
-                    link: 'welcome?id=4',
+                    link: 'welcome/8',
                 }
             ]
         },
@@ -80,7 +80,7 @@ export class SidebarService {
                 {
                     title: '数据库',
                     icon: 'user',
-                    link: 'welcome?id=6',
+                    link: 'welcome/9',
                 },
                 {
                     title: '账号管理',

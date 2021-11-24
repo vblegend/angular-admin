@@ -1,29 +1,53 @@
 import { Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, ParamMap } from "@angular/router";
 import { CommonService } from "../../services/common.service";
-
+import { Location } from '@angular/common';
+import { Subscription } from "rxjs";
 @Component({
     selector: 'ngx-generic-component',
     template: '<i>123</i>'
 })
 export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
 
+    private _routeSubscription: Subscription;
+    /**
+     * router refresh params
+     */
+    protected queryParams: ParamMap;
+
     /**
      *
      */
-    constructor(protected commonService: CommonService,) {
-
+    constructor(protected activatedRoute: ActivatedRoute, protected commonService: CommonService, protected location: Location = null) {
+        this._routeSubscription = this.activatedRoute.paramMap.subscribe((params) => {
+            const frist = this.queryParams == null;
+            this.queryParams = params;
+            if (!frist) this.onRouter();
+        });
     }
 
+    /**
+     * 当路由参数变化时触发。
+     */
+    protected onRouter() {
 
-
+    }
 
     /**
      * 一个生命周期钩子，它会在 Angular 初始化完了该指令的所有数据绑定属性之后调用。 定义 ngOnInit() 方法可以处理所有附加的初始化任务。\
      * 它的调用时机在默认的变更检测器首次检查完该指令的所有数据绑定属性之后，任何子视图或投影内容检查完之前。 它会且只会在指令初始化时调用一次。
      */
-    public ngOnInit(): void {
+    ngOnInit(): void {
+        console.log('ngOnInit');
+        // this.activatedRoute.params.subscribe(
+        //     params => {
+        //         console.log(params);
+        //     }
+        // );
 
+        // this.activatedRoute.queryParams.subscribe(queryParams => {
+        //     console.log(queryParams);
+        // });
     }
 
     /**
@@ -43,13 +67,12 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
 
     }
 
-
-
-
     /**
      * 一个生命周期钩子，它会在指令、管道或服务被销毁时调用。 用于在实例被销毁时，执行一些自定义清理代码。
      */
     public ngOnDestroy(): void {
-
+        if (this._routeSubscription) {
+            this._routeSubscription.unsubscribe();
+        }
     }
 }
