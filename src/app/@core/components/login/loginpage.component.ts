@@ -7,7 +7,7 @@ import { GenericComponent } from '../basic/generic.component';
 
 @Component({
   selector: 'ngx-login',
-  styleUrls: ['./loginpage.component.scss'],
+  styleUrls: ['./loginpage.component.less'],
   templateUrl: './loginpage.component.html',
 })
 export class LoginPageComponent extends GenericComponent {

@@ -4,7 +4,7 @@ import { SidebarService } from '../../@core/services/sidebar.service';
 @Component({
   selector: 'app-logo',
   templateUrl: './logo.component.html',
-  styleUrls: ['./logo.component.scss']
+  styleUrls: ['./logo.component.less']
 })
 export class LogoComponent implements OnInit {
 

@@ -9,7 +9,7 @@ import { AttachAddon } from 'xterm-addon-attach';
 
 @Component({
   selector: 'ngx-terminal-component',
-  styleUrls: ['./terminal.component.scss'],
+  styleUrls: ['./terminal.component.less'],
   templateUrl: './terminal.component.html'
 })
 export class TerminalComponent  implements OnInit, OnDestroy {

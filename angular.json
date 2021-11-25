@@ -9,7 +9,10 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "style": "scss"
+          "style": "less"
+        },
+        "@schematics/angular:application": {
+          "strict": true
         }
       },
       "architect": {
@@ -21,6 +24,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "inlineStyleLanguage": "less",
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles/themes"]
             },
@@ -37,20 +41,20 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "src/app/@core/styles/style.scss",
+              "src/app/@core/styles/style.less",
               "node_modules/xterm/css/xterm.css",
               {
-                "input": "src/styles/default.scss",
+                "input": "src/styles/default.less",
                 "bundleName": "theme-default",
                 "inject": true
               },
               {
-                "input": "src/styles/white.scss",
+                "input": "src/styles/white.less",
                 "bundleName": "theme-white",
                 "inject": false
               },
               {
-                "input": "src/styles/dark.scss",
+                "input": "src/styles/dark.less",
                 "bundleName": "theme-dark",
                 "inject": false
               }
@@ -130,7 +134,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",
-      "style": "scss"
+      "style": "less"
     },
     "@schematics/angular:directive": {
       "prefix": "ngx"

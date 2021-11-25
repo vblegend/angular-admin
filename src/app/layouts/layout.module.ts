@@ -11,16 +11,20 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
 import { LogoComponent } from './logo/logo.component';
 import { CoreModule } from "../@core/core.module";
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { FormsModule } from "@angular/forms";
 @NgModule({
     imports: [
         CommonModule,
         CoreModule,
+        FormsModule,
         RouterModule,
         NzIconModule,
         NzMenuModule,
         NzLayoutModule,
         NzGridModule,
-        NzToolTipModule
+        NzToolTipModule,
+        NzSelectModule
     ],
     exports: [
         FooterComponent,

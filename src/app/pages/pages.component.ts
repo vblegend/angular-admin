@@ -6,7 +6,7 @@ import { SidebarService } from '../@core/services/sidebar.service';
 
 @Component({
   selector: 'ngx-pages',
-  styleUrls: ['pages.component.scss'],
+  styleUrls: ['pages.component.less'],
   templateUrl: 'pages.component.html',
 })
 export class PagesComponent extends GenericComponent {

@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
+  styleUrls: ['./welcome.component.less']
 })
 export class WelcomeComponent extends GenericComponent {
   public id: string;

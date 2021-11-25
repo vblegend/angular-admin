@@ -9,7 +9,7 @@ import { StringNameValue } from '../../../../../typings';
 
 @Component({
   selector: 'ngx-theme-setting-component',
-  styleUrls: ['./theme.setting.component.scss'],
+  styleUrls: ['./theme.setting.component.less'],
   templateUrl: './theme.setting.component.html'
 })
 export class ThemeSettingComponent implements OnInit, OnDestroy {

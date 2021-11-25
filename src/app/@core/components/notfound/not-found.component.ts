@@ -5,7 +5,7 @@ import { GenericComponent } from '../basic/generic.component';
 
 @Component({
   selector: 'ngx-not-found',
-  styleUrls: ['./not-found.component.scss'],
+  styleUrls: ['./not-found.component.less'],
   templateUrl: './not-found.component.html',
 })
 export class NotFoundComponent extends GenericComponent {

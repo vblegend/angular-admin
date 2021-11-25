@@ -1,3 +1,19 @@
+@import "mixin";
+
+.themeMixin( {
+    :host {
+      .ant-menu-item {
+        border-bottom: @menu-border-bottom;
+      }
+      ::ng-deep {
+        .ant-menu-submenu-title {
+          border-bottom: @menu-border-bottom;
+        }
+      }
+    }
+  }
+);
+
 :host {
   display: flex;
   user-select: none;
@@ -8,19 +24,14 @@
   box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
 }
 
-.ant-menu-item {
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
-  border-bottom: solid 1px #333 !important;
-
-
-}
-
-
 ::ng-deep {
   .ant-menu-submenu-title {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
-    border-bottom: solid 1px #333 !important;
   }
+}
+
+.ant-menu-item {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
 }

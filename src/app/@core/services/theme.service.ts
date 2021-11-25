@@ -19,13 +19,15 @@ export enum ThemeStyle {
     providedIn: 'root',
 })
 export class ThemeService {
-    private _themes: Record<ThemeStyle, string>;
+    private readonly _themes: Record<ThemeStyle, string>;
     private _currentTheme: ThemeStyle;
 
 
     public get currentTheme(): ThemeStyle {
         return this._currentTheme;
     }
+
+
 
 
     constructor() {
@@ -39,6 +41,10 @@ export class ThemeService {
 
     }
 
+    public get themes():Record<ThemeStyle, string>{
+        return this._themes;
+    }
+
 
     /**
      * 移除一个主题
@@ -46,7 +52,7 @@ export class ThemeService {
      */
     private removeTheme(themeId: ThemeStyle) {
         const themeClass = `theme-${themeId}`;
-        document.documentElement.classList.remove(themeClass);
+        document.documentElement.classList.remove(themeId);
         const removedThemeStyle = document.getElementById(themeClass);
         if (removedThemeStyle) {
             document.head.removeChild(removedThemeStyle);
@@ -75,7 +81,7 @@ export class ThemeService {
     private async loadTheme(themeId: string): Promise<void> {
         const themeClass = `theme-${themeId}`;
         await this.loadCssFile(`${themeClass}.css`, themeClass);
-        document.documentElement.classList.add(themeClass);
+        document.documentElement.classList.add(themeId);
     }
 
 
