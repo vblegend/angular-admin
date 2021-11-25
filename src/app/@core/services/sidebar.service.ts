@@ -31,7 +31,7 @@ export class SidebarService {
         {
             title: '主控面板',
             icon: 'bars',
-            link: 'welcome/2',
+            link: 'dashboard',
         },
         {
             title: '健康监控',

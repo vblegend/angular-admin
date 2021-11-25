@@ -1,11 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { MessageType } from '../../common/messagetype';
 // import { NbAuthService } from '@nebular/auth';
-import { AccountService } from '../../services/account.service';
-import { CommonService } from '../../services/common.service';
-import { NetWorkService } from '../../services/network.sevrice';
+
 import { GenericComponent } from '../basic/generic.component';
 
 
@@ -18,20 +14,13 @@ export class LoginPageComponent extends GenericComponent {
 
   public password: string;
   public loadingWait: boolean;
-  constructor(
-    protected accountService: AccountService,
-    protected commonService: CommonService,
-    // @Inject(NB_AUTH_OPTIONS) protected options = {},
-    // protected cd: ChangeDetectorRef,
-    public netWorkService: NetWorkService,
-    protected activatedRoute: ActivatedRoute,
-    protected router: Router) {
-    super(activatedRoute, commonService);
+  constructor(injector: Injector) {
+    super(injector);
     this.password = '';
   }
 
-  protected onRouter() {
-
+  protected onQueryChanges() {
+    console.log(this.queryParams);
   }
 
 

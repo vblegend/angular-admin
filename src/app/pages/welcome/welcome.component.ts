@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { GenericComponent } from '../../@core/components/basic/generic.component';
 import { CommonService } from '../../@core/services/common.service';
@@ -10,18 +10,41 @@ import { Location } from '@angular/common';
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent extends GenericComponent {
-
+  public id: string;
   public name: string = null;
-  constructor(protected activatedRoute: ActivatedRoute, protected commonService: CommonService, protected location: Location = null) {
-    super(activatedRoute, commonService, location)
+  constructor(injector: Injector) {
+    super(injector)
   }
 
-  protected onRouter() {
-    console.log(`app-welcome onRouter ${this.queryParams.get('id')}`);
+  protected onQueryChanges() {
+
+    this.id = this.queryParams.get('id');
+    console.log(`app-welcome onRouter ${this.id}`);
+
+    const result = this.runOut(this.sum).then(e => {
+      console.log(e);
+    });
+
+
   }
 
-  public ngOnInit(){
-    console.log(`app-welcome ngOnInit ${this.queryParams.get('id')}`);
+
+
+
+
+  private async sum(): Promise<number> {
+    return new Promise((resolver) => {
+      window.setTimeout(() => {
+        resolver(103);
+      }, 500);
+    });
+  }
+
+
+
+  public ngOnInit() {
+    this.id = this.queryParams.get('id');
+    console.log(`app-welcome ngOnInit ${this.id}`);
   }
 
   protected onDestroy() {

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { Location } from '@angular/common';
+import { GenericComponent } from '../basic/generic.component';
 
 
 @Component({
@@ -7,13 +8,13 @@ import { Location } from '@angular/common';
   styleUrls: ['./not-found.component.scss'],
   templateUrl: './not-found.component.html',
 })
-export class NotFoundComponent {
+export class NotFoundComponent extends GenericComponent {
 
-  constructor(private _location: Location) {
-
+  constructor(injector: Injector) {
+    super(injector);
   }
 
-  goBack() {
-    this._location.back();
-  }
+
+
+  
 }

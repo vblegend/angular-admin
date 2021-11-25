@@ -19,12 +19,12 @@ const routes: Routes = [{
     {
       path: 'dashboard',
       title: { value: 'dashboard', needsTranslator: true },
-      // component: DashboardComponent
+      component: WelcomeComponent
     },
     {
       path: 'buttons',
       title: { value: 'buttons', needsTranslator: true },
-      // component: ButtonsComponent
+      component: WelcomeComponent
     },
     {
       path: '',

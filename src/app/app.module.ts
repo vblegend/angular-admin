@@ -29,6 +29,7 @@ import { CoreModule } from './@core/core.module';
 import { DocumentTitleService } from './@core/services/document.title.service';
 import { Exception } from './@core/common/exception';
 import { ThemeService, ThemeStyle } from './@core/services/theme.service';
+import { NzIconService } from 'ng-zorro-antd/icon';
 registerLocaleData(zh);
 
 
@@ -57,16 +58,28 @@ registerLocaleData(zh);
 })
 export class AppModule {
 
-  constructor(private bootstrapService: BootstrapService, private netWorkService: NetWorkService, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
-    themeService.changeTheme(ThemeStyle.Dark);
+
+
+
+  constructor(private bootstrapService: BootstrapService,
+    private netWorkService: NetWorkService,
+    private themeService: ThemeService,
+    private documentTitleService: DocumentTitleService,
+    private networkService: NetWorkService,
+    private iconService: NzIconService) {
+
+    themeService.changeTheme(ThemeStyle.Default);
     console.warn('initialization App Module');
     bootstrapService.loadingElement = document.getElementById('global-spinner');
 
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
     documentTitleService.register();
-
     bootstrapService.runAtBootstrap(this.init, this);
-    //
+
+    // register iconfont
+    this.iconService.fetchFromIconfont({
+      scriptUrl: 'assets/fonts/iconfont.js'
+    });
   }
 
 
@@ -84,11 +97,8 @@ export class AppModule {
         //   console.log(`result：${result}`);
         // });
       }
-
       await Promise.all(list);
       console.timeEnd('websocket');
-
-
     } catch (e) {
       console.log(e);
     }

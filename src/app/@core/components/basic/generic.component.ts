@@ -1,53 +1,139 @@
-import { Component, DoCheck, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Component, DoCheck, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
 import { Subscription } from "rxjs";
+
+
+
+/**
+ * Generic basic components, commonly used services are integrated internally \
+ * But the internal methods and properties are protected 
+ */
 @Component({
     selector: 'ngx-generic-component',
     template: '<i>123</i>'
 })
 export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
-
+    private _queryParams: ParamMap;
     private _routeSubscription: Subscription;
+    protected readonly activatedRoute: ActivatedRoute;
     /**
-     * router refresh params
+     * get common service
+     * @returns 
      */
-    protected queryParams: ParamMap;
+    protected readonly commonService: CommonService;
+    protected readonly location: Location;
+    protected readonly zone: NgZone;
+    protected readonly router: Router
+    /**
+     * get current route request parameters \
+     * do not cache the variable 
+     */
+    protected get queryParams(): ParamMap {
+        return this._queryParams;
+    }
+
+
 
     /**
      *
      */
-    constructor(protected activatedRoute: ActivatedRoute, protected commonService: CommonService, protected location: Location = null) {
+    constructor(injector: Injector = null) {
+        this.activatedRoute = injector.get(ActivatedRoute);
+        this.commonService = injector.get(CommonService);
+        this.location = injector.get(Location);
+        this.zone = injector.get(NgZone);
+        this.router = injector.get(Router);
         this._routeSubscription = this.activatedRoute.paramMap.subscribe((params) => {
             const frist = this.queryParams == null;
-            this.queryParams = params;
-            if (!frist) this.onRouter();
+            this._queryParams = params;
+            if (!frist) this.onQueryChanges();
         });
     }
 
     /**
-     * 当路由参数变化时触发。
+     * This event is triggered when the current component routing request parameter changes, and will not affect the parent routing
+     * @queryParams route request parameters 
      */
-    protected onRouter() {
+    protected onQueryChanges(): void {
 
     }
+
+
+    /**
+     * Executes the `fn` function synchronously in Angular's parent zone and returns value returned by
+     * the function.
+     * @param fn 
+     * @returns 
+     */
+    protected runOut<T>(fn: (...args: any[]) => T): T {
+        return this.zone.runOutsideAngular(fn);
+    }
+
+    /**
+     * Executes the `fn` function synchronously within the Angular zone and returns value returned by
+     * the function.
+     * @param fn 
+     * @param applyThis 
+     * @param applyArgs 
+     * @returns T
+     */
+    protected run<T>(fn: (...args: any[]) => T, applyThis?: any, applyArgs?: any[]): T {
+        return this.zone.run(fn, applyThis, applyArgs);
+    }
+
+    /**
+     * Asynchronous thread sleep function 
+     * @param milliseconds sleep time in milliseconds  
+     * @returns 
+     */
+    public async sleep(milliseconds: number): Promise<void> {
+        return new Promise((resolve) => {
+            window.setTimeout(resolve, milliseconds);
+        });
+    }
+
+    /**
+     * navigate to the specified routing address
+     * @param routePaths 
+     * @returns 
+     */
+    public navigate(routePaths: string, extras?: NavigationExtras): Promise<boolean> {
+        return this.router.navigate([routePaths], extras);
+    }
+    
+    /**
+     * Navigates back in the platform's history.
+     */
+    public goBack(): void {
+        this.location.back();
+    }
+
+
+    /**
+     * navigate to the specified routing address
+     * `this.navigateByUrl('/results');`
+     * `this.navigateByUrl('/results', { page: 1 });`
+     * @param routeUrl Route address
+     * @param queryParams Route request parameters 
+     * @returns 
+     */
+    public navigateByUrl(routeUrl: string, queryParams?: Params): Promise<boolean> {
+        if (queryParams) {
+            return this.router.navigate([routeUrl], { queryParams: queryParams });
+        } else {
+            return this.router.navigateByUrl(routeUrl);
+        }
+    }
+
 
     /**
      * 一个生命周期钩子，它会在 Angular 初始化完了该指令的所有数据绑定属性之后调用。 定义 ngOnInit() 方法可以处理所有附加的初始化任务。\
      * 它的调用时机在默认的变更检测器首次检查完该指令的所有数据绑定属性之后，任何子视图或投影内容检查完之前。 它会且只会在指令初始化时调用一次。
      */
-    ngOnInit(): void {
-        console.log('ngOnInit');
-        // this.activatedRoute.params.subscribe(
-        //     params => {
-        //         console.log(params);
-        //     }
-        // );
+    public ngOnInit(): void {
 
-        // this.activatedRoute.queryParams.subscribe(queryParams => {
-        //     console.log(queryParams);
-        // });
     }
 
     /**

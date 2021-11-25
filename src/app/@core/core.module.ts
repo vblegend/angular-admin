@@ -1,4 +1,4 @@
-import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, Injector, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 // import { NbAuthModule } from '@nebular/auth';

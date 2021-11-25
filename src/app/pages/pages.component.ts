@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
+import { GenericComponent } from '../@core/components/basic/generic.component';
 import { SidebarService } from '../@core/services/sidebar.service';
 
 // import { MENU_ITEMS } from './pages-menu';
@@ -8,14 +9,22 @@ import { SidebarService } from '../@core/services/sidebar.service';
   styleUrls: ['pages.component.scss'],
   templateUrl: 'pages.component.html',
 })
-export class PagesComponent {
+export class PagesComponent extends GenericComponent {
 
   /**
    *
    */
-  constructor(public sidebarService: SidebarService) {
-    
+  constructor(injector: Injector, public sidebarService: SidebarService) {
+    super(injector);
   }
+
+  protected onQueryChanges() {
+    console.log(`ngx-pages onRouter ${this.queryParams.get('id')}`);
+
+  }
+
+
+
 
 }
 

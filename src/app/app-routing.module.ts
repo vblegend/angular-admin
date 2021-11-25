@@ -24,8 +24,7 @@ const routes: Routes = [
   },
   {
     path: 'pages',
-    loadChildren: () => import('./pages/pages.module')
-      .then(m => m.PagesModule),
+    loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
     canActivate: [AuthGuardService]
   },
   {
@@ -42,7 +41,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { useHash: true })
   ],
   exports: [RouterModule]
 })
