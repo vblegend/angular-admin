@@ -2,15 +2,19 @@
   <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: { level: 1, menus: menus} }"></ng-container>
   <ng-template #menuTpl let-data>
     <ng-container *ngFor="let menu of data.menus;">
-      <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="sidebarService.isCollapsed ? 24 : data.level * 24" [routerLink]="menu.link" nz-tooltip
-        nzTooltipPlacement="right" [nzTooltipTitle]="sidebarService.isCollapsed && data.level === 1 ? menu.title : ''"
-        [nzMatchRouter]="true" [nzDisabled]="menu.disabled" [nzSelected]="menu.selected">
-        <i nz-icon [nzType]="menu.icon" *ngIf="menu.icon"></i>
+      <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="sidebarService.isCollapsed ? 24 : data.level * 24"
+        [routerLink]="menu.link" nz-tooltip nzTooltipPlacement="right"
+        [nzTooltipTitle]="sidebarService.isCollapsed && data.level === 1 ? menu.title : ''" [nzMatchRouter]="true"
+        [nzDisabled]="menu.disabled" [nzSelected]="menu.selected">
+        <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
         <span>{{ menu.title }}</span>
       </li>
-      <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="data.level * 24" [routerLink]="menu.link"
-        [nzMatchRouter]="true" [nzOpen]="menu.open" [nzTitle]="menu.title" [nzIcon]="menu.icon"
+      <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="data.level * 24" [nzMatchRouter]="true" [nzOpen]="menu.open"
         [nzDisabled]="menu.disabled">
+        <span title>
+          <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
+          <span>{{ menu.title }}</span>
+        </span>
         <ul>
           <ng-container
             *ngTemplateOutlet="menuTpl; context: { $implicit: { level: data.level+1,menus: menu.children}  }">
