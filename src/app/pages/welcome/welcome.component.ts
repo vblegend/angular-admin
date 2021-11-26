@@ -1,8 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { GenericComponent } from '../../@core/components/basic/generic.component';
-import { CommonService } from '../../@core/services/common.service';
-import { Location } from '@angular/common';
+import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
   selector: 'app-welcome',
@@ -20,40 +17,17 @@ export class WelcomeComponent extends GenericComponent {
 
     this.id = this.queryParams.get('id');
     console.log(`app-welcome onRouter ${this.id}`);
-
-    const result = this.runOut(this.sum).then(e => {
-      console.log(e);
-    });
-
-
   }
 
-
-
-
-
-  private async sum(): Promise<number> {
-    return new Promise((resolver) => {
-      window.setTimeout(() => {
-        resolver(103);
-      }, 500);
-    });
-  }
-
-
-
-  public ngOnInit() {
+  protected onInit() {
     this.id = this.queryParams.get('id');
-    console.log(`app-welcome ngOnInit ${this.id}`);
+    console.log(`app-welcome onInit ${this.id}`);
   }
 
   protected onDestroy() {
     console.log(`app-welcome onDestroy`);
   }
-  // public ngOnInit() {
 
-  //   super.ngOnInit();
-  // }
 
 
 }

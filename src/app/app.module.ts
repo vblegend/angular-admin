@@ -11,25 +11,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LOCALE_ID } from '@angular/core';
-
-
-
-
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { zh_CN } from 'ng-zorro-antd/i18n';
 import zh from '@angular/common/locales/zh';
-import { FormsModule } from '@angular/forms';
 import { IconsProviderModule } from './icons-provider.module';
-import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { BootstrapService } from './@core/services/bootstrap.service';
-import { NetWorkService } from './@core/services/network.sevrice';
-import { CoreModule } from './@core/core.module';
-import { DocumentTitleService } from './@core/services/document.title.service';
-import { Exception } from './@core/common/exception';
-import { ThemeService, ThemeStyle } from './@core/services/theme.service';
+import { BootstrapService } from '@core/services/bootstrap.service';
+import { NetWorkService } from '@core/services/network.sevrice';
+import { CoreModule } from '@core/core.module';
+import { DocumentTitleService } from '@core/services/document.title.service';
+import { Exception } from '@core/common/exception';
+import { ThemeService, ThemeStyle } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
+import { DynamicModule } from './@dynamic/dynamic.module';
 registerLocaleData(zh);
 
 
@@ -41,13 +35,12 @@ registerLocaleData(zh);
   imports: [
     CommonModule,
     CoreModule.forRoot(),
+    DynamicModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
     IconsProviderModule,
-
-
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'zh-CN' }, // replace "de-at" with your locale
@@ -104,5 +97,9 @@ export class AppModule {
     }
   }
 
+
+
+
+  
 
 }

@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild,ComponentFactoryResolver } from '@angular/core';
-
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, Injector } from '@angular/core';
+import { GenericComponent } from '@core/components/basic/generic.component';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { Terminal } from 'xterm';
 import { AttachAddon } from 'xterm-addon-attach';
 
@@ -12,20 +13,20 @@ import { AttachAddon } from 'xterm-addon-attach';
   styleUrls: ['./terminal.component.less'],
   templateUrl: './terminal.component.html'
 })
-export class TerminalComponent  implements OnInit, OnDestroy {
+export class TerminalComponent extends GenericComponent {
   @ViewChild('TerminalParent', { static: true }) public terminalDiv: ElementRef;
   public term: Terminal;
   private command: string;
-  public constructor() {
-   
+  constructor(injector: Injector, private modal: NzModalRef) {
+    super(injector)
+
   }
 
-  /**
-   * cdkDrag cdkDragHandle
-   */
+  handleCancel(): void {
+    this.modal.close(true);
+  }
 
-
-  public ngOnInit(): void {
+  protected onInit(): void {
     this.term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
       cursorStyle: 'underline', // 光标样式
@@ -137,7 +138,7 @@ export class TerminalComponent  implements OnInit, OnDestroy {
     term.write('\r\n$ ');
   }
 
-  public ngOnDestroy(): void {
+  public onDestroy(): void {
 
   }
 

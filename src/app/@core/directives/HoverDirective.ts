@@ -5,7 +5,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 })
 export class HoverDirective {
     @Input('hitHover') color: string = '#007ACC';
-    @Input('cursor') cursor: string = null;
+    @Input() cursor: string = null;
 
     private isHover: boolean;
     private _oldColor: string;

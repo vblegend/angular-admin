@@ -2,16 +2,18 @@
 
 .themeMixin( {
     :host {
-      .ant-menu-item {
-        border-bottom: @menu-border-bottom;
-      }
       ::ng-deep {
+        .ant-menu-item,
+        // .ant-menu-submenu,
         .ant-menu-submenu-title {
-          border-bottom: @menu-border-bottom;
+          // border:@menu-item-border;
+          border-color: @menu-item-border-color;
+          // border-bottom: @menu-border-bottom;
         }
       }
     }
   }
+
 );
 
 :host {
@@ -25,13 +27,12 @@
 }
 
 ::ng-deep {
+
+  .ant-menu-item,
+  // .ant-menu-submenu,
   .ant-menu-submenu-title {
     margin-top: 0px !important;
     margin-bottom: 0px !important;
+    border-bottom: solid 1px;
   }
-}
-
-.ant-menu-item {
-  margin-top: 0px !important;
-  margin-bottom: 0px !important;
 }

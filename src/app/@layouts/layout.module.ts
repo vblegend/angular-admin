@@ -9,7 +9,7 @@ import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
 import { LogoComponent } from './logo/logo.component';
-import { CoreModule } from "../@core/core.module";
+import { CoreModule } from "@core/core.module";
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormsModule } from "@angular/forms";

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
 // import { DashboardComponent } from './dashboard/dashboard.component';
-import { NotFoundComponent } from '../@core/components/notfound/not-found.component';
+import { NotFoundComponent } from '@core/components/notfound/not-found.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 // import { ButtonsComponent } from './buttons/buttons.component';
 

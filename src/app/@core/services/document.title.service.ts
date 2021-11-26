@@ -53,12 +53,6 @@ export class DocumentTitleService {
      * load page default title from router
      */
     public register(): void {
-        // override the route reuse strategy 复用路由
-        // this.router.routeReuseStrategy.shouldReuseRoute = (future, curr) => {
-        //     const a = this.getUrl(future);
-        //     const b = this.getUrl(curr);
-        //     return a == b;
-        // };
         if (this.subscription == null) {
             this.subscription = this.router.events.subscribe(this.router_event.bind(this));
         }

@@ -1,4 +1,4 @@
-import { Component, DoCheck, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Component, ComponentFactoryResolver, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
@@ -12,12 +12,17 @@ import { Subscription } from "rxjs";
  */
 @Component({
     selector: 'ngx-generic-component',
-    template: '<i>123</i>'
+    template: '<ng-container #view></ng-container>'
 })
-export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, DoCheck {
+export abstract class GenericComponent implements OnInit, OnDestroy {
+    @ViewChild("view", { read: ViewContainerRef }) view: ViewContainerRef;
+    // private hostElement: ElementRef<GenericComponent>;
+    // private componentFactoryResolver: ComponentFactoryResolver;
+
     private _queryParams: ParamMap;
     private _routeSubscription: Subscription;
     protected readonly activatedRoute: ActivatedRoute;
+
     /**
      * get common service
      * @returns 
@@ -26,6 +31,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
     protected readonly location: Location;
     protected readonly zone: NgZone;
     protected readonly router: Router
+
+
     /**
      * get current route request parameters \
      * do not cache the variable 
@@ -34,17 +41,21 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
         return this._queryParams;
     }
 
-
-
     /**
      *
      */
-    constructor(injector: Injector = null) {
+    constructor(injector: Injector) {
         this.activatedRoute = injector.get(ActivatedRoute);
         this.commonService = injector.get(CommonService);
         this.location = injector.get(Location);
         this.zone = injector.get(NgZone);
         this.router = injector.get(Router);
+        // this.hostElement = injector.get(ElementRef); 
+        // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
+        // this.view.createComponent()
+        // const componentFactory = this.componentFactoryResolver.resolveComponentFactory();
+        // return componentFactory.inputs;
+        // this.hostElement
         this._routeSubscription = this.activatedRoute.paramMap.subscribe((params) => {
             const frist = this.queryParams == null;
             this._queryParams = params;
@@ -102,7 +113,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
     public navigate(routePaths: string, extras?: NavigationExtras): Promise<boolean> {
         return this.router.navigate([routePaths], extras);
     }
-    
+
     /**
      * Navigates back in the platform's history.
      */
@@ -133,7 +144,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
      * 它的调用时机在默认的变更检测器首次检查完该指令的所有数据绑定属性之后，任何子视图或投影内容检查完之前。 它会且只会在指令初始化时调用一次。
      */
     public ngOnInit(): void {
-
+        this.onInit();
     }
 
     /**
@@ -141,17 +152,26 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
      * 如果至少发生了一次变更，则该回调方法会在默认的变更检测器检查完可绑定属性之后、视图子节点和内容子节点检查完之前调用。
      * @param changes 
      */
-    public ngOnChanges(changes: SimpleChanges): void {
+    // public ngOnChanges(changes: SimpleChanges): void {
 
-    }
+    // }
 
     /**
      * 一个生命周期钩子，除了使用默认的变更检查器执行检查之外，还会为指令执行自定义的变更检测函数。\
      * 在变更检测期间，默认的变更检测算法会根据引用来比较可绑定属性，以查找差异。 你可以使用此钩子来用其他方式检查和响应变更。
      */
-    public ngDoCheck(): void {
+    // public ngDoCheck(): void {
+
+    // }
+
+    protected onInit(): void {
 
     }
+
+    protected onDestroy(): void {
+
+    }
+
 
     /**
      * 一个生命周期钩子，它会在指令、管道或服务被销毁时调用。 用于在实例被销毁时，执行一些自定义清理代码。
@@ -160,5 +180,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, OnChanges, 
         if (this._routeSubscription) {
             this._routeSubscription.unsubscribe();
         }
+        this.onDestroy();
     }
 }

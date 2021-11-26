@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, RouterState, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { map, filter } from "rxjs/operators";
-
 import { SessionManager } from '../common/sessionmanager';
 import { RouteTitle } from '../models/RouteTitle';
 import { NzMessageDataOptions, NzMessageService } from 'ng-zorro-antd/message';

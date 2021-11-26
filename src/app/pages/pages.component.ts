@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
-import { GenericComponent } from '../@core/components/basic/generic.component';
-import { SidebarService } from '../@core/services/sidebar.service';
+import { GenericComponent } from '@core/components/basic/generic.component';
+import { SidebarService } from '@core/services/sidebar.service';
 
 // import { MENU_ITEMS } from './pages-menu';
 

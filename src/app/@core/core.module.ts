@@ -12,19 +12,15 @@ import { AccountService } from './services/account.service';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { NgxEchartsModule } from 'ngx-echarts';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { LoginPageComponent } from './components/login/loginpage.component';
 import { ThemeSettingComponent } from './components/windows/theme.setting.component/theme.setting.component';
 import { TerminalComponent } from './components/windows/terminal.component/terminal.component';
-import * as echarts from 'echarts';
-import { GuestRoleProvider } from './services/guest.role.provider';
 import { CommonService } from './services/common.service';
 import { DefaultPipe } from './pipes/default.pipe';
 import { TranslatorPipe } from './pipes/translator.pipe';
 import { DocumentTitleService } from './services/document.title.service';
 import { NetWorkService } from './services/network.sevrice';
-import { Exception } from './common/exception';
 import { NotFoundComponent } from './components/notfound/not-found.component';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -40,6 +36,8 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { SidebarService } from './services/sidebar.service';
 import { HoverDirective } from './directives/HoverDirective';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -93,7 +91,9 @@ const PROVIDERS: Provider[] = [
     NzGridModule,
     NzInputModule,
     RouterModule,
+    NzFormModule,
     FormsModule,
+    NzModalModule,
     NzSpaceModule,
     NzButtonModule,
     NzFormModule,

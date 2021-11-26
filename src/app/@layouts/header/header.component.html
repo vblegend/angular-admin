@@ -5,3 +5,8 @@
 <nz-select name="currentTheme" [(ngModel)]="currentTheme" (ngModelChange)="changeTheme($event)">
   <nz-option *ngFor="let theme of themes" [nzValue]="theme.key" [nzLabel]="theme.value"></nz-option>
 </nz-select>
+
+<button nz-button (click)="tclick()" nzType="primary">
+  <i nz-icon nzType="search"></i>
+  Search
+</button>

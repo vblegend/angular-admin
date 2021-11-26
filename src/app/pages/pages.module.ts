@@ -9,8 +9,8 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 // import { ButtonsComponent } from './buttons/buttons.component';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { LayoutModule } from '../layouts/layout.module';
-import { CoreModule } from '../@core/core.module';
+import { LayoutModule } from '@layouts/layout.module';
+import { CoreModule } from '@core/core.module';
 
 @NgModule({
   imports: [

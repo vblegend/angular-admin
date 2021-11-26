@@ -1,9 +1,6 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-
-import { map, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-// import { NbAuthService } from '@nebular/auth';
 import { CommonService } from './common.service';
 import { NetWorkService } from './network.sevrice';
 
@@ -36,7 +33,7 @@ export class AuthGuardService implements CanActivate {
 
 
   private verifyNetWorkState(): boolean {
-    return this.netWorkService.isConnect;
+    return true;// this.netWorkService.isConnect;
   }
 
   private verifyLoginState(state: { userName: string }): boolean {

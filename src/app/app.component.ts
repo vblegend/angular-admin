@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { GenericComponent } from './@core/components/basic/generic.component';
+import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
   selector: 'app-root',
