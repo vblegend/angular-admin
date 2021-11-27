@@ -1,5 +1,28 @@
 <nz-layout>
-  <nz-sider nzCollapsible [nzCollapsedWidth]="64" [(nzCollapsed)]="sidebarService.isCollapsed" [nzTrigger]="null">
+  <nz-header>
+      <app-header></app-header>
+  </nz-header>
+  <nz-layout>
+    <nz-sider nzCollapsible [nzCollapsedWidth]="64" [(nzCollapsed)]="menuService.isCollapsed" [nzTrigger]="null">
+      <div class="sidebar-form">
+        <app-sidebar></app-sidebar>
+      </div>
+    </nz-sider>
+    <nz-layout>
+      <nz-content>
+        <router-outlet></router-outlet>
+      </nz-content>
+      <nz-footer>
+        <app-footer></app-footer>
+      </nz-footer>
+    </nz-layout>
+
+  </nz-layout>
+</nz-layout>
+
+<!-- 
+<nz-layout>
+  <nz-sider nzCollapsible [nzCollapsedWidth]="64" [(nzCollapsed)]="menuService.isCollapsed" [nzTrigger]="null">
     <app-logo></app-logo>
     <div class="sidebar-form">
       <app-sidebar></app-sidebar>
@@ -15,16 +38,6 @@
     <nz-footer>
       <app-footer></app-footer>
     </nz-footer>
-
   </nz-layout>
 </nz-layout>
-
-<!-- 
-<nz-layout>
-  <nz-header>Header</nz-header>
-  <nz-layout>
-    <nz-sider>Sider</nz-sider>
-    <nz-content>Content</nz-content>
-  </nz-layout>
-  <nz-footer>Footer</nz-footer>
-</nz-layout> -->
+ -->

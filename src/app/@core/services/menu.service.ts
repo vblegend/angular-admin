@@ -5,7 +5,7 @@ import { RouteConfigure } from "../models/RouteConfigure";
 @Injectable({
     providedIn: 'root',
 })
-export class SidebarService {
+export class MenuService {
 
     public isCollapsed: boolean;
 
@@ -40,7 +40,7 @@ export class SidebarService {
         },
         {
             title: '服务进程',
-            icon: 'grace-yingyongfuwu',
+            icon: 'grace-memory',
             link: 'welcome/4',
         },
         {
@@ -139,7 +139,24 @@ export class SidebarService {
                     link: 'welcome/3455',
                 }
             ]
+        },
+        {
+            title: '系统设置',
+            icon: 'grace-shezhi2',
+            link: 'welcome/34864523',
+        },
+        {
+            title: '关于我们',
+            icon: 'grace-guanyu1',
+            link: 'welcome/4343213',
+        },
+        {
+            title: '退出登录',
+            icon: 'grace-guanji',
+            link: 'welcome/4348343',
         }
+
+
 
 
 

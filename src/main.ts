@@ -12,7 +12,6 @@ import { environment } from './environments/environment';
 import 'zone.js';  // Included with Angular CLI.
 
 if (environment.production) {
-  console.log(environment.production);
   enableProdMode();
 }
 

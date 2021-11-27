@@ -1,8 +1,9 @@
 import { KeyValue } from '@angular/common';
 import { Component, Injector } from '@angular/core';
+import { Exception } from '@core/common/exception';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { DialogService } from '@core/services/dialog.service';
-import { SidebarService } from '@core/services/sidebar.service';
+import { MenuService } from '@core/services/menu.service';
 import { ThemeService, ThemeStyle } from '@core/services/theme.service';
 
 @Component({
@@ -14,7 +15,7 @@ export class HeaderComponent extends GenericComponent {
   isCollapsed = false;
   public currentTheme: ThemeStyle;
   public themes: KeyValue<string, string>[];
-  constructor(injector: Injector, public sidebarService: SidebarService, public themeService: ThemeService , private dialogService:DialogService) {
+  constructor(injector: Injector, public menuService: MenuService, public themeService: ThemeService , private dialogService:DialogService) {
     super(injector);
   }
 
@@ -39,6 +40,8 @@ export class HeaderComponent extends GenericComponent {
     this.dialogService.createTerminalWindow();
   }
 
-
+  public throwError(){
+    throw Exception.build('test Global Error Handle','ZHE......');
+  }
 
 }

@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration development --port=4200 --host=0.0.0.0 --disable-host-check --proxy-config proxy.conf.json",
+    "start": "ng serve --configuration development --port=8080 --host=0.0.0.0 --disable-host-check --proxy-config proxy.conf.json",
     "build": "ng build",
     "lint": "ng lint",
     "lint:style": "stylelint \"app/**/*.less\"",

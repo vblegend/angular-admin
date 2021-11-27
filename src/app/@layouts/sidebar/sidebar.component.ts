@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { RouteConfigure } from '@core/models/RouteConfigure';
-import { SidebarService } from '@core/services/sidebar.service';
+import { MenuService } from '@core/services/menu.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,7 +9,7 @@ import { SidebarService } from '@core/services/sidebar.service';
   styleUrls: ['./sidebar.component.less']
 })
 export class SidebarComponent extends GenericComponent {
-  constructor(injector: Injector, public sidebarService: SidebarService) {
+  constructor(injector: Injector, public menuService: MenuService) {
     super(injector);
   }
 
@@ -17,7 +17,7 @@ export class SidebarComponent extends GenericComponent {
 
 
   protected onInit(): void {
-    this.menus = this.sidebarService.menus;
+    this.menus = this.menuService.menus;
 
     // console.log(`app-sidebar ngOnInit`);
   }

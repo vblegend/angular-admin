@@ -1,4 +1,4 @@
-import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, Injector, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ErrorHandler, Injector, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
 // import { NbAuthModule } from '@nebular/auth';
@@ -34,10 +34,11 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { SidebarService } from './services/sidebar.service';
+import { MenuService } from './services/menu.service';
 import { HoverDirective } from './directives/HoverDirective';
 import { NzModalModule } from 'ng-zorro-antd/modal';
-
+import { GlobalErrorHandler } from './private/GlobalErrorHandler';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -53,7 +54,7 @@ const EXPORT_DIRECTIVES: Provider[] = [
 /**
  * EXPORT CONPONENTS
  */
- const EXPORT_COMPONENTS = [
+const EXPORT_COMPONENTS = [
   LoginPageComponent,
   NotFoundComponent,
   ThemeSettingComponent,
@@ -75,7 +76,7 @@ const PROVIDERS: Provider[] = [
   NetWorkService,
   ThemeService,
   BootstrapService,
-  SidebarService
+  MenuService
 ];
 
 
@@ -98,6 +99,7 @@ const PROVIDERS: Provider[] = [
     NzButtonModule,
     NzFormModule,
     ReactiveFormsModule,
+    NzNotificationModule,
     NzMessageModule,
     DragDropModule,
   ],
@@ -133,6 +135,11 @@ export class CoreModule {
           useFactory: BootstrapService.InitializerFactory,
           deps: [BootstrapService],
           multi: true
+        },
+        {
+          provide: ErrorHandler,
+          useClass: GlobalErrorHandler,
+          deps: [NzNotificationService]
         }
       ]
     };

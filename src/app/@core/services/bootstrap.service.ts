@@ -41,8 +41,7 @@ export class BootstrapService {
      */
     private async initializer(): Promise<void> {
         if (this.loadingElement) this.loadingElement.style.display = '';
-        console.warn('initialization Bootstrap');
-        await this.commonService.sleep(1000);
+        // console.warn('initialization Bootstrap');
         const promises: Promise<void>[] = [];
         for (const init of this._bootstrapInits) {
             const result = <any>init.delegate.apply(init.context);

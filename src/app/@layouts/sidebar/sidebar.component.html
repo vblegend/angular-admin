@@ -1,10 +1,10 @@
-<ul nz-menu nzMode="inline" [nzInlineCollapsed]="sidebarService.isCollapsed">
+<ul nz-menu nzMode="inline" [nzInlineCollapsed]="menuService.isCollapsed">
   <ng-container *ngTemplateOutlet="menuTpl; context: { $implicit: { level: 1, menus: menus} }"></ng-container>
   <ng-template #menuTpl let-data>
     <ng-container *ngFor="let menu of data.menus;">
-      <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="sidebarService.isCollapsed ? 24 : data.level * 24"
+      <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="menuService.isCollapsed ? 24 : data.level * 24"
         [routerLink]="menu.link" nz-tooltip nzTooltipPlacement="right"
-        [nzTooltipTitle]="sidebarService.isCollapsed && data.level === 1 ? menu.title : ''" [nzMatchRouter]="true"
+        [nzTooltipTitle]="menuService.isCollapsed && data.level === 1 ? menu.title : ''" [nzMatchRouter]="true"
         [nzDisabled]="menu.disabled" [nzSelected]="menu.selected">
         <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
         <span>{{ menu.title }}</span>

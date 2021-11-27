@@ -18,7 +18,6 @@ export class DialogService {
     return this.modalService.create<TerminalComponent, boolean>({
       nzTitle: 'terminal',
       nzWidth:'646px',
-      
       // nzClassName : 'terminal',
       nzContent: TerminalComponent,
     });

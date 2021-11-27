@@ -31,7 +31,7 @@ export class NetWorkService {
     constructor() {
         this.serialNumber = 0;
         this.tasklist = new Map();
-        console.log('NetWorkService');
+        // console.log('NetWorkService');
     }
 
     private getSerialNumber(): number {
@@ -44,7 +44,7 @@ export class NetWorkService {
     }
 
     public set url(value: string) {
-        if (this._connectPromise) throw Exception.build('websocket url must be modified when the connection request is not established.');
+        if (this._connectPromise) throw Exception.build('network service', 'websocket url must be modified when the connection request is not established.');
         this._url = value;
     }
 
@@ -102,18 +102,18 @@ export class NetWorkService {
 
         if (timeout == null) timeout = this.timeout;
         const promise = new Promise<T>((resolve, rejects) => {
- 
+
             const sn = this.getSerialNumber();
 
-            if (this.webSocket == null) return rejects(Exception.build('websocket is not initialized!'));
-            if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('websocket is not connected!'));
+            if (this.webSocket == null) return rejects(Exception.build('network service', 'websocket is not initialized!'));
+            if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('network service', 'websocket is not connected!'));
             const message: WebSocketMessage<D> = { sn, method, data };
             this.webSocket.send(JSON.stringify(message));
             // console.log(sn);
             // check timeout
             const timer = window.setTimeout(() => {
                 if (!task.complate) {
-                    task.rejects(Exception.build('websocket call timeout!'));
+                    task.rejects(Exception.build('network service', 'websocket call timeout!'));
                     task.complate = true;
                     this.tasklist.delete(sn);
                 }

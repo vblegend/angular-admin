@@ -107,6 +107,7 @@
             },
             "development": {
               "optimization": false,
+              "outputHashing": "all",
               "buildOptimizer": false,
               "sourceMap": true
             }

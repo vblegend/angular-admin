@@ -62,7 +62,7 @@ export class AppModule {
     private iconService: NzIconService) {
 
     themeService.changeTheme(ThemeStyle.Default);
-    console.warn('initialization App Module');
+    // console.warn('initialization App Module');
     bootstrapService.loadingElement = document.getElementById('global-spinner');
 
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
@@ -80,7 +80,7 @@ export class AppModule {
     this.netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
     try {
       const state = await this.netWorkService.connection();
-      if (!state) throw Exception.build('failed to connect to server!');
+      if (!state) throw Exception.build('app init', 'failed to connect to server!');
       console.time('websocket');
       const list: Promise<string>[] = [];
 
@@ -93,13 +93,12 @@ export class AppModule {
       await Promise.all(list);
       console.timeEnd('websocket');
     } catch (e) {
-      console.log(e);
     }
   }
 
 
 
 
-  
+
 
 }

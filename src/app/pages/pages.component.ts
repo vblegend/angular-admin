@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { SidebarService } from '@core/services/sidebar.service';
+import { MenuService } from '@core/services/menu.service';
 
 // import { MENU_ITEMS } from './pages-menu';
 
@@ -14,7 +14,7 @@ export class PagesComponent extends GenericComponent {
   /**
    *
    */
-  constructor(injector: Injector, public sidebarService: SidebarService) {
+  constructor(injector: Injector, public menuService: MenuService) {
     super(injector);
   }
 

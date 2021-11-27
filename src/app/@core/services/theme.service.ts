@@ -41,7 +41,7 @@ export class ThemeService {
 
     }
 
-    public get themes():Record<ThemeStyle, string>{
+    public get themes(): Record<ThemeStyle, string> {
         return this._themes;
     }
 
@@ -66,7 +66,7 @@ export class ThemeService {
      * #throw Exception
      */
     public async changeTheme(themeId: ThemeStyle): Promise<void> {
-        if (this._themes[themeId] == null) throw Exception.build("don't try to load an undeclared theme");
+        if (this._themes[themeId] == null) throw Exception.build('change Theme', "don't try to load an undeclared theme");
         try {
             await this.loadTheme(themeId);
             if (this._currentTheme) {
@@ -74,7 +74,7 @@ export class ThemeService {
             }
             this._currentTheme = themeId;
         } catch (ex) {
-            throw Exception.fromCatch(ex, 'A fatal error was encountered while loading the theme file.')
+            throw Exception.fromCatch('change Theme', ex, 'A fatal error was encountered while loading the theme file.')
         }
     }
 

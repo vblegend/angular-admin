@@ -1,8 +1,2 @@
-<!-- <a href="/">
-
-</a> -->
-
-<div>
-    <img src="favicon.png" alt="logo">
-    <h1  [style.visibility]="sidebarService.isCollapsed? 'hidden' : 'visible'">Administrator</h1>
-</div>
+<img src="favicon.png" alt="logo">
+<h1  *ngIf="!menuService.isCollapsed"  >Test</h1>

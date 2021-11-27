@@ -13,6 +13,10 @@ import { CoreModule } from "@core/core.module";
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { FormsModule } from "@angular/forms";
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 @NgModule({
     imports: [
         CommonModule,
@@ -24,7 +28,11 @@ import { FormsModule } from "@angular/forms";
         NzLayoutModule,
         NzGridModule,
         NzToolTipModule,
-        NzSelectModule
+        NzButtonModule,
+        NzSelectModule,
+        NzSpaceModule,
+        NzDividerModule,
+        NzBadgeModule
     ],
     exports: [
         FooterComponent,
