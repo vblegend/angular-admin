@@ -11,16 +11,23 @@ import { GenericComponent } from '../basic/generic.component';
   templateUrl: './loginpage.component.html',
 })
 export class LoginPageComponent extends GenericComponent {
-
+  public background: string;
   public password: string;
   public loadingWait: boolean;
   constructor(injector: Injector) {
     super(injector);
     this.password = '';
+    this.background = 'url(/assets/images/team.png)';
   }
 
+  protected onInit() {
+    console.log(`on init login`);
+    console.log(this.queryParams.get('name'));
+  }
+
+
   protected onQueryChanges() {
-    console.log(this.queryParams);
+    console.log(`on query login`);
   }
 
 
@@ -40,8 +47,9 @@ export class LoginPageComponent extends GenericComponent {
     // this.accountService.login(this.password).then(e => {
     //   console.log(e);
     // });
-    window.setTimeout(() => {
+    this.createTimer(() => {
       this.loadingWait = false;
-    }, 3000);
+    }).start(3000);
+
   }
 }

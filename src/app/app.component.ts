@@ -3,7 +3,7 @@ import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  template: '<router-outlet></router-outlet>    <ngx-global-templates></ngx-global-templates>',
   styleUrls: ['./app.component.less']
 })
 export class AppComponent extends GenericComponent {

@@ -153,7 +153,7 @@ export class MenuService {
         {
             title: '退出登录',
             icon: 'grace-guanji',
-            link: 'welcome/4348343',
+            link: '../login'
         }
 
 

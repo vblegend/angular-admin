@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, Injector } from '@angular/core';
+import { Exception } from '@core/common/exception';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { Terminal } from 'xterm';
@@ -81,6 +82,9 @@ export class TerminalComponent extends GenericComponent {
     ].join('\n\r'));
 
     const socket = new WebSocket('wss://docker.example.com/containers/mycontainerid/attach/ws');
+    socket.onerror = (e) => {
+      throw Exception.fromCatch('Terminal does not work ', e, `Unable to connect to server：${socket.url}`);
+    };
     const attachAddon = new AttachAddon(socket);
     // Attach the socket to term
     this.term.loadAddon(attachAddon);

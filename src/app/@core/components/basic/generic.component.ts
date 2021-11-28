@@ -3,6 +3,9 @@ import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@ang
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
 import { Subscription } from "rxjs";
+import { Exception } from "@core/common/exception";
+import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
+import { TemplateService } from "@core/services/template.service";
 
 
 
@@ -18,7 +21,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     @ViewChild("view", { read: ViewContainerRef }) view: ViewContainerRef;
     // private hostElement: ElementRef<GenericComponent>;
     // private componentFactoryResolver: ComponentFactoryResolver;
-
+    private _times: FixedTimer[];
+    private _isDispose: boolean;
     private _queryParams: ParamMap;
     private _routeSubscription: Subscription;
     protected readonly activatedRoute: ActivatedRoute;
@@ -31,7 +35,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     protected readonly location: Location;
     protected readonly zone: NgZone;
     protected readonly router: Router
-
+    protected readonly templateService: TemplateService;
 
     /**
      * get current route request parameters \
@@ -45,11 +49,14 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      *
      */
     constructor(injector: Injector) {
+        this._isDispose = false;
+        this._times = [];
         this.activatedRoute = injector.get(ActivatedRoute);
         this.commonService = injector.get(CommonService);
         this.location = injector.get(Location);
         this.zone = injector.get(NgZone);
         this.router = injector.get(Router);
+        this.templateService = injector.get(TemplateService);
         // this.hostElement = injector.get(ElementRef); 
         // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         // this.view.createComponent()
@@ -78,8 +85,9 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @param fn 
      * @returns 
      */
-    protected runOut<T>(fn: (...args: any[]) => T): T {
-        return this.zone.runOutsideAngular(fn);
+    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: Object): T {
+        this.ifDisposeThrow();
+        return this.zone.runOutsideAngular(thisContext ? fn.bind(thisContext) : fn);
     }
 
     /**
@@ -91,8 +99,29 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @returns T
      */
     protected run<T>(fn: (...args: any[]) => T, applyThis?: any, applyArgs?: any[]): T {
+        this.ifDisposeThrow();
         return this.zone.run(fn, applyThis, applyArgs);
     }
+
+
+    protected createTimer(handler: FixedTimerHandler): FixedTimer {
+        this.ifDisposeThrow();
+        return new FixedTimer(handler, this.timer_onstart, this.timer_onstop, this);
+    }
+
+    private timer_onstart(timer: FixedTimer) {
+        this._times.push(timer);
+    }
+
+    private timer_onstop(timer: FixedTimer) {
+        const index = this._times.indexOf(timer);
+        if (index > -1) {
+            this._times.splice(index, 1);
+        }
+    }
+
+
+
 
     /**
      * Asynchronous thread sleep function 
@@ -100,6 +129,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @returns 
      */
     public async sleep(milliseconds: number): Promise<void> {
+        this.ifDisposeThrow();
         return new Promise((resolve) => {
             window.setTimeout(resolve, milliseconds);
         });
@@ -111,6 +141,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @returns 
      */
     public navigate(routePaths: string, extras?: NavigationExtras): Promise<boolean> {
+        this.ifDisposeThrow();
         return this.router.navigate([routePaths], extras);
     }
 
@@ -118,6 +149,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * Navigates back in the platform's history.
      */
     public goBack(): void {
+        this.ifDisposeThrow();
         this.location.back();
     }
 
@@ -131,6 +163,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @returns 
      */
     public navigateByUrl(routeUrl: string, queryParams?: Params): Promise<boolean> {
+        this.ifDisposeThrow();
         if (queryParams) {
             return this.router.navigate([routeUrl], { queryParams: queryParams });
         } else {
@@ -173,10 +206,29 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     }
 
 
+    protected ifDisposeThrow() {
+        if (this._isDispose) {
+            throw Exception.build(`${typeof this} has been destroyed.`, 'cannot continue to operate components that have been destroyed.');
+        }
+    }
+
+    /**
+     * 
+     */
+    public get IsDispose(): boolean {
+        return this._isDispose;
+    }
+
+
     /**
      * 一个生命周期钩子，它会在指令、管道或服务被销毁时调用。 用于在实例被销毁时，执行一些自定义清理代码。
      */
     public ngOnDestroy(): void {
+        if (this._isDispose) return;
+        while (this._times.length) {
+            this._times[0].stop();
+        }
+        this._isDispose = true;
         if (this._routeSubscription) {
             this._routeSubscription.unsubscribe();
         }

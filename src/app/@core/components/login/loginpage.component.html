@@ -1,23 +1,36 @@
 <nz-layout>
-  <nz-layout class="background">
-  </nz-layout>
+  <nz-layout class="background" [style.background-image]="background"></nz-layout>
+  <nz-layout class="background blur" [style.background-image]="background"></nz-layout>
+
+
   <nz-layout>
     <div class="pos-center">
       <label class="mb-30 title-label no-select ts-5">Test</label>
-      <form nz-form  class="login-form">
+      <form nz-form class="login-form">
         <label for="exampleInputPassword1" class="form-label no-select ts-2">enter your password</label>
         <nz-form-item>
           <nz-space>
             <input *nzSpaceItem nz-input [nzSize]="'default'" class="pwd-imput" name="password" type="password"
               id="exampleInputPassword1" [(ngModel)]="password" placeholder="Password">
-            <button *nzSpaceItem nz-button [nzType]="'danger'" [nzSize]="'default'" [nzLoading]="loadingWait" type="submit" (click)="login()">
-              <i nz-icon nzType="poweroff"></i>
-              login
+            <button *nzSpaceItem nz-button nzType="default" [nzSize]="'default'" [nzLoading]="loadingWait" type="submit"
+              (click)="login()">
+              <!-- <i nz-icon  [nzIconfont]="'grace-terminal1'"></i> -->
+              LOGIN
             </button>
           </nz-space>
         </nz-form-item>
-
       </form>
     </div>
   </nz-layout>
+
+  <nz-layout>
+    <nz-avatar [nzSize]="48" nz-icon [nzIconfont]="'grace-jiqunguanli'" nz-popover 
+      nzPopoverTrigger="click" nzPopoverPlacement="left" [nzPopoverContent]="contentTemplate"></nz-avatar>
+    <ng-template #contentTemplate>
+      <a (click)="clickMe()">Close</a>
+    </ng-template>
+  </nz-layout>
+
+
+
 </nz-layout>

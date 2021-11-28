@@ -24,6 +24,7 @@ import { Exception } from '@core/common/exception';
 import { ThemeService, ThemeStyle } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { DynamicModule } from './@dynamic/dynamic.module';
+import { CommonService } from '@core/services/common.service';
 registerLocaleData(zh);
 
 
@@ -52,16 +53,20 @@ registerLocaleData(zh);
 export class AppModule {
 
 
-
-
   constructor(private bootstrapService: BootstrapService,
+    private commonService: CommonService,
     private netWorkService: NetWorkService,
     private themeService: ThemeService,
     private documentTitleService: DocumentTitleService,
     private networkService: NetWorkService,
     private iconService: NzIconService) {
 
-    themeService.changeTheme(ThemeStyle.Default);
+    const theme = this.commonService.session.get<ThemeStyle>('theme');
+    if (theme) {
+      themeService.changeTheme(theme);
+    } else {
+      themeService.changeTheme(ThemeStyle.Default);
+    }
     // console.warn('initialization App Module');
     bootstrapService.loadingElement = document.getElementById('global-spinner');
 

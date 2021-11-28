@@ -15,7 +15,7 @@
     </ng-template>
 
 
-    <button nz-button *nzSpaceItem (click)="tclick()" nzType="primary">
+    <button nz-button *nzSpaceItem nzType="primary">
       <i nz-icon nzType="search"></i>
       Search
     </button>
@@ -46,17 +46,18 @@
 
     <!-- <div class="icon-button" *nzSpaceItem> -->
     <i class="icon-button" *nzSpaceItem nz-icon nz-tooltip nzTooltipPlacement="bottom" [nzTooltipTitle]="'终端'"
-      [nzIconfont]="'grace-terminal1'"></i>
+      (click)="tclick()" [nzIconfont]="'grace-terminal1'"></i>
     <!-- </div> -->
 
     <!-- <div class="icon-button" *nzSpaceItem> -->
-    <i class="icon-button" *nzSpaceItem nz-icon nz-tooltip nzTooltipPlacement="bottom" [nzTooltipTitle]="'信息'"
-      [nzIconfont]="'grace-youjian1'"></i>
+    <i class="icon-button" *nzSpaceItem nz-icon nz-tooltip nzTooltipPlacement="bottom" [nzTooltipTitle]="'退出'"
+      nz-popconfirm nzPopconfirmTitle="Are you sure to log out ?" nzPopconfirmPlacement="bottom"
+      (nzOnConfirm)="logout()" [nzIconfont]="'grace-iconfontzhuxiao1'"></i>
     <!-- </div> -->
   </nz-space>
 
 
-
+  <span class="username none-select">{{today | date:'yyyy-MM-dd HH:mm:ss'}}</span>
 
 
 </div>

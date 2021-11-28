@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot } from '@angular/router';
+import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot, NavigationCancel } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RouteTitle } from '../models/RouteTitle';
 import { Subscription } from 'rxjs';
@@ -87,12 +87,15 @@ export class DocumentTitleService {
     }
 
     private router_event(event: RouterEvent) {
-        if (event instanceof NavigationEnd) {
+        // console.log(event.constructor.name);
+        if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
             let title = this.getCurrentTitle(this.router);
+            // console.log(title);s
             if (title == null) title = this._defaultTitle;
             const suffixText = this.getTitleText(this._globalSuffix);
             const titleText = this.getTitleText(title);
             const prefixText = this.getTitleText(this._globalPrefix);
+            if (event instanceof NavigationCancel) this.titleService.setTitle('');
             this.titleService.setTitle(suffixText + titleText + prefixText);
         }
     }

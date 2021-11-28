@@ -39,6 +39,10 @@ import { HoverDirective } from './directives/HoverDirective';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { GlobalErrorHandler } from './private/GlobalErrorHandler';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { TemplateService } from './services/template.service';
+import { GlobalTemplatesComponent } from './components/global-templates/global-templates.component';
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -59,7 +63,8 @@ const EXPORT_COMPONENTS = [
   NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
-  ErrorComponent
+  ErrorComponent,
+  GlobalTemplatesComponent
 ];
 
 
@@ -76,7 +81,8 @@ const PROVIDERS: Provider[] = [
   NetWorkService,
   ThemeService,
   BootstrapService,
-  MenuService
+  MenuService,
+  TemplateService
 ];
 
 
@@ -102,6 +108,8 @@ const PROVIDERS: Provider[] = [
     NzNotificationModule,
     NzMessageModule,
     DragDropModule,
+    NzAvatarModule,
+    NzPopoverModule
   ],
   exports: [
     EXPORT_COMPONENTS,
@@ -111,7 +119,7 @@ const PROVIDERS: Provider[] = [
   declarations: [
     EXPORT_COMPONENTS,
     EXPORT_DIRECTIVES,
-    EXPORT_PIPES
+    EXPORT_PIPES,
   ]
 })
 
@@ -139,7 +147,7 @@ export class CoreModule {
         {
           provide: ErrorHandler,
           useClass: GlobalErrorHandler,
-          deps: [NzNotificationService]
+          deps: [NzNotificationService, TemplateService]
         }
       ]
     };

@@ -99,12 +99,9 @@ export class NetWorkService {
      * @returns 
      */
     public async send<D, T>(method: string, data: D, timeout?: number): Promise<T> {
-
         if (timeout == null) timeout = this.timeout;
         const promise = new Promise<T>((resolve, rejects) => {
-
             const sn = this.getSerialNumber();
-
             if (this.webSocket == null) return rejects(Exception.build('network service', 'websocket is not initialized!'));
             if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('network service', 'websocket is not connected!'));
             const message: WebSocketMessage<D> = { sn, method, data };
@@ -182,7 +179,7 @@ export class NetWorkService {
     }
 
     private socket_error(_ev: Event): void {
-
+        throw Exception.fromCatch('NetService websocket', _ev, 'Unable to connect to Websocket server !');
     }
 
 

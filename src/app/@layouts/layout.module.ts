@@ -17,6 +17,16 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+
+
+
+
+
+
+
+
 @NgModule({
     imports: [
         CommonModule,
@@ -32,7 +42,8 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
         NzSelectModule,
         NzSpaceModule,
         NzDividerModule,
-        NzBadgeModule
+        NzBadgeModule,
+        NzPopconfirmModule
     ],
     exports: [
         FooterComponent,

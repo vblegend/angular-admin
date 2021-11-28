@@ -3,7 +3,7 @@
   <ng-template #menuTpl let-data>
     <ng-container *ngFor="let menu of data.menus;">
       <li *ngIf="!menu.children" nz-menu-item [nzPaddingLeft]="menuService.isCollapsed ? 24 : data.level * 24"
-        [routerLink]="menu.link" nz-tooltip nzTooltipPlacement="right"
+        [routerLink]="menu.link" [queryParams]="menu.queryParams" nz-tooltip nzTooltipPlacement="right"
         [nzTooltipTitle]="menuService.isCollapsed && data.level === 1 ? menu.title : ''" [nzMatchRouter]="true"
         [nzDisabled]="menu.disabled" [nzSelected]="menu.selected">
         <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
