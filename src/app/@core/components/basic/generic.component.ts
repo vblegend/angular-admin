@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
@@ -6,8 +6,8 @@ import { Subscription } from "rxjs";
 import { Exception } from "@core/common/exception";
 import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
 import { TemplateService } from "@core/services/template.service";
-
-
+import { ComponentPortal } from '@angular/cdk/portal';
+import { ComponentType, Overlay } from '@angular/cdk/overlay';
 
 /**
  * Generic basic components, commonly used services are integrated internally \
@@ -25,18 +25,18 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     private _isDispose: boolean;
     private _queryParams: ParamMap;
     private _routeSubscription: Subscription;
-    protected readonly activatedRoute: ActivatedRoute;
 
     /**
      * get common service
      * @returns 
      */
+    protected readonly activatedRoute: ActivatedRoute;
     protected readonly commonService: CommonService;
     protected readonly location: Location;
     protected readonly zone: NgZone;
     protected readonly router: Router
     protected readonly templateService: TemplateService;
-
+    protected readonly overlay: Overlay;
     /**
      * get current route request parameters \
      * do not cache the variable 
@@ -48,7 +48,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     /**
      *
      */
-    constructor(injector: Injector) {
+    constructor(private injector: Injector) {
         this._isDispose = false;
         this._times = [];
         this.activatedRoute = injector.get(ActivatedRoute);
@@ -56,6 +56,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         this.location = injector.get(Location);
         this.zone = injector.get(NgZone);
         this.router = injector.get(Router);
+        this.overlay = injector.get(Overlay);
         this.templateService = injector.get(TemplateService);
         // this.hostElement = injector.get(ElementRef); 
         // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
@@ -77,6 +78,25 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     protected onQueryChanges(): void {
 
     }
+
+
+    /**
+     * 
+     * @param ctor 
+     * @returns 
+     */
+    protected generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
+        const overlayRef = this.overlay.create({
+            hasBackdrop: false,
+            scrollStrategy: this.overlay.scrollStrategies.noop(),
+            positionStrategy: this.overlay.position().global()
+        });
+        const componentPortal = new ComponentPortal(ctor, null, this.injector);
+        const componentRef = overlayRef.attach(componentPortal);
+        return componentRef;
+    }
+
+
 
 
     /**
@@ -119,9 +139,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
             this._times.splice(index, 1);
         }
     }
-
-
-
 
     /**
      * Asynchronous thread sleep function 

@@ -1,15 +1,15 @@
-import { ErrorHandler } from "@angular/core";
+import { ErrorHandler, EventEmitter } from "@angular/core";
 import { Exception } from "@core/common/exception";
 import { TemplateService } from "@core/services/template.service";
 import { NzNotificationService } from "ng-zorro-antd/notification";
 
 export class GlobalErrorHandler implements ErrorHandler {
-
+    // public em : EventEmitter;
     constructor(private notification: NzNotificationService, private templateService: TemplateService) {
 
     }
 
-    public handleError(error): void {
+    public handleError(error: Object): void {
         if (error instanceof Exception) {
             this._notification(error);
         }
@@ -18,7 +18,6 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     private _notification(exception: Exception): void {
         const template = this.templateService.getTemplate('#globalErrorNotification');
-        this.notification.template(template);
         this.notification.create('error', exception.host, exception.message);
     }
 

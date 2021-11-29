@@ -42,7 +42,11 @@ import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notif
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { TemplateService } from './services/template.service';
-import { GlobalTemplatesComponent } from './components/global-templates/global-templates.component';
+
+
+
+
+
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -63,8 +67,7 @@ const EXPORT_COMPONENTS = [
   NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
-  ErrorComponent,
-  GlobalTemplatesComponent
+  ErrorComponent
 ];
 
 
