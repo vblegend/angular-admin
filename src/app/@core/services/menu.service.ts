@@ -46,7 +46,7 @@ export class MenuService {
         {
             title: '计划任务',
             icon: 'grace-renwujihua',
-            link: 'welcome/4444',
+            link: 'tasks',
         },
         {
             title: '日志管理',

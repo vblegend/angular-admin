@@ -2,6 +2,8 @@
 @import (multiple) '~ng-zorro-antd/src/style/themes/dark.less';
 @import './base.less';
 // 
+@body-background: #151a30;
+
 @component-background: #222b45;
 
 @menu-border-bottom: solid 1px #2e3958;
@@ -12,7 +14,7 @@
 
 @layout-sider-background: @component-background;
 @layout-trigger-background: @component-background;
-@layout-header-background: #151a30;
+@layout-header-background: @component-background;
 
 
 
@@ -36,3 +38,59 @@
 @tooltip-arrow-width: 5px;
 @tooltip-distance: @tooltip-arrow-width - 1px + 4px;
 @tooltip-arrow-color: @tooltip-bg;
+
+
+
+
+
+@border-color-split:#2e3958;
+// Table
+// --
+@table-bg: @component-background;
+@table-header-bg: @background-color-light;
+@table-header-color: @heading-color;
+@table-header-sort-bg: @background-color-base;
+@table-body-sort-bg: #fafafa;
+@table-row-hover-bg: @background-color-light;
+@table-selected-row-color: inherit;
+@table-selected-row-bg: @primary-1;
+@table-body-selected-sort-bg: @table-selected-row-bg;
+@table-selected-row-hover-bg: darken(@table-selected-row-bg, 2%);
+@table-expanded-row-bg: #fbfbfb;
+@table-padding-vertical: 16px;
+@table-padding-horizontal: 16px;
+@table-padding-vertical-md: (@table-padding-vertical * 3 / 4);
+@table-padding-horizontal-md: (@table-padding-horizontal / 2);
+@table-padding-vertical-sm: (@table-padding-vertical / 2);
+@table-padding-horizontal-sm: (@table-padding-horizontal / 2);
+@table-border-color: @border-color-split;
+@table-border-radius-base: @border-radius-base;
+@table-footer-bg: @background-color-light;
+@table-footer-color: @heading-color;
+@table-header-bg-sm: @table-header-bg;
+@table-font-size: @font-size-base;
+@table-font-size-md: @table-font-size;
+@table-font-size-sm: @table-font-size;
+@table-header-cell-split-color: rgba(0, 0, 0, 0.03);
+// Sorter
+// Legacy: `table-header-sort-active-bg` is used for hover not real active
+@table-header-sort-active-bg: rgba(0, 0, 0, 0.04);
+@table-fixed-header-sort-active-bg: hsv(0, 0, 96%);
+
+// Filter
+@table-header-filter-active-bg: rgba(0, 0, 0, 0.04);
+@table-filter-btns-bg: inherit;
+@table-filter-dropdown-bg: @component-background;
+@table-expand-icon-bg: @component-background;
+@table-selection-column-width: 32px;
+// Sticky
+@table-sticky-scroll-bar-bg: fade(#000, 35%);
+@table-sticky-scroll-bar-radius: 4px;
+
+
+//Dropdown
+@dropdown-menu-bg: @component-background;
+@dropdown-vertical-padding: 2px;
+@dropdown-edge-child-vertical-padding: 0px;
+@dropdown-font-size: @font-size-base;
+@dropdown-line-height: 22px;

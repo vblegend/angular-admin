@@ -42,6 +42,7 @@ import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notif
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { TemplateService } from './services/template.service';
+import { UnSelectedDirective } from './directives/UnSelectedDirective';
 
 
 
@@ -55,7 +56,8 @@ const EXPORT_PIPES: Provider[] = [
 
 
 const EXPORT_DIRECTIVES: Provider[] = [
-  HoverDirective
+  HoverDirective,
+  UnSelectedDirective
 ];
 
 
