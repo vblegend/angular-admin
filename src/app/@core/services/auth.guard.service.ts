@@ -21,7 +21,6 @@ export class AuthGuardService implements CanActivate {
     //       return authenticated;
     //     })
     //   );
-
     const userCookie = this.commonService.session.get<{ userName: string }>("user");
     if (!this.verifyLoginState(userCookie) || !this.verifyNetWorkState()) {
       this.commonService.navigateByUrl('/login');

@@ -1,16 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 
+import { NzSafeAny } from 'ng-zorro-antd/core/types';
+import { NzDrawerOptions, NzDrawerRef } from 'ng-zorro-antd/drawer';
+
 import { NzTableFilterFn, NzTableFilterList, NzTableFilterValue, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
-import { SchedulingTask, TaskMode } from './tasks.model';
+import { TaskAddComponent } from '../task-add/task-add.component';
+import { SchedulingTask, TaskMode } from '../task-model/tasks.model';
+
 
 
 @Component({
   selector: 'ngx-tasks',
-  templateUrl: './tasks.component.html',
-  styleUrls: ['./tasks.component.less']
+  templateUrl: './task-list.component.html',
+  styleUrls: ['./task-list.component.less']
 })
-export class TasksComponent extends GenericComponent {
+export class TaskListComponent extends GenericComponent {
   public searchValue: string;
   public serviceFilters: NzTableFilterList;
   public listOfRandomUser: SchedulingTask[] = [];
@@ -53,6 +58,27 @@ export class TasksComponent extends GenericComponent {
   }
 
 
+
+
+  public async newTask(): Promise<void> {
+    // ngx-task-add
+    // this.modalService.create({
+    //   nzTitle: '创建任务',
+    //   nzContent: TaskAddComponent
+    // });
+    const drawerRef = this.openDrawer<TaskAddComponent, string, number>({
+      nzTitle: '创建任务',
+      nzContent: TaskAddComponent,
+      nzMaskClosable: false,
+      nzWidth: 'auto',
+      nzContentParams: {
+        input: 'sfsdfsg'
+      }
+    });
+    const result = await this.waitDrawer(drawerRef);
+    console.log(result);
+
+  }
 
 
 

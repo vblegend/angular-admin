@@ -1,0 +1,59 @@
+<form nz-form  class="login-form" (ngSubmit)="submitForm()">
+
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">E-mail</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your username!">
+      <input type="text" nz-input placeholder="Username" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Password</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <input type="password" nz-input placeholder="Password" />
+    </nz-form-control>
+  </nz-form-item>
+  <div nz-row class="login-form-margin">
+    <div nz-col [nzSpan]="12">
+      <label nz-checkbox >
+        <span>Remember me</span>
+      </label>
+    </div>
+    <div nz-col [nzSpan]="12">
+      <a class="login-form-forgot">Forgot password</a>
+    </div>
+  </div>
+  <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
+  Or
+  <a>register now!</a>
+</form>
+
+
+<div style="width: 600px;">
+  <div nz-row>
+    <div nz-col nzSpan="4">col-12</div>
+    <input nz-col nzSpan="8" nz-input />
+  </div>
+
+  <br />
+
+  <div nz-row>
+    <div nz-col nzSpan="4">col-12</div>
+    <input nz-col nzSpan="8" nz-input />
+  </div>
+
+  <br />
+
+  <div nz-row>
+    <div nz-col nzSpan="4">col-12</div>
+    <input nz-col nzSpan="8" nz-input />
+  </div>
+  <br />
+  <div nz-row>
+  </div>
+
+  <nz-divider></nz-divider>
+  <div nz-row>
+    <button nz-col nzOffset="16" nzType="primary" (click)="submit()" nz-button>Submit</button>
+    <button nz-col nzOffset="1" nzType="primary" (click)="cancel()" nz-button>Cancel</button>
+  </div>
+</div>

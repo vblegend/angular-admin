@@ -8,6 +8,9 @@ import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
 import { TemplateService } from "@core/services/template.service";
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentType, Overlay } from '@angular/cdk/overlay';
+import { NzModalService } from "ng-zorro-antd/modal";
+import { NzDrawerOptions, NzDrawerRef, NzDrawerService } from "ng-zorro-antd/drawer";
+import { NzSafeAny } from "ng-zorro-antd/core/types";
 
 /**
  * Generic basic components, commonly used services are integrated internally \
@@ -37,6 +40,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     protected readonly router: Router
     protected readonly templateService: TemplateService;
     protected readonly changeDetector: ChangeDetectorRef;
+    protected readonly modalService: NzModalService;
+    protected readonly drawerService: NzDrawerService;
     protected readonly overlay: Overlay;
     /**
      * get current route request parameters \
@@ -60,6 +65,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         this.overlay = injector.get(Overlay);
         this.templateService = injector.get(TemplateService);
         this.changeDetector = injector.get(ChangeDetectorRef);
+        this.modalService = injector.get(NzModalService);
+        this.drawerService = injector.get(NzDrawerService);
         // this.hostElement = injector.get(ElementRef); 
         // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         // this.view.createComponent()
@@ -76,15 +83,15 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     /**
      * 更改检测树相关
      */
-    protected attachView(){
+    protected attachView() {
         this.changeDetector.reattach();
     }
 
-    protected detachView(){
+    protected detachView() {
         this.changeDetector.detach();
     }
 
-    protected detectChanges(){
+    protected detectChanges() {
         this.changeDetector.detectChanges();
     }
 
@@ -168,6 +175,37 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
             window.setTimeout(resolve, milliseconds);
         });
     }
+
+
+
+
+
+    /**
+     * Open a drawer that cannot be mask closable 
+     * @param options 
+     * @returns 
+     */
+    public openDrawer<TDrawer, TInput, TOut>(options: NzDrawerOptions<TDrawer, { input: TInput }>): NzDrawerRef<TDrawer, TOut> {
+        options.nzMaskClosable = false;
+        return this.drawerService.create(options);
+    }
+
+    /**
+     * waiting for a drawer to close 
+     * @param drawerRef 
+     * @returns 
+     */
+    public async waitDrawer<TDrawer = NzSafeAny, TOut = NzSafeAny>(drawerRef: NzDrawerRef<TDrawer, TOut>): Promise<TOut> {
+        return new Promise<TOut>((resolve) => {
+            drawerRef.afterClose.subscribe(resolve);
+        });
+    }
+
+
+
+
+
+
 
     /**
      * navigate to the specified routing address

@@ -43,6 +43,7 @@ import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { TemplateService } from './services/template.service';
 import { UnSelectedDirective } from './directives/UnSelectedDirective';
+import { NzDrawerService } from 'ng-zorro-antd/drawer';
 
 
 
@@ -84,7 +85,8 @@ const PROVIDERS: Provider[] = [
   ThemeService,
   BootstrapService,
   MenuService,
-  TemplateService
+  TemplateService,
+  NzDrawerService
 ];
 
 

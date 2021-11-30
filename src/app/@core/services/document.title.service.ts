@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot, NavigationCancel } from '@angular/router';
+import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot, NavigationCancel, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RouteTitle } from '../models/RouteTitle';
 import { Subscription } from 'rxjs';
@@ -77,8 +77,6 @@ export class DocumentTitleService {
         return next;
     }
 
-
-
     public unRegister(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -88,6 +86,15 @@ export class DocumentTitleService {
 
     private router_event(event: RouterEvent) {
         // console.log(event.constructor.name);
+
+        if(event instanceof NavigationStart){
+
+            console.log(event);
+
+        }
+
+
+
         if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
             let title = this.getCurrentTitle(this.router);
             // console.log(title);s
@@ -100,7 +107,6 @@ export class DocumentTitleService {
         }
     }
 
-
     private getTitleText(title: RouteTitle): string {
         let value: string = '';
         if (title != null) {
@@ -112,11 +118,9 @@ export class DocumentTitleService {
         return value;
     }
 
-
-
     private getCurrentTitle(router: Router): RouteTitle {
         let title: RouteTitle = null;
-        const state: RouterState = this.router.routerState;
+        const state: RouterState = router.routerState;
         const snapshot: RouterStateSnapshot = state.snapshot;
         let node = snapshot.root;
         while (node != null) {
@@ -127,8 +131,5 @@ export class DocumentTitleService {
         }
         return title;
     }
-
-
-
 
 }
