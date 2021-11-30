@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
@@ -36,6 +36,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     protected readonly zone: NgZone;
     protected readonly router: Router
     protected readonly templateService: TemplateService;
+    protected readonly changeDetector: ChangeDetectorRef;
     protected readonly overlay: Overlay;
     /**
      * get current route request parameters \
@@ -58,6 +59,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         this.router = injector.get(Router);
         this.overlay = injector.get(Overlay);
         this.templateService = injector.get(TemplateService);
+        this.changeDetector = injector.get(ChangeDetectorRef);
         // this.hostElement = injector.get(ElementRef); 
         // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         // this.view.createComponent()
@@ -69,6 +71,21 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
             this._queryParams = params;
             if (!frist) this.onQueryChanges();
         });
+    }
+
+    /**
+     * 更改检测树相关
+     */
+    protected attachView(){
+        this.changeDetector.reattach();
+    }
+
+    protected detachView(){
+        this.changeDetector.detach();
+    }
+
+    protected detectChanges(){
+        this.changeDetector.detectChanges();
     }
 
     /**

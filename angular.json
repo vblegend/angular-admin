@@ -41,7 +41,7 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
-              "src/app/@core/styles/style.less",
+              "src/styles/style.less",
               {
                 "input": "src/styles/default.less",
                 "bundleName": "theme-default",

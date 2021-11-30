@@ -46,9 +46,6 @@ import { UnSelectedDirective } from './directives/UnSelectedDirective';
 
 
 
-
-
-
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
   TranslatorPipe

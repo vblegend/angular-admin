@@ -30,6 +30,9 @@
       }
     ],
     "paths": {
+      "@node_modules/*": [
+        "../node_modules/*"
+      ],
       "@core/*": [
         "app/@core/*"
       ],

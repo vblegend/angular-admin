@@ -10,7 +10,7 @@
 </nz-page-header>
 
 
-<nz-table #filterTable nzShowSizeChanger [nzData]="listOfDisplay" [nzFrontPagination]="false" [nzLoading]="loading">
+<nz-table #filterTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfDisplay" [nzFrontPagination]="false" [nzLoading]="loading">
   <thead>
     <tr>
       <th nzColumnKey="taskName" nzCustomFilter nzShowSort [nzSortFn]="taskNameSortFn"> 任务名称
@@ -20,7 +20,7 @@
       </th>
       <th nzColumnKey="service" [nzFilters]="serviceFilters" [nzFilterFn]="serviceFilterFn">注册服务</th>
       <th nzColumnKey="mode" [nzFilters]="serviceFilters" [nzFilterFn]="serviceFilterFn">触发方式</th>
-      <th nzColumnKey="IPAddress" [nzSortOrder]="true">IP地址</th>
+      <th nzColumnKey="ipAddress" [nzSortOrder]="true" [nzSortFn]="true"  >IP地址</th>
       <th nzRight nzWidth="150px">操作</th>
     </tr>
   </thead>
@@ -29,7 +29,7 @@
       <td>{{ data.taskName }}</td>
       <td>{{ data.service }}</td>
       <td>{{ data.mode  }}</td>
-      <td>{{ data.IPAddress }}</td>
+      <td>{{ data.ipAddress }}</td>
       <td>
         <!-- <a nz-popconfirm (nzOnConfirm)="editRow(data)">
           <i nz-icon [nzIconfont]="'grace-bofang2'"></i>

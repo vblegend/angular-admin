@@ -35,9 +35,9 @@ export class TasksComponent extends GenericComponent {
     this.serviceFilters = [{ text: '数据服务', value: 'data.service' }, { text: '网关服务', value: 'gateway.service' }, { text: '登陆服务', value: 'login.service' }];
     this.loading = false;
     this.listOfRandomUser = [
-      { taskId: 1, taskName: '张三', service: 'data.service', serviceId: 'a001', mode: TaskMode.Manual, IPAddress: '123@gmail.com' },
-      { taskId: 2, taskName: '李四', service: 'gateway.service', serviceId: 'a002', mode: TaskMode.Automatic, IPAddress: '234@gmail.com' },
-      { taskId: 3, taskName: '王五', service: 'login.service', serviceId: 'a003', mode: TaskMode.Manual, IPAddress: '345@gmail.com' },
+      { taskId: 1, taskName: '张三', service: 'data.service', serviceId: 'a001', mode: TaskMode.Manual, ipAddress: '123@gmail.com' },
+      { taskId: 2, taskName: '李四', service: 'gateway.service', serviceId: 'a002', mode: TaskMode.Automatic, ipAddress: '234@gmail.com' },
+      { taskId: 3, taskName: '王五', service: 'login.service', serviceId: 'a003', mode: TaskMode.Manual, ipAddress: '345@gmail.com' },
     ];
     this.search();
   }
@@ -49,6 +49,7 @@ export class TasksComponent extends GenericComponent {
 
   public deleteRow(task: SchedulingTask): void {
     this.listOfRandomUser = this.listOfRandomUser.filter(d => d.taskId !== task.taskId);
+    this.listOfDisplay = this.listOfDisplay.filter(d => d.taskId !== task.taskId);
   }
 
 

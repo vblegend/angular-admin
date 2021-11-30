@@ -22,7 +22,7 @@ export interface SchedulingTask {
     mode: TaskMode;
 
 
-    IPAddress: string;
+    ipAddress: string;
 
 
 }

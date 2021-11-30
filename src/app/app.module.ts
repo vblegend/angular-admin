@@ -5,7 +5,7 @@
  */
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, NgModule } from '@angular/core';
+import { ApplicationRef, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ChangeDetectorRef, ComponentRef, NgModule, NgZone } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -56,11 +56,19 @@ export class AppModule {
   constructor(private bootstrapService: BootstrapService,
     private commonService: CommonService,
     private netWorkService: NetWorkService,
+    private zone: NgZone,
+    private appRef: ApplicationRef,
     private themeService: ThemeService,
+ 
     private documentTitleService: DocumentTitleService,
     private networkService: NetWorkService,
     private iconService: NzIconService) {
 
+    // const zone = this.zone as NgZonePrivate
+    // this.zone.shouldCoalesceEventChangeDetection = true;
+
+    // shouldCoalesceRunChangeDetection
+ 
     const theme = this.commonService.session.get<ThemeStyle>('theme');
     if (theme) {
       themeService.changeTheme(theme);
