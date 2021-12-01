@@ -21,6 +21,10 @@ import { NzGridModule } from 'ng-zorro-antd/grid';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
+
+
 
 
 @NgModule({
@@ -48,7 +52,9 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
     NzGridModule,
     ReactiveFormsModule,
     NzIconModule,
-    NzDatePickerModule
+    NzDatePickerModule,
+    NzTagModule,
+    NzCheckboxModule
   ]
 })
 export class TasksModule { }

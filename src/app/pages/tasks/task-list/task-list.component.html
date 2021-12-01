@@ -5,7 +5,7 @@
 
   </nz-page-header-content>
   <nz-page-header-footer>
-    <button nz-button nzType="primary" (click@outside)="newTask()">Create Task</button>
+    <button nz-button nzType="primary" (click)="newTask()">Create Task</button>
   </nz-page-header-footer>
 </nz-page-header>
 
@@ -29,13 +29,15 @@
   <tbody>
     <tr *ngFor="let data of filterTable.data">
       <td>{{ data.taskName }}</td>
-      <td>{{ data.service }}</td>
+      <td>
+        <nz-tag [nzColor]="data.online?'success':'error'">{{ data.service }}</nz-tag>
+      </td>
       <td>{{ data.mode }}</td>
       <td>{{ data.ipAddress }}</td>
       <td>
         <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">
           Click me
-          <i nz-icon nzType="down" ></i>
+          <i nz-icon nzType="down"></i>
         </a>
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>

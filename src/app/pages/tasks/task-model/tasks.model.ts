@@ -15,6 +15,7 @@ export interface SchedulingTask {
 
     service: string;
 
+    online:boolean;
     serviceId: string;
 
     lastExec?: Date;
