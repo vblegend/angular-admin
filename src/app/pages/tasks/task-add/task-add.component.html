@@ -12,6 +12,14 @@
       <input type="password" nz-input placeholder="Password" />
     </nz-form-control>
   </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Timer</nz-form-label>
+    <nz-form-control nzErrorTip="Please input your Password!">
+      <nz-date-picker nzShowTime></nz-date-picker>
+    </nz-form-control>
+  </nz-form-item>
+
+
   <div nz-row class="login-form-margin">
     <div nz-col [nzSpan]="12">
       <label nz-checkbox >
@@ -26,6 +34,8 @@
   Or
   <a>register now!</a>
 </form>
+
+
 
 
 <div style="width: 600px;">

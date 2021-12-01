@@ -44,6 +44,8 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { TemplateService } from './services/template.service';
 import { UnSelectedDirective } from './directives/UnSelectedDirective';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { OutSideEventPluginService } from './services/outside.event.plugin.service';
 
 
 
@@ -152,6 +154,11 @@ export class CoreModule {
           provide: ErrorHandler,
           useClass: GlobalErrorHandler,
           deps: [NzNotificationService, TemplateService]
+        },
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: OutSideEventPluginService,
+          multi: true
         }
       ]
     };

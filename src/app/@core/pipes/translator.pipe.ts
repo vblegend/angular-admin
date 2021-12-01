@@ -8,7 +8,7 @@ export class TranslatorPipe implements PipeTransform {
      *
      */
     constructor(private router: Router) {
-        console.log(router);
+        // console.log(router);
     }
 
 

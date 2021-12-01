@@ -89,7 +89,7 @@ export class DocumentTitleService {
 
         if(event instanceof NavigationStart){
 
-            console.log(event);
+            // console.log(event);
 
         }
 

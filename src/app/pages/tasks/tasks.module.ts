@@ -19,6 +19,8 @@ import { TaskAddComponent } from './task-add/task-add.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 
 
 @NgModule({
@@ -44,7 +46,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     NzDrawerModule,
     NzGridModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NzIconModule,
+    NzDatePickerModule
   ]
 })
 export class TasksModule { }
