@@ -5,7 +5,7 @@ import { FixedTimer } from '@core/common/fixedtimer';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { DialogService } from '@core/services/dialog.service';
 import { MenuService } from '@core/services/menu.service';
-import { ThemeService, ThemeStyle } from '@core/services/theme.service';
+import { ThemeService } from '@core/services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +14,7 @@ import { ThemeService, ThemeStyle } from '@core/services/theme.service';
 })
 export class HeaderComponent extends GenericComponent {
 
-  public currentTheme: ThemeStyle;
+  public currentTheme: string;
   public today: Date;
   public themes: KeyValue<string, string>[];
   constructor(injector: Injector, public menuService: MenuService, public themeService: ThemeService, private dialogService: DialogService) {
@@ -41,7 +41,7 @@ export class HeaderComponent extends GenericComponent {
 
 
 
-  public changeTheme(event: ThemeStyle) {
+  public changeTheme(event: string) {
     this.themeService.changeTheme(event);
     this.commonService.session.set('theme', event);
   }
@@ -58,14 +58,16 @@ export class HeaderComponent extends GenericComponent {
   }
 
 
-  public logout():void{
+  public logout(): void {
     this.commonService.session.remove('user');
     this.navigate('../login');
   }
 
 
 
+  public systemSetting(): void {
 
+  }
 
 
 }

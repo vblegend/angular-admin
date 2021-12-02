@@ -80,7 +80,9 @@ export class TaskListComponent extends GenericComponent {
 
   }
 
-
+  public trackBydata(index: number, item: SchedulingTask): number {
+    return item.taskId;
+  }
 
 
 

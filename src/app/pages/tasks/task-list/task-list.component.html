@@ -27,7 +27,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of filterTable.data">
+    <tr *ngFor="let data of filterTable.data; trackBy: trackBydata;">
       <td>{{ data.taskName }}</td>
       <td>
         <nz-tag [nzColor]="data.online?'success':'error'">{{ data.service }}</nz-tag>

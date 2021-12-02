@@ -44,6 +44,11 @@ export class MenuService {
             link: 'welcome/4',
         },
         {
+            title: '服务管理',
+            icon: 'grace-jiqunguanli',
+            link: 'welcome/454',
+        },
+        {
             title: '计划任务',
             icon: 'grace-renwujihua',
             link: 'tasks',
@@ -141,25 +146,10 @@ export class MenuService {
             ]
         },
         {
-            title: '系统设置',
-            icon: 'grace-shezhi2',
-            link: 'welcome/34864523',
-        },
-        {
             title: '关于我们',
             icon: 'grace-guanyu1',
             link: 'welcome/4343213',
-        },
-        {
-            title: '退出登录',
-            icon: 'grace-guanji',
-            link: '../login'
         }
-
-
-
-
-
     ];
 
 

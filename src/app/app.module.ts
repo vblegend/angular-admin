@@ -21,7 +21,7 @@ import { NetWorkService } from '@core/services/network.sevrice';
 import { CoreModule } from '@core/core.module';
 import { DocumentTitleService } from '@core/services/document.title.service';
 import { Exception } from '@core/common/exception';
-import { ThemeService, ThemeStyle } from '@core/services/theme.service';
+import { ThemeService } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { DynamicModule } from './@dynamic/dynamic.module';
 import { CommonService } from '@core/services/common.service';
@@ -59,28 +59,25 @@ export class AppModule {
     private zone: NgZone,
     private appRef: ApplicationRef,
     private themeService: ThemeService,
- 
+
     private documentTitleService: DocumentTitleService,
     private networkService: NetWorkService,
     private iconService: NzIconService) {
 
-    // const zone = this.zone as NgZonePrivate
-    // this.zone.shouldCoalesceEventChangeDetection = true;
-
-    // shouldCoalesceRunChangeDetection
- 
-    const theme = this.commonService.session.get<ThemeStyle>('theme');
+    // initialization theme
+    themeService.registerTheme({ dark: '黑暗主题', white: '亮色主题' });
+    const theme = this.commonService.session.get<string>('theme');
     if (theme) {
       themeService.changeTheme(theme);
     } else {
-      themeService.changeTheme(ThemeStyle.Default);
+      themeService.changeTheme('default');
     }
-    // console.warn('initialization App Module');
+    // loading 
     bootstrapService.loadingElement = document.getElementById('global-spinner');
-
+    bootstrapService.runAtBootstrap(this.init, this);
+    // title service
     documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
     documentTitleService.register();
-    bootstrapService.runAtBootstrap(this.init, this);
 
     // register iconfont
     this.iconService.fetchFromIconfont({

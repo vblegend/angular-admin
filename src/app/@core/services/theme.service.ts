@@ -2,55 +2,46 @@ import { Injectable } from '@angular/core';
 import { Exception } from '../common/exception';
 import { ThemeConfigure } from '../common/themeconfigure';
 
-
-
-
-export enum ThemeStyle {
-    Default = 'default',
-    Dark = 'dark',
-    White = 'white'
-}
-
-
-
-
-
 @Injectable({
     providedIn: 'root',
 })
 export class ThemeService {
-    private readonly _themes: Record<ThemeStyle, string>;
-    private _currentTheme: ThemeStyle;
+    private readonly _themes: Record<string, string>;
+    private _currentTheme: string;
 
 
-    public get currentTheme(): ThemeStyle {
+    public get currentTheme(): string {
         return this._currentTheme;
     }
 
-
-
-
     constructor() {
         this._themes = {
-            default: '默认主题',
-            dark: '黑暗主题',
-            white: '亮色主题'
+            default: '默认主题'
         }
-
-        this.changeTheme(ThemeStyle.White);
-
     }
 
-    public get themes(): Record<ThemeStyle, string> {
+    public get themes(): Record<string, string> {
         return this._themes;
     }
+
+
+    /**
+     * register themes
+     * @param _themes 
+     */
+    public registerTheme(_themes: Record<string, string>) {
+        for (const key in _themes) {
+            this._themes[key] = _themes[key];
+        }
+    }
+
 
 
     /**
      * 移除一个主题
      * @param themeId 
      */
-    private removeTheme(themeId: ThemeStyle) {
+    private removeTheme(themeId: string) {
         const themeClass = `theme-${themeId}`;
         document.documentElement.classList.remove(themeId);
         const removedThemeStyle = document.getElementById(themeClass);
@@ -65,9 +56,10 @@ export class ThemeService {
      * @param themeId 
      * #throw Exception
      */
-    public async changeTheme(themeId: ThemeStyle): Promise<void> {
+    public async changeTheme(themeId: string = 'default'): Promise<void> {
         if (this._themes[themeId] == null) throw Exception.build('change Theme', "don't try to load an undeclared theme");
         try {
+            if (this._currentTheme === themeId) return;
             await this.loadTheme(themeId);
             if (this._currentTheme) {
                 this.removeTheme(this._currentTheme);
