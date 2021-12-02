@@ -26,7 +26,8 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -48,11 +49,13 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
     NzPopconfirmModule,
     NzDropDownModule,
     NzInputModule,
-    NzDividerModule
+    NzDividerModule,
+    DragDropModule
   ],
   declarations: [
     PagesComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    DashboardComponent
   ],
   providers: [
     // otherProviders...

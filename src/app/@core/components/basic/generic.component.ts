@@ -1,8 +1,8 @@
-import { ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
+import { ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { CommonService } from "../../services/common.service";
 import { Location } from '@angular/common';
-import { Subscription } from "rxjs";
+import { Observable, Subject, Subscription } from "rxjs";
 import { Exception } from "@core/common/exception";
 import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
 import { TemplateService } from "@core/services/template.service";
@@ -23,12 +23,11 @@ import { NzSafeAny } from "ng-zorro-antd/core/types";
 export abstract class GenericComponent implements OnInit, OnDestroy {
     @ViewChild("view", { read: ViewContainerRef }) view: ViewContainerRef;
     // private hostElement: ElementRef<GenericComponent>;
-    // private componentFactoryResolver: ComponentFactoryResolver;
+    private componentFactoryResolver: ComponentFactoryResolver;
     private _times: FixedTimer[];
     private _isDispose: boolean;
     private _queryParams: ParamMap;
-    private _routeSubscription: Subscription;
-
+    private _subscriptions: Subscription[];
     /**
      * get common service
      * @returns 
@@ -43,6 +42,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     protected readonly modalService: NzModalService;
     protected readonly drawerService: NzDrawerService;
     protected readonly overlay: Overlay;
+    protected readonly viewContainerRef: ViewContainerRef;
     /**
      * get current route request parameters \
      * do not cache the variable 
@@ -57,6 +57,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
     constructor(private injector: Injector) {
         this._isDispose = false;
         this._times = [];
+        this._subscriptions = [];
         this.activatedRoute = injector.get(ActivatedRoute);
         this.commonService = injector.get(CommonService);
         this.location = injector.get(Location);
@@ -67,18 +68,23 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         this.changeDetector = injector.get(ChangeDetectorRef);
         this.modalService = injector.get(NzModalService);
         this.drawerService = injector.get(NzDrawerService);
+        this.viewContainerRef = injector.get(ViewContainerRef);
         // this.hostElement = injector.get(ElementRef); 
-        // this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
+        this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         // this.view.createComponent()
         // const componentFactory = this.componentFactoryResolver.resolveComponentFactory();
         // return componentFactory.inputs;
         // this.hostElement
-        this._routeSubscription = this.activatedRoute.paramMap.subscribe((params) => {
-            const frist = this.queryParams == null;
-            this._queryParams = params;
-            if (!frist) this.onQueryChanges();
-        });
+        this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
+
+
+    private route_updateParam(params: ParamMap) {
+        const frist = this.queryParams == null;
+        this._queryParams = params;
+        if (!frist) this.onQueryChanges();
+    }
+
 
     /**
      * 更改检测树相关
@@ -103,6 +109,36 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * 
+     * @param target 
+     * @param next 
+     * @param once 
+     * @returns 
+     */
+    protected subscribe<T>(target: Observable<T> | EventEmitter<T> | Subject<T>, next?: (value: T) => void, once?: boolean): Subscription {
+        const that = this as Object;
+        const subscription: Subscription = target.subscribe((value) => {
+            next.apply(that, [value]);
+            if (once) {
+                this.unsubscribe(subscription);
+            }
+        });
+        this._subscriptions.push(subscription);
+        return subscription;
+    }
+
+
+    private unsubscribe(sub: Subscription): void {
+        const index = this._subscriptions.indexOf(sub);
+        if (index > -1) {
+            this._subscriptions.splice(index, 1);
+            if (sub.closed != true) {
+                sub.unsubscribe();
+            }
+        }
+    }
+
 
     /**
      * 
@@ -110,6 +146,18 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @returns 
      */
     protected generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
+        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ctor);
+        const componentRef = this.viewContainerRef.createComponent<T>(componentFactory, null, this.injector);
+        return componentRef;
+    }
+
+
+    /**
+     * 
+     * @param ctor 
+     * @returns 
+     */
+    protected generateOverlayComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
         const overlayRef = this.overlay.create({
             hasBackdrop: false,
             scrollStrategy: this.overlay.scrollStrategies.noop(),
@@ -119,7 +167,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         const componentRef = overlayRef.attach(componentPortal);
         return componentRef;
     }
-
 
 
 
@@ -300,10 +347,10 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
         while (this._times.length) {
             this._times[0].stop();
         }
-        this._isDispose = true;
-        if (this._routeSubscription) {
-            this._routeSubscription.unsubscribe();
+        while (this._subscriptions.length) {
+            this.unsubscribe(this._subscriptions[0]);
         }
+        this._isDispose = true;
         this.onDestroy();
     }
 }

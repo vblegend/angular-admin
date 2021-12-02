@@ -17,7 +17,12 @@ if (environment.production) {
   enableProdMode();
 }
 
-
+document.oncontextmenu = (e: MouseEvent) => {
+  const element = e.target as HTMLElement;
+  if (element instanceof HTMLInputElement) return;
+  const selection = document.getSelection().toString();
+  if (selection === '') e.preventDefault();
+}
 registerLocaleData(zh);
 
 platformBrowserDynamic().bootstrapModule(AppModule, {}).catch(err => console.error(err));
