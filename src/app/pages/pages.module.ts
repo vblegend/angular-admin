@@ -28,12 +28,12 @@ import { FormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
 @NgModule({
   imports: [
     CoreModule,
     CommonModule,
     FormsModule,
+    // TranslationModule.forRoot({ root: './i18n/' }),
     LayoutModule.forRoot(),
     NzIconModule,
     NzMenuModule,

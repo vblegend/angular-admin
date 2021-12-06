@@ -259,7 +259,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @param routePaths 
      * @returns 
      */
-    public navigate(routePaths: string, extras?: NavigationExtras): Promise<boolean> {
+    public async navigate(routePaths: string, extras?: NavigationExtras): Promise<boolean> {
         this.ifDisposeThrow();
         return this.router.navigate([routePaths], extras);
     }
@@ -281,7 +281,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy {
      * @param queryParams Route request parameters 
      * @returns 
      */
-    public navigateByUrl(routeUrl: string, queryParams?: Params): Promise<boolean> {
+    public async navigateByUrl(routeUrl: string, queryParams?: Params): Promise<boolean> {
         this.ifDisposeThrow();
         if (queryParams) {
             return this.router.navigate([routeUrl], { queryParams: queryParams });
