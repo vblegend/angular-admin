@@ -1,7 +1,7 @@
 /**
  * disable zone event plugin servic
  * 
- * <button class="btn btn-primary" (click!zone)="onClick()">
+ * <button class="btn btn-primary" (click@outside)="onClick()">
  *   Click me!
  * </button>
  * 

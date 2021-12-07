@@ -1,8 +1,12 @@
+import { Injectable } from "@angular/core";
 
 import * as CryptoJS from 'crypto-js'
 
 
-export class SessionManager {
+@Injectable({
+    providedIn: 'root'
+})
+export class SessionService {
 
     public readonly confuseCode = {
         version: 1.0,
@@ -55,5 +59,4 @@ export class SessionManager {
     public generateIV(key: string) {
         return CryptoJS.MD5(JSON.stringify(this.confuseCode) + key + '$').toString();
     }
-
 }

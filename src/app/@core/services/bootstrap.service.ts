@@ -1,10 +1,6 @@
-import { Action } from '@angular-devkit/schematics';
-import { ComponentRef, Inject, Injectable } from '@angular/core';
-
+import { ComponentRef, Injectable } from '@angular/core';
 import { AppComponent } from '../../app.component';
 import { Delegate, DelegateContext } from '../common/delegate';
-import { CommonService } from './common.service';
-
 @Injectable({
     providedIn: 'root',
 })
@@ -18,7 +14,7 @@ export class BootstrapService {
     private _bootstrapInits: DelegateContext[];
 
 
-    constructor(private commonService: CommonService) {
+    constructor() {
         this._bootstrapInits = [];
     }
 

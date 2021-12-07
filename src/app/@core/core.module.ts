@@ -16,7 +16,6 @@ import { RouterModule } from '@angular/router';
 import { LoginPageComponent } from './components/login/loginpage.component';
 import { ThemeSettingComponent } from './components/windows/theme.setting.component/theme.setting.component';
 import { TerminalComponent } from './components/windows/terminal.component/terminal.component';
-import { CommonService } from './services/common.service';
 import { DefaultPipe } from './pipes/default.pipe';
 import { TranslatorPipe } from './pipes/translator.pipe';
 import { DocumentTitleService } from './services/document.title.service';
@@ -44,8 +43,9 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { TemplateService } from './services/template.service';
 import { UnSelectedDirective } from './directives/UnSelectedDirective';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { BrowserModule, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { OutSideEventPluginService } from './services/outside.event.plugin.service';
+import { SessionService } from './services/session.service';
 
 
 
@@ -77,12 +77,12 @@ const EXPORT_COMPONENTS = [
  * custom providers services
  */
 const PROVIDERS: Provider[] = [
+  SessionService,
   DocumentTitleService,
   RestfulService,
   AuthGuardService,
   DialogService,
   AccountService,
-  CommonService,
   NetWorkService,
   ThemeService,
   BootstrapService,
@@ -98,22 +98,23 @@ const PROVIDERS: Provider[] = [
 @NgModule({
   imports: [
     CommonModule,
+    // BrowserModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DragDropModule,
     NzIconModule,
     NzMenuModule,
     NzLayoutModule,
     NzGridModule,
     NzInputModule,
-    RouterModule,
     NzFormModule,
-    FormsModule,
     NzModalModule,
     NzSpaceModule,
     NzButtonModule,
     NzFormModule,
-    ReactiveFormsModule,
     NzNotificationModule,
     NzMessageModule,
-    DragDropModule,
     NzAvatarModule,
     NzPopoverModule
   ],

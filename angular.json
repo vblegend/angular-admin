@@ -67,8 +67,7 @@
               "echarts",
               "lodash",
               "zrender/lib/svg/svg",
-              "zrender/lib/vml/vml",
-              "crypto-js"
+              "zrender/lib/vml/vml"
             ],
             "vendorChunk": true,
             "extractLicenses": false,

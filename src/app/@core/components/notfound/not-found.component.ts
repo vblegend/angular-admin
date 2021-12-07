@@ -1,5 +1,4 @@
 import { Component, Injector } from '@angular/core';
-import { Location } from '@angular/common';
 import { GenericComponent } from '../basic/generic.component';
 
 

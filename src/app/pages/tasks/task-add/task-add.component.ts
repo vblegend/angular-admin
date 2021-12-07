@@ -15,25 +15,8 @@ export class TaskAddComponent extends GenericDrawerComponent<string, boolean> {
 
 
 
-  submitForm(): void {
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-    } else {
-      Object.values(this.validateForm.controls).forEach(control => {
-        if (control.invalid) {
-          control.markAsDirty();
-          control.updateValueAndValidity({ onlySelf: true });
-        }
-      });
-    }
-  }
-
-
-
-
 
   public onInit(): void {
-
     this.validateForm = this.fb.group({
       userName: [null, [Validators.required]],
       password: [null, [Validators.required]],
@@ -44,7 +27,20 @@ export class TaskAddComponent extends GenericDrawerComponent<string, boolean> {
 
 
   public submit(): void {
-    this.close(true);
+
+    if (this.validateForm.valid) {
+      console.log('submit', this.validateForm.value);
+      this.close(true);
+    } else {
+      Object.values(this.validateForm.controls).forEach(control => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+
+
   }
 
   public cancel(): void {

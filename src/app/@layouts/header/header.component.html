@@ -1,7 +1,8 @@
 <div class="header-trigger">
   <app-logo></app-logo>
   <i class="trigger" (click)="menuService.toggleCollapsed()" nz-icon
-    [nzType]="menuService.isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+    [nzIconfont]="menuService.isCollapsed ? 'grace-menu-unfold' : 'grace-menu-fold'">
+  </i>
 
 
   <nz-select name="currentTheme" [(ngModel)]="currentTheme" (ngModelChange)="changeTheme($event)">

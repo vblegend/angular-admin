@@ -9,9 +9,11 @@ import { GenericComponent } from "./generic.component";
     template: `<ng-container #view></ng-container>`
 })
 export class GenericDrawerComponent<TInput, TOut> extends GenericComponent {
+    @Input()
+    public readonly input: TInput;
 
-    @Input() public readonly input: TInput;
-    public readonly drawerRef: NzDrawerRef<TOut>;
+    protected readonly drawerRef: NzDrawerRef<TOut>;
+    
     constructor(injector: Injector) {
         super(injector);
         this.drawerRef = injector.get(NzDrawerRef);

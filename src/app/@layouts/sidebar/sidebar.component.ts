@@ -18,7 +18,5 @@ export class SidebarComponent extends GenericComponent {
 
   protected onInit(): void {
     this.menus = this.menuService.menus;
-
-    // console.log(`app-sidebar ngOnInit`);
   }
 }

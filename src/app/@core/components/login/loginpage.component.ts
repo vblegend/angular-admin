@@ -33,16 +33,16 @@ export class LoginPageComponent extends GenericComponent {
 
   public login(): void {
     if (this.password.length == 0) {
-      this.commonService.showMessage("Please input your Password!", MessageType.Error);
+      this.showMessage("Please input your Password!", MessageType.Error);
       return;
     }
 
     if (this.loadingWait) return;
     this.loadingWait = true;
-    this.commonService.showMessage("login successful.", MessageType.Success);
-    this.commonService.sleep(1000).then(() => {
-      this.commonService.session.set('user', { userName: '姑嘚423^$%#12f阀手动阀3' });
-      this.commonService.navigate('/');
+    this.showMessage("login successful.", MessageType.Success);
+    this.sleep(1000).then(() => {
+      this.sessionService.set('user', { userName: '姑嘚423^$%#12f阀手动阀3' });
+      this.navigate('/');
     });
     // this.accountService.login(this.password).then(e => {
     //   console.log(e);

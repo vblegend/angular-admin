@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
   selector: 'ngx-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.less']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent extends GenericComponent {
 
-  constructor() { }
 
-  ngOnInit(): void {
-  }
 
 }

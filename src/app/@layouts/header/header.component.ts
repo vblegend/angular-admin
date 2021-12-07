@@ -43,7 +43,7 @@ export class HeaderComponent extends GenericComponent {
 
   public changeTheme(event: string) {
     this.themeService.changeTheme(event);
-    this.commonService.session.set('theme', event);
+    this.sessionService.set('theme', event);
   }
 
 
@@ -59,7 +59,7 @@ export class HeaderComponent extends GenericComponent {
 
 
   public logout(): void {
-    this.commonService.session.remove('user');
+    this.sessionService.remove('user');
     this.navigate('../login');
   }
 

@@ -24,7 +24,7 @@ import { Exception } from '@core/common/exception';
 import { ThemeService } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { DynamicModule } from './@dynamic/dynamic.module';
-import { CommonService } from '@core/services/common.service';
+import { SessionService } from '@core/services/session.service';
 registerLocaleData(zh);
 
 
@@ -35,13 +35,13 @@ registerLocaleData(zh);
   ],
   imports: [
     CommonModule,
-    CoreModule.forRoot(),
-    DynamicModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
+    CoreModule.forRoot(),
+    DynamicModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
-    IconsProviderModule,
+    // IconsProviderModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'zh-CN' }, // replace "de-at" with your locale
@@ -54,19 +54,18 @@ export class AppModule {
 
 
   constructor(private bootstrapService: BootstrapService,
-    private commonService: CommonService,
     private netWorkService: NetWorkService,
+    private sessionService: SessionService,
     private zone: NgZone,
     private appRef: ApplicationRef,
     private themeService: ThemeService,
-
     private documentTitleService: DocumentTitleService,
     private networkService: NetWorkService,
     private iconService: NzIconService) {
 
     // initialization theme
     themeService.registerTheme({ dark: '黑暗主题', white: '亮色主题' });
-    const theme = this.commonService.session.get<string>('theme');
+    const theme = this.sessionService.get<string>('theme');
     if (theme) {
       themeService.changeTheme(theme);
     } else {
