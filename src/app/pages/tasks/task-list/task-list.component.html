@@ -10,8 +10,8 @@
 </nz-page-header>
 
 
-<nz-table #filterTable nzShowSizeChanger [nzFrontPagination]="false" [nzData]="listOfDisplay"
-  [nzFrontPagination]="false" [nzLoading]="loading">
+<nz-table #filterTable nzShowSizeChanger nzShowPagination nzPageSize="10" [nzFrontPagination]="true" [nzData]="listOfDisplay"
+   [nzLoading]="loading">
   <thead>
     <tr>
       <th nzColumnKey="taskName" nzCustomFilter nzShowSort [nzSortFn]="taskNameSortFn"> 任务名称

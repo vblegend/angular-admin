@@ -25,6 +25,10 @@ import { ThemeService } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
 import { DynamicModule } from './@dynamic/dynamic.module';
 import { SessionService } from '@core/services/session.service';
+import { CacheService } from '@core/services/cache.service';
+import { TaskMode } from './pages/tasks/task-model/tasks.model';
+import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
+import { ObjectUtil } from '@core/util/object.util';
 registerLocaleData(zh);
 
 
@@ -59,9 +63,13 @@ export class AppModule {
     private zone: NgZone,
     private appRef: ApplicationRef,
     private themeService: ThemeService,
+    private cacheService: CacheService,
     private documentTitleService: DocumentTitleService,
     private networkService: NetWorkService,
     private iconService: NzIconService) {
+
+
+    this.testClone();
 
     // initialization theme
     themeService.registerTheme({ dark: '黑暗主题', white: '亮色主题' });
@@ -83,6 +91,28 @@ export class AppModule {
       scriptUrl: 'assets/fonts/iconfont.js'
     });
   }
+
+
+
+
+  private testClone() {
+
+    const tasks = [] ;
+    for (let i = 0; i < 1000000; i++) {
+      tasks.push({ taskId: i, taskName: '张三 - ' + i, service: 'data.service', online: true, serviceId: 'a001', mode: TaskMode.Manual, ipAddress: '123@gmail.com' });
+    }
+    console.time('clone.test');
+    this.cacheService.tasks.load(tasks);
+
+    this.cacheService.tasks.load(tasks);
+    console.timeEnd('clone.test');
+  }
+
+
+
+
+
+
 
 
   private async init(): Promise<void> {

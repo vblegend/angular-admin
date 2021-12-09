@@ -98,13 +98,13 @@ export class NetWorkService {
      * @param timeout  default = 120000
      * @returns 
      */
-    public async send<D, T>(method: string, data: D, timeout?: number): Promise<T> {
+    public async send<TData, TResult>(method: string, data: TData, timeout?: number): Promise<TResult> {
         if (timeout == null) timeout = this.timeout;
-        const promise = new Promise<T>((resolve, rejects) => {
+        const promise = new Promise<TResult>((resolve, rejects) => {
             const sn = this.getSerialNumber();
             if (this.webSocket == null) return rejects(Exception.build('network service', 'websocket is not initialized!'));
             if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('network service', 'websocket is not connected!'));
-            const message: WebSocketMessage<D> = { sn, method, data };
+            const message: WebSocketMessage<TData> = { sn, method, data };
             this.webSocket.send(JSON.stringify(message));
             // console.log(sn);
             // check timeout

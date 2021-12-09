@@ -46,6 +46,7 @@ import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { BrowserModule, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { OutSideEventPluginService } from './services/outside.event.plugin.service';
 import { SessionService } from './services/session.service';
+import { CacheService } from './services/cache.service';
 
 
 
@@ -88,7 +89,8 @@ const PROVIDERS: Provider[] = [
   BootstrapService,
   MenuService,
   TemplateService,
-  NzDrawerService
+  NzDrawerService,
+  CacheService
 ];
 
 

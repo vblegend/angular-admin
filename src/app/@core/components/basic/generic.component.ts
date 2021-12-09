@@ -13,6 +13,7 @@ import { NzSafeAny } from "ng-zorro-antd/core/types";
 import { NzMessageDataOptions, NzMessageService } from "ng-zorro-antd/message";
 import { MessageType } from "@core/common/messagetype";
 import { SessionService } from "@core/services/session.service";
+import { CacheService } from "@core/services/cache.service";
 
 /**
  * Generic basic components, commonly used services are integrated internally \
@@ -33,6 +34,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * get common service
      * @returns 
      */
+    protected readonly cacheService: CacheService;
     protected readonly componentFactoryResolver: ComponentFactoryResolver;
     protected readonly sessionService: SessionService;
     protected readonly activatedRoute: ActivatedRoute;
@@ -73,6 +75,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.viewContainerRef = injector.get(ViewContainerRef);
         this.messageService = injector.get(NzMessageService);
         this.sessionService = injector.get(SessionService);
+        this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
@@ -335,6 +338,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected onDestroy(): void {
 
     }
+
     protected onAfterViewInit(): void {
 
     }
