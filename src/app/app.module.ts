@@ -26,9 +26,10 @@ import { NzIconService } from 'ng-zorro-antd/icon';
 import { DynamicModule } from './@dynamic/dynamic.module';
 import { SessionService } from '@core/services/session.service';
 import { CacheService } from '@core/services/cache.service';
-import { TaskMode } from './pages/tasks/task-model/tasks.model';
+import { SchedulingTask, TaskMode } from './pages/tasks/task-model/tasks.model';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 import { ObjectUtil } from '@core/util/object.util';
+import { LocalCache } from '@core/cache/local.cache';
 registerLocaleData(zh);
 
 
@@ -69,7 +70,9 @@ export class AppModule {
     private iconService: NzIconService) {
 
 
-    this.testClone();
+    // this.testClone();
+    this.zone.runOutsideAngular(this.testClone.bind(this));
+
 
     // initialization theme
     themeService.registerTheme({ dark: '黑暗主题', white: '亮色主题' });
@@ -97,15 +100,48 @@ export class AppModule {
 
   private testClone() {
 
-    const tasks = [] ;
-    for (let i = 0; i < 1000000; i++) {
-      tasks.push({ taskId: i, taskName: '张三 - ' + i, service: 'data.service', online: true, serviceId: 'a001', mode: TaskMode.Manual, ipAddress: '123@gmail.com' });
-    }
-    console.time('clone.test');
-    this.cacheService.tasks.load(tasks);
 
-    this.cacheService.tasks.load(tasks);
+
+    this.cacheService.register("tasks", new LocalCache('', e => e.taskId));
+    // .get('seg');
+
+    const tasks = [];
+    for (let i = 0; i < 100000; i++) {
+      tasks.push({
+        taskId: i, taskName: '张三 - ' + i,
+        service: 'data.service',
+        online: true,
+        serviceId: 'a001',
+        mode: TaskMode.Manual,
+        ipAddress: '123@gmail.com',
+        data: ['abc', 'ABC', 1, 2, 3]
+      });
+    }
+
+    const t1 = this.cacheService.get("tasks").subscribe(e => {
+      console.log(`1+-type:${e.type},data.length:${e.data.length} this:${this.constructor.name}`);
+    }, f => f.taskId > 100 && f.taskId < 50000);
+    const t2 = this.cacheService.get("tasks").subscribe(e => {
+      console.log(`2+-type:${e.type},data.length:${e.data.length} this:${this.constructor.name}`);
+    }, f => f.taskId == 5);
+
+    // t1();
+    // t2();
+
+    console.time('clone.test');
+    this.cacheService.get("tasks").load(tasks);
+
+    for (let v = 0; v < 20; v++) {
+      tasks[v].taskName = '李四' + v;
+    }
+    this.cacheService.get("tasks").batchPut(tasks.slice(0, 20));
+    this.cacheService.get("tasks").batchPut(tasks);
+    // for (let i = 0; i < 1000; i++) {
+    //   this.cacheService.tasks.remove(100000 + i);
+    // }
     console.timeEnd('clone.test');
+    const lst = this.cacheService.get("tasks").getAll();
+    console.log(lst.length);
   }
 
 

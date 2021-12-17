@@ -7,6 +7,21 @@
 
 export class ObjectUtil {
 
+
+
+    /**
+     * regardless of object references
+     * determine whether the contents of two objects are equal 
+     * @param object1 
+     * @param object2 
+     * @returns 
+     */
+    public static equals<T>(object1: T, object2: T) {
+        const entrie1 = Object.entries(object1).toString();
+        const entrie2 = Object.entries(object2).toString();
+        return entrie1 === entrie2;
+    }
+
     /**
      *  deep freeze object
      * @param target 
@@ -15,13 +30,13 @@ export class ObjectUtil {
         if (typeof target === 'object') {
             if (target instanceof Array) {
                 for (let i = 0; i < target.length; i++) {
-                    this.freeze(target[i]);
+                    if (typeof target[i] === 'object')  this.freeze(target[i]);
                 }
             } else {
                 var keys = Object.keys(target);
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
-                    this.freeze(target[key]);
+                    if (typeof target[key] === 'object') this.freeze(target[key]);
                 }
             }
             Object.freeze(target);
@@ -58,14 +73,17 @@ export class ObjectUtil {
      */
     public static clone<T>(target: T, thisContext?: Object): T {
         if (typeof target === 'undefined') return undefined;
-        if (typeof target === 'string') return target.substr(0) as any;
+        if (typeof target === 'string') return target.substring(0) as any;
         if (typeof target === 'number') return target;
         if (typeof target === 'boolean') return target;
         if (typeof target === 'function') return target.bind(thisContext);
         if (target === null) return null;
         let result = null;
         if (target instanceof Array) {
-            result = this.cloneArray<T>(target);
+            result = [];
+            for (let i = 0; i < target.length; i++) {
+                result.push(this.clone(target[i]));
+            }
         } else {
             result = {};
             const keys = Object.keys(target);
@@ -76,18 +94,4 @@ export class ObjectUtil {
         }
         return result
     }
-
-    /**
-     * deep clone array
-     * @param target 
-     * @returns 
-     */
-    public static cloneArray<T>(target: T[]): T[] {
-        const result: T[] = [];
-        for (let i = 0; i < target.length; i++) {
-            result.push(this.clone(target[i]));
-        }
-        return result;
-    }
-
 }

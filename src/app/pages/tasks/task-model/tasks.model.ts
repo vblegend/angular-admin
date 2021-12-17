@@ -7,7 +7,7 @@ export enum TaskMode {
 }
 
 export interface SchedulingTask {
-
+    (value1: string, value2: string): string
 
     taskId: number;
 
@@ -15,7 +15,7 @@ export interface SchedulingTask {
 
     service: string;
 
-    online:boolean;
+    online: boolean;
     serviceId: string;
 
     lastExec?: Date;

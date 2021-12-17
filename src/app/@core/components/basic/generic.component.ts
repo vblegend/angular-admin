@@ -143,12 +143,14 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
                 sub.unsubscribe();
             }
         }
+        // {{{{{{}}}}}}
+        // [[[[[[]]]]]]
     }
 
 
     /**
      * 
-     * @param ctor 
+     * @param ctor  
      * @returns 
      */
     protected generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {

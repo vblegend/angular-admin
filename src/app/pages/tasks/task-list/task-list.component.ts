@@ -39,7 +39,7 @@ export class TaskListComponent extends GenericComponent {
     this.loading = true;
     this.serviceFilters = [{ text: '数据服务', value: 'data.service' }, { text: '网关服务', value: 'gateway.service' }, { text: '登陆服务', value: 'login.service' }];
     this.loading = false;
-    this.listOfRandomUser = this.cacheService.tasks.getAll();
+    this.listOfRandomUser = this.cacheService.get('tasks').getAll();
     this.search();
   }
 

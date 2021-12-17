@@ -1,7 +1,15 @@
 import { Injectable, Injector } from '@angular/core';
 import { LocalCache } from '@core/cache/local.cache';
-import { RouteTitle } from '@core/models/RouteTitle';
+import { Exception } from '@core/common/exception';
 import { SchedulingTask } from 'app/pages/tasks/task-model/tasks.model';
+
+
+
+export interface CacheEKeyMaps {
+    tasks: LocalCache<SchedulingTask, number>;
+    users: LocalCache<SchedulingTask, number>;
+}
+
 
 /**
  * 数据缓存服务 
@@ -10,17 +18,19 @@ import { SchedulingTask } from 'app/pages/tasks/task-model/tasks.model';
     providedIn: 'root'
 })
 export class CacheService {
-    public readonly tasks: LocalCache<SchedulingTask, number>;
-
-
-
+    private _caches: Map<string, LocalCache<Object, Object>> = new Map();
     constructor(protected injector: Injector) {
-        this.tasks = new LocalCache<SchedulingTask, number>('route.1', e => e.taskId);
-
-
     }
 
+    //, 
+    public register<K extends keyof CacheEKeyMaps>(type: K, cache: CacheEKeyMaps[K]): void {
+        if (this._caches.has(type)) {
+            throw Exception.build('', '');
+        }
+        this._caches.set(type, cache);
+    }
 
-
-
+    public get<K extends keyof CacheEKeyMaps>(type: K): CacheEKeyMaps[K] {
+        return this._caches.get(type) as CacheEKeyMaps[K];
+    }
 }
