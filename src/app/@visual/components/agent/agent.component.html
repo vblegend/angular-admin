@@ -1,0 +1,15 @@
+<div class="visual-agent" style="position:absolute;" [ngStyle]="getStyle()">
+    <div [ngStyle]="getConponentStyle()">
+        <ng-container #ChildrenView>
+        </ng-container>
+    </div>
+    <div class="move-button" moveAnchor [host]="this"> </div>
+    <div class="anchor left-button" resizeAnchor [host]="this" position="left"> </div>
+    <div class="anchor right-button" resizeAnchor [host]="this" position="right"> </div>
+    <div class="anchor top-button" resizeAnchor [host]="this" position="top"> </div>
+    <div class="anchor down-button" resizeAnchor [host]="this" position="down"> </div>
+    <div class="anchor lTop-button" resizeAnchor [host]="this" position="lTop"> </div>
+    <div class="anchor rTop-button" resizeAnchor [host]="this" position="rTop"> </div>
+    <div class="anchor lDown-button" resizeAnchor [host]="this" position="lDown"> </div>
+    <div class="anchor rDown-button" resizeAnchor [host]="this" position="rDown"> </div>
+</div>

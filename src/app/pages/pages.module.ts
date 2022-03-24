@@ -28,12 +28,15 @@ import { FormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { VisualModule } from '@visual/visual.module';
+import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
 @NgModule({
   imports: [
     CoreModule,
     CommonModule,
     FormsModule,
     // TranslationModule.forRoot({ root: './i18n/' }),
+    VisualModule.forRoot(),
     LayoutModule.forRoot(),
     NzIconModule,
     NzMenuModule,
@@ -55,7 +58,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   declarations: [
     PagesComponent,
     WelcomeComponent,
-    DashboardComponent
+    DashboardComponent,
+    SvgViewerComponent
   ],
   providers: [
     // otherProviders...

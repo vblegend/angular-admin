@@ -59,7 +59,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      *
      */
-    constructor(private injector: Injector) {
+    constructor(protected injector: Injector) {
         this._isDispose = false;
         this._times = [];
         this._subscriptions = [];

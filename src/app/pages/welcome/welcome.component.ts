@@ -34,7 +34,7 @@ export class WelcomeComponent extends GenericComponent {
     this.id = this.queryParams.get('id');
     console.log(`app-welcome onInit ${this.id}`);
 
-    const ref = this.generateComponent(NotFoundComponent);
+    // const ref = this.generateComponent(NotFoundComponent);
     // ref.destroy();
     // this.subscription = this.deleteRequest.subscribe(e => {
     //   console.log(`app-welcome subscribe ${this.id}`);

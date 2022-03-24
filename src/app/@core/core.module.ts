@@ -35,6 +35,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { MenuService } from './services/menu.service';
 import { HoverDirective } from './directives/HoverDirective';
+import { MutableDirective } from './directives/MutableDirective';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { GlobalErrorHandler } from './private/GlobalErrorHandler';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
@@ -49,7 +50,6 @@ import { SessionService } from './services/session.service';
 import { CacheService } from './services/cache.service';
 
 
-
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
   TranslatorPipe
@@ -58,6 +58,7 @@ const EXPORT_PIPES: Provider[] = [
 
 const EXPORT_DIRECTIVES: Provider[] = [
   HoverDirective,
+  MutableDirective,
   UnSelectedDirective
 ];
 

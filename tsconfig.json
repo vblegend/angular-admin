@@ -36,8 +36,8 @@
       "@core/*": [
         "app/@core/*"
       ],
-      "@dynamic/*": [
-        "app/@dynamic/*"
+      "@visual/*": [
+        "app/@visual/*"
       ],
       "@layouts/*": [
         "app/@layouts/*"

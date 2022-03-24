@@ -23,13 +23,13 @@ import { DocumentTitleService } from '@core/services/document.title.service';
 import { Exception } from '@core/common/exception';
 import { ThemeService } from '@core/services/theme.service';
 import { NzIconService } from 'ng-zorro-antd/icon';
-import { DynamicModule } from './@dynamic/dynamic.module';
 import { SessionService } from '@core/services/session.service';
 import { CacheService } from '@core/services/cache.service';
 import { SchedulingTask, TaskMode } from './pages/tasks/task-model/tasks.model';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 import { ObjectUtil } from '@core/util/object.util';
 import { LocalCache } from '@core/cache/local.cache';
+import { VisualModule } from '@visual/visual.module';
 registerLocaleData(zh);
 
 
@@ -43,7 +43,7 @@ registerLocaleData(zh);
     BrowserModule,
     AppRoutingModule,
     CoreModule.forRoot(),
-    DynamicModule.forRoot(),
+    VisualModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
     // IconsProviderModule,
