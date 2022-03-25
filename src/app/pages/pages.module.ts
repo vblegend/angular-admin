@@ -28,15 +28,18 @@ import { FormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { VisualModule } from '@visual/visual.module';
+import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
 import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
+import { HmiSchemaService } from './services/hmi.schema.service';
+import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+
 @NgModule({
   imports: [
     CoreModule,
     CommonModule,
     FormsModule,
     // TranslationModule.forRoot({ root: './i18n/' }),
-    VisualModule.forRoot(),
+    HmiModule.forRoot(),
     LayoutModule.forRoot(),
     NzIconModule,
     NzMenuModule,
@@ -62,10 +65,14 @@ import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
     SvgViewerComponent
   ],
   providers: [
-    // otherProviders...
-
+    {
+      provide: ComponentSchemaService,
+      useClass: HmiSchemaService,
+    }
   ]
 })
 export class PagesModule {
+
+
 
 }

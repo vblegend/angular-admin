@@ -66,12 +66,33 @@ export interface ElementSize {
     height: number;
 }
 
+export interface ComponentDefaultConfigure {
+    /**
+ * 位置与大小
+ */
+    location?: ElementLocation;
+    /**
+     * 组件大小
+     */
+    size?: ElementSize;
+    /**
+     * 
+     * 样式属性，主动更新。
+     */
+    style: ComponentStyle;
+
+    /**
+     * 组态绑定数据，被动更新 需事件通知
+     */
+    data: ComponentDataConfigure;
+}
+
+
 
 /**
  * 2D组态元素配置
  */
-export interface ComponentViewConfigure {
-
+export interface ComponentConfigure extends ComponentDefaultConfigure {
     /**
      * 对象唯一ID
      */
@@ -94,22 +115,4 @@ export interface ComponentViewConfigure {
      * 是否可见
      */
     visible?: boolean;
-    /**
-     * 位置与大小
-     */
-    location?: ElementLocation;
-    /**
-     * 组件大小
-     */
-    size?: ElementSize;
-    /**
-     * 
-     * 样式属性，主动更新。
-     */
-    style: ComponentStyle;
-
-    /**
-     * 组态绑定数据，被动更新 需事件通知
-     */
-    data: ComponentDataConfigure;
 }

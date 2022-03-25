@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
@@ -7,6 +7,16 @@ import { GenericComponent } from '@core/components/basic/generic.component';
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent extends GenericComponent {
+
+  /**
+   *
+   */
+  constructor(protected injector: Injector) {
+    super(injector);
+
+
+  }
+
 
 
 

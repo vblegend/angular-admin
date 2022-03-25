@@ -46,11 +46,6 @@ export class ReSizeAnchorDirective implements OnInit {
     @HostListener('document:mousemove', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
         if (this.buttonDown) {
-            // 
-            // this.host.config.location.left += (ev.clientX - this.disX) / scale;
-            // this.host.config.location.top += (ev.clientY - this.disY) / scale;
-            // this.disX = ev.clientX;
-            // this.disY = ev.clientY;
             this.onMove(ev);
             ev.preventDefault();
         }
@@ -69,11 +64,17 @@ export class ReSizeAnchorDirective implements OnInit {
 
 
 
-
+    /**
+     * 移动 这里仅做了四个方向的移动 而且没有做数据溢出检测
+     * @param ev 
+     * @returns 
+     */
     private onMove(ev: MouseEvent) {
-        const scale = this.host.canvas.viewScale;
+        const scale = this.host.canvas.zoomScale;
         const xLength = (ev.clientX - this.disX) / scale;
         const yLength = (ev.clientY - this.disY) / scale;
+        if(Number.isNaN(xLength)) return;
+        if(Number.isNaN(yLength)) return;
         switch (this.position) {
             case AnchorPosition.Left:
                 this.host.config.location.left += xLength;

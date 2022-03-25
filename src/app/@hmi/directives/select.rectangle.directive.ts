@@ -2,12 +2,11 @@ import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnIni
 import { AgentComponent } from '../components/agent/agent.component';
 
 @Directive({
-    selector: '[moveAnchor]'
+    selector: '[selectRectangle]'
 })
 
-export class MoveAnchorDirective implements OnInit {
+export class SelectRectangleDirective implements OnInit {
     @Input() host: AgentComponent;
-    @Output() mouseEnter = new EventEmitter<boolean>();
     private element: HTMLElement = null;
     private buttonDown = false;
     private disX: number;
@@ -22,23 +21,14 @@ export class MoveAnchorDirective implements OnInit {
 
     }
 
-    @HostListener('mouseenter')
-    public onMouseEnter(): void {
-        this.mouseEnter.emit(true);
-    }
-
-    @HostListener('mouseleave')
-    public onMouseLeave(): void {
-        this.mouseEnter.emit(false);
-    }
 
     @HostListener('mousedown', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
         if (ev.button === 0) {
             this.buttonDown = true;
-            this.element.style.cursor = 'move';
-            this.disX = ev.clientX;
-            this.disY = ev.clientY;
+            this.element.style.cursor = 'crosshair';
+            // this.disX = ev.clientX;
+            // this.disY = ev.clientY;
             ev.preventDefault();
         }
     }
@@ -46,11 +36,7 @@ export class MoveAnchorDirective implements OnInit {
     @HostListener('document:mousemove', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
         if (this.buttonDown) {
-            const scale = this.host.canvas.viewScale;
-            this.host.config.location.left += (ev.clientX - this.disX) / scale;
-            this.host.config.location.top += (ev.clientY - this.disY) / scale;
-            this.disX = ev.clientX;
-            this.disY = ev.clientY;
+
             ev.preventDefault();
         }
     }
@@ -58,7 +44,7 @@ export class MoveAnchorDirective implements OnInit {
     @HostListener('document:mouseup', ['$event'])
     public onMouseUp(ev: MouseEvent): void {
         if (this.buttonDown && ev.button === 0) {
-            this.element.style.cursor = 'grab';
+            this.element.style.cursor = '';
             this.buttonDown = false;
             ev.preventDefault();
         }

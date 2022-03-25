@@ -36,8 +36,8 @@
       "@core/*": [
         "app/@core/*"
       ],
-      "@visual/*": [
-        "app/@visual/*"
+      "@hmi/*": [
+        "app/@hmi/*"
       ],
       "@layouts/*": [
         "app/@layouts/*"

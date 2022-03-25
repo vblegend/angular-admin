@@ -9,6 +9,12 @@ import { CanvasComponent } from './components/canvas/canvas.component';
 import { ZoomViewerDirective } from './directives/zoom.viewer.directive';
 import { PanViewerDirective } from './directives/pan.viewer.directive';
 import { EditorComponent } from './editor.component';
+import { ComponentSchemaService } from './services/component.schema.service';
+import { SelectRectangleDirective } from './directives/select.rectangle.directive';
+
+
+export declare const HMI_COMPONENT_SCHEMA_DECLARES : ComponentSchemaService;
+
 /**
  * services
  */
@@ -26,7 +32,8 @@ const EXPORT_DIRECTIVES: Provider[] = [
   ReSizeAnchorDirective,
   MoveAnchorDirective,
   ZoomViewerDirective,
-  PanViewerDirective
+  PanViewerDirective,
+  SelectRectangleDirective
 ];
 
 
@@ -59,11 +66,11 @@ const EXPORT_COMPONENTS = [
     EXPORT_PIPES
   ]
 })
-export class VisualModule {
+export class HmiModule {
 
-  public static forRoot(): ModuleWithProviders<VisualModule> {
+  public static forRoot(): ModuleWithProviders<HmiModule> {
     return {
-      ngModule: VisualModule,
+      ngModule: HmiModule,
       providers: [
         ...PROVIDERS
       ]

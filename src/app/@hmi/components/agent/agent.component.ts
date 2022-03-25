@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { LoginPageComponent } from '@core/components/login/loginpage.component';
-import { ComponentViewConfigure } from '../../configuration/component.element.configure';
+import { ComponentConfigure } from '../../configuration/component.element.configure';
 import { CanvasComponent } from '../canvas/canvas.component';
 import { SvgViewerComponent } from 'app/pages/graphics/svg.viewer/svg.viewer.component';
 import { BasicComponent } from '../basic/basic.component';
+import { ImgViewerComponent } from 'app/pages/graphics/img.viewer/img.viewer.component';
+import { EditorComponent } from 'app/@hmi/editor.component';
 
 @Component({
   selector: 'ngx-agent-element',
@@ -13,8 +15,9 @@ import { BasicComponent } from '../basic/basic.component';
 })
 export class AgentComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  public config: ComponentViewConfigure;
+  public config: ComponentConfigure;
   private _canvas: CanvasComponent;
+  private _editor: EditorComponent;
 
 
   /**
@@ -24,20 +27,30 @@ export class AgentComponent extends GenericComponent {
     return this._canvas;
   }
 
+  public get editor(): EditorComponent {
+    return this._editor;
+  }
 
   /**
    * 初始化对象的布局
    */
-  public initLayout(canvas: CanvasComponent, configure: ComponentViewConfigure) {
+  public initLayout(canvas: CanvasComponent, configure: ComponentConfigure) {
     this.config = configure;
     this._canvas = canvas;
+    this._editor = canvas.editor;
   }
 
 
   protected onInit(): void {
     this.ifDisposeThrowException();
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(SvgViewerComponent);
-    const componentRef = this.container.createComponent<SvgViewerComponent>(componentFactory, null, this.injector);
+    console.log(this.config.type);
+    const comRef = this.editor.provider.getType(this.config.type);
+    if (comRef == null) {
+      throw `未知的类型${this.config.type}.`;
+    }
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(comRef.component);
+    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(SvgViewerComponent);
+    const componentRef = this.container.createComponent<BasicComponent>(componentFactory, null, this.injector);
     if (componentRef.instance instanceof BasicComponent) {
       componentRef.instance.data = this.config.data;
     } else {

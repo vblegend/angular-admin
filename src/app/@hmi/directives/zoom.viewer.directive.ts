@@ -29,7 +29,7 @@ export class ZoomViewerDirective implements OnInit {
         this.index += delta;
         this.index = Math.max(0, Math.min(this.index, this.scales.length));
         const zoom = this.scales[this.index];
-        this.canvas.viewScale = zoom;
+        this.canvas.zoomScale = zoom;
         this.el.nativeElement.scrollTo();
         ev.preventDefault();
     }

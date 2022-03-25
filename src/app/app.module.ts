@@ -29,7 +29,7 @@ import { SchedulingTask, TaskMode } from './pages/tasks/task-model/tasks.model';
 import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
 import { ObjectUtil } from '@core/util/object.util';
 import { LocalCache } from '@core/cache/local.cache';
-import { VisualModule } from '@visual/visual.module';
+import { HmiModule } from 'app/@hmi/hmi.module';
 registerLocaleData(zh);
 
 
@@ -43,7 +43,7 @@ registerLocaleData(zh);
     BrowserModule,
     AppRoutingModule,
     CoreModule.forRoot(),
-    VisualModule.forRoot(),
+    HmiModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
     // IconsProviderModule,
