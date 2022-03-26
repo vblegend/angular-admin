@@ -1,6 +1,9 @@
+import { Injectable } from "@angular/core";
 import { ComponentSchema } from "app/@hmi/configuration/component.schema";
 
-
+@Injectable({
+    providedIn : 'root'
+})
 export class ComponentSchemaService {
 
     private _map: Record<string, ComponentSchema>;

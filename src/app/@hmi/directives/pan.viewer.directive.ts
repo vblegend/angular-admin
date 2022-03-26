@@ -1,11 +1,6 @@
-import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, NgZone } from '@angular/core';
-import { AgentComponent } from '../components/agent/agent.component';
-import { CanvasComponent } from '../components/canvas/canvas.component';
-
-// interface MouseEvent {
-//     wheelDelta: number;
-// }
-
+import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, NgZone, Injector } from '@angular/core';
+import { BaseDirective } from '@core/directives/base.directive';
+import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 
 
 
@@ -13,17 +8,16 @@ import { CanvasComponent } from '../components/canvas/canvas.component';
     selector: '[panViewer]'
 })
 
-export class PanViewerDirective {
-    @Input() canvas: CanvasComponent;
-    private element: HTMLElement = null;
+export class PanViewerDirective extends BaseDirective {
+    @Input() canvas: DisignerCanvasComponent;
+
     private buttonDown: boolean;
     private disX: number;
     private disY: number;
 
 
-
-    constructor(private el: ElementRef, public viewContainerRef: ViewContainerRef, private zone: NgZone) {
-        this.element = this.el.nativeElement;
+    constructor(protected injector: Injector) {
+        super(injector);
         this.buttonDown = false;
     }
 
@@ -39,6 +33,7 @@ export class PanViewerDirective {
             this.disY = ev.clientY;
             this.element.style.cursor = 'grab';
             ev.preventDefault();
+            ev.stopPropagation();
         }
     }
 

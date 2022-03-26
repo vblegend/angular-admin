@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { LoginPageComponent } from '@core/components/login/loginpage.component';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
-import { CanvasComponent } from '../canvas/canvas.component';
+import { ComponentConfigure, ElementLocation } from '../../configuration/component.element.configure';
+import { PlayCanvasComponent } from '../play-canvas/play.canvas.component';
 import { SvgViewerComponent } from 'app/pages/graphics/svg.viewer/svg.viewer.component';
 import { BasicComponent } from '../basic/basic.component';
 import { ImgViewerComponent } from 'app/pages/graphics/img.viewer/img.viewer.component';
 import { EditorComponent } from 'app/@hmi/editor.component';
+import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 
 @Component({
   selector: 'ngx-agent-element',
@@ -16,14 +17,13 @@ import { EditorComponent } from 'app/@hmi/editor.component';
 export class AgentComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
   public config: ComponentConfigure;
-  private _canvas: CanvasComponent;
+  private _canvas: PlayCanvasComponent;
   private _editor: EditorComponent;
-
-
+  public selfRef: ComponentRef<AgentComponent>;
   /**
    * 获取当前代理对象所属canvas
    */
-  public get canvas(): CanvasComponent {
+  public get canvas(): PlayCanvasComponent {
     return this._canvas;
   }
 
@@ -31,13 +31,20 @@ export class AgentComponent extends GenericComponent {
     return this._editor;
   }
 
+  public get isSelected(): boolean {
+    return true;
+  }
+
+
   /**
    * 初始化对象的布局
    */
-  public initLayout(canvas: CanvasComponent, configure: ComponentConfigure) {
+  public initLayout(canvas: PlayCanvasComponent, configure: ComponentConfigure) {
     this.config = configure;
     this._canvas = canvas;
-    this._editor = canvas.editor;
+    if (canvas instanceof DisignerCanvasComponent) {
+      this._editor = canvas.editor;
+    }
   }
 
 
@@ -48,9 +55,10 @@ export class AgentComponent extends GenericComponent {
     if (comRef == null) {
       throw `未知的类型${this.config.type}.`;
     }
-    const componentRef = this.container.createComponent<BasicComponent>(comRef.component, { injector: this.injector });
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicComponent>(comRef.component);
+    const componentRef = this.container.createComponent<BasicComponent>(componentFactory, null, this.injector);
     if (componentRef.instance instanceof BasicComponent) {
-      componentRef.instance.data = this.config.data;
+      componentRef.instance.initialization(this.config.data);
     } else {
       throw 'load fail. ';
     }
@@ -62,12 +70,10 @@ export class AgentComponent extends GenericComponent {
 
   public getStyle(): Record<string, Object> {
     const style: Record<string, Object> = {};
-    if (this.config.location.left != null) style['left'] = `${this.config.location.left}px`
-    if (this.config.location.right != null && style['left'] != null) style['right'] = `${this.config.location.right}px`
-    if (this.config.location.top != null) style['top'] = `${this.config.location.top}px`
-    if (this.config.location.bottom != null && style['top'] != null) style['bottom'] = `${this.config.location.bottom}px`
-    if (this.config.size.width != null) style['width'] = `${this.config.size.width}px`
-    if (this.config.size.height != null) style['height'] = `${this.config.size.height}px`
+    if (this.config.rect.left != null) style['left'] = `${this.config.rect.left}px`
+    if (this.config.rect.top != null) style['top'] = `${this.config.rect.top}px`
+    if (this.config.rect.width != null) style['width'] = `${this.config.rect.width}px`
+    if (this.config.rect.height != null) style['height'] = `${this.config.rect.height}px`
     // =======================================================================================
     if (this.config.style.opacity != null) style['opacity'] = this.config.style.opacity;
     if (this.config.style.background != null) style['background'] = this.config.style.background;
@@ -86,6 +92,16 @@ export class AgentComponent extends GenericComponent {
   }
 
 
+
+
+  public isShowDecorator() {
+    return this.canvas.isEditor && this.isSelected;
+  }
+
+
+  protected onDestroy(): void {
+      this.selfRef = null;
+  }
 
 
 

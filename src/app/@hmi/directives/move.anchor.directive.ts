@@ -1,25 +1,33 @@
-import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
+import { BaseDirective } from '@core/directives/base.directive';
+import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
+import { ElementLocation } from '@hmi/configuration/component.element.configure';
+import { Rectangle } from '@hmi/core/common';
+import { EditorComponent } from '@hmi/editor.component';
 import { AgentComponent } from '../components/agent/agent.component';
 
 @Directive({
     selector: '[moveAnchor]'
 })
 
-export class MoveAnchorDirective implements OnInit {
+export class MoveAnchorDirective extends BaseDirective {
     @Input() host: AgentComponent;
     @Output() mouseEnter = new EventEmitter<boolean>();
-    private element: HTMLElement = null;
+
+    private editor: EditorComponent;
     private buttonDown = false;
-    private disX: number;
-    private disY: number;
+    private batchNo: number;
+    private offsetX: number;
+    private offsetY: number;
 
 
-    constructor(private el: ElementRef, public viewContainerRef: ViewContainerRef) {
-        this.element = this.el.nativeElement;
+    constructor(protected injector: Injector) {
+        super(injector);
     }
 
-    public ngOnInit(): void {
-
+    public onInit(): void {
+        if (this.host == null) throw 'args host notfound.';
+        this.editor = this.host.editor;
     }
 
     @HostListener('mouseenter')
@@ -36,31 +44,34 @@ export class MoveAnchorDirective implements OnInit {
     public onMouseDown(ev: MouseEvent): void {
         if (ev.button === 0) {
             this.buttonDown = true;
+            this.batchNo = Math.floor(Math.random() * Number.MAX_VALUE);
             this.element.style.cursor = 'move';
-            this.disX = ev.clientX;
-            this.disY = ev.clientY;
+            const scale = this.editor.canvas.zoomScale;
+            this.offsetX = (ev.clientX / scale - this.host.config.rect.left);
+            this.offsetY = (ev.clientY / scale - this.host.config.rect.top);
             ev.preventDefault();
+            ev.stopPropagation();
         }
     }
 
     @HostListener('document:mousemove', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
         if (this.buttonDown) {
-            const scale = this.host.canvas.zoomScale;
-            let distanceX = (ev.clientX - this.disX) / scale;
-            let distanceY = (ev.clientY - this.disY) / scale;
-            if (Number.isNaN(distanceX) || Number.isNaN(distanceY) || (distanceX === 0 && distanceY === 0)) {
+            const scale = this.editor.canvas.zoomScale;
+            const ox = Math.max((ev.clientX / scale - this.offsetX), 0);
+            const oy = Math.max((ev.clientY / scale - this.offsetY), 0);
+            if (Number.isNaN(oy) || Number.isNaN(ox) ||
+                (this.host.config.rect.left === ox && this.host.config.rect.top === oy)) {
                 ev.preventDefault();
                 return;
             }
-            let DestX = this.host.config.location.left + distanceX;
-            let DestY = this.host.config.location.top + distanceY;
-            if (DestX < 0) DestX = 0;
-            if (DestY < 0) DestY = 0;
-            this.host.config.location.left = DestX;
-            this.host.config.location.top = DestY;
-            this.disX = ev.clientX;
-            this.disY = ev.clientY;
+            const locaotion: Rectangle = { left: ox, top: oy, width: this.host.config.rect.width, height: this.host.config.rect.height };
+            this.editor.execute(new ObjectAttributeCommand(this.editor,
+                [this.host],
+                'config/rect',
+                [locaotion],
+                this.batchNo
+            ));
             ev.preventDefault();
         }
     }
@@ -68,7 +79,7 @@ export class MoveAnchorDirective implements OnInit {
     @HostListener('document:mouseup', ['$event'])
     public onMouseUp(ev: MouseEvent): void {
         if (this.buttonDown && ev.button === 0) {
-            this.element.style.cursor = 'grab';
+            this.element.style.cursor = '';// grab
             this.buttonDown = false;
             ev.preventDefault();
         }

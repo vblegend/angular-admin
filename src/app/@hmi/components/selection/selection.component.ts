@@ -31,6 +31,9 @@ export class SelectionComponent extends GenericComponent {
 
 
 
+  public isShow(): boolean {
+    return this.rect.width > 0 && this.rect.height > 0;
+  }
 
 
 

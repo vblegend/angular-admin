@@ -1,4 +1,9 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
+import { BaseDirective } from '@core/directives/base.directive';
+import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
+import { ElementLocation } from '@hmi/configuration/component.element.configure';
+import { Rectangle } from '@hmi/core/common';
+import { EditorComponent } from '@hmi/editor.component';
 import { AgentComponent } from '../components/agent/agent.component';
 
 
@@ -17,29 +22,29 @@ export enum AnchorPosition {
     selector: '[resizeAnchor]'
 })
 
-export class ReSizeAnchorDirective implements OnInit {
+export class ReSizeAnchorDirective extends BaseDirective {
     @Input() host: AgentComponent;
     @Input() position: AnchorPosition;
-    private element: HTMLElement = null;
+    private editor: EditorComponent;
     private buttonDown: boolean;
     private disX: number;
     private disY: number;
+    private batchNo: number;
 
-    constructor(private el: ElementRef, public viewContainerRef: ViewContainerRef) {
-        this.element = this.el.nativeElement;
-    }
-
-    public ngOnInit(): void {
-
+    public onInit(): void {
+        if (this.host == null) throw 'args host notfound.';
+        this.editor = this.host.editor;
     }
 
     @HostListener('mousedown', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
         if (ev.button === 0) {
+            this.batchNo = Math.floor(Math.random() * Number.MAX_VALUE);
             this.buttonDown = true;
             this.disX = ev.clientX;
             this.disY = ev.clientY;
             ev.preventDefault();
+            ev.stopPropagation();
         }
     }
 
@@ -48,6 +53,7 @@ export class ReSizeAnchorDirective implements OnInit {
         if (this.buttonDown) {
             this.onMove(ev);
             ev.preventDefault();
+            ev.stopPropagation();
         }
     }
 
@@ -70,27 +76,39 @@ export class ReSizeAnchorDirective implements OnInit {
      * @returns 
      */
     private onMove(ev: MouseEvent) {
-        const scale = this.host.canvas.zoomScale;
+        const scale = this.editor.canvas.zoomScale;
+        const rectangle: Rectangle = {
+            left: this.host.config.rect.left,
+            top: this.host.config.rect.top,
+            width: this.host.config.rect.width,
+            height: this.host.config.rect.height
+        };
         const xLength = (ev.clientX - this.disX) / scale;
         const yLength = (ev.clientY - this.disY) / scale;
-        if(Number.isNaN(xLength)) return;
-        if(Number.isNaN(yLength)) return;
+        if (Number.isNaN(xLength)) return;
+        if (Number.isNaN(yLength)) return;
         switch (this.position) {
             case AnchorPosition.Left:
-                this.host.config.location.left += xLength;
-                this.host.config.size.width -= xLength;
+                rectangle.left = this.host.config.rect.left + xLength;
+                rectangle.width = this.host.config.rect.width - xLength;
                 break;
             case AnchorPosition.Top:
-                this.host.config.location.top += yLength;
-                this.host.config.size.height -= yLength;
+                rectangle.top = this.host.config.rect.top + yLength;
+                rectangle.height = this.host.config.rect.height - yLength;
                 break;
             case AnchorPosition.Right:
-                this.host.config.size.width += xLength;
+                rectangle.width = this.host.config.rect.width + (ev.clientX - this.disX) / scale;
                 break;
             case AnchorPosition.Down:
-                this.host.config.size.height += yLength;
+                rectangle.height = this.host.config.rect.height + (ev.clientY - this.disY) / scale;
                 break;
         }
+        this.editor.execute(new ObjectAttributeCommand(this.editor,
+            [this.host],
+            'config/rect',
+            [rectangle],
+            this.batchNo
+        ));
         this.disX = ev.clientX;
         this.disY = ev.clientY;
     }

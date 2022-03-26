@@ -47,7 +47,9 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected readonly modalService: NzModalService;
     protected readonly drawerService: NzDrawerService;
     protected readonly overlay: Overlay;
-    protected readonly viewContainerRef: ViewContainerRef;
+    public readonly viewContainerRef: ViewContainerRef;
+
+    public readonly viewComponentRef: ComponentRef<this>;
     /**
      * get current route request parameters \
      * do not cache the variable 

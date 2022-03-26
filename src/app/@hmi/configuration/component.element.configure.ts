@@ -1,3 +1,4 @@
+import { Rectangle } from "@hmi/core/common";
 
 
 /**
@@ -44,7 +45,7 @@ export interface ElementLocation {
     /**
      * 右侧间距（未使用）
      */
-    right?: number;
+    // right?: number;
     /**
      * 顶侧间距
      */
@@ -52,7 +53,7 @@ export interface ElementLocation {
     /**
      * 下侧间距（未使用）
      */
-    bottom?: number;
+    // bottom?: number;
 }
 
 export interface ElementSize {
@@ -66,15 +67,16 @@ export interface ElementSize {
     height: number;
 }
 
+
+
+
+
+
 export interface ComponentDefaultConfigure {
     /**
- * 位置与大小
- */
-    location?: ElementLocation;
-    /**
-     * 组件大小
+     * 位置与大小
      */
-    size?: ElementSize;
+    rect?: Rectangle;
     /**
      * 
      * 样式属性，主动更新。
