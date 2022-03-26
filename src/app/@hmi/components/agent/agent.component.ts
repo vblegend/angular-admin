@@ -48,9 +48,7 @@ export class AgentComponent extends GenericComponent {
     if (comRef == null) {
       throw `未知的类型${this.config.type}.`;
     }
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(comRef.component);
-    // const componentFactory = this.componentFactoryResolver.resolveComponentFactory(SvgViewerComponent);
-    const componentRef = this.container.createComponent<BasicComponent>(componentFactory, null, this.injector);
+    const componentRef = this.container.createComponent<BasicComponent>(comRef.component, { injector: this.injector });
     if (componentRef.instance instanceof BasicComponent) {
       componentRef.instance.data = this.config.data;
     } else {
