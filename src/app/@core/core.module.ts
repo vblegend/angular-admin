@@ -1,193 +1,169 @@
-import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
+import { APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ComponentRef, ErrorHandler, Injector, ModuleWithProviders, NgModule, Optional, Provider, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
-import { NbAuthModule } from '@nebular/auth';
-import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+// import { MatNativeDateModule, MAT_RIPPLE_GLOBAL_OPTIONS } from '@angular/material/core';
+// import { NbAuthModule } from '@nebular/auth';
+// import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 
-import {
-  LayoutService,
-  PlayerService,
-  StateService,
-} from './utils';
 
-import { RippleService } from './utils/ripple.service';
 import { RestfulService } from './services/restful.service';
 import { AuthGuardService } from './services/auth.guard.service';
 import { DialogService } from './services/dialog.service';
 import { AccountService } from './services/account.service';
-import { EarningService } from './services/earning.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatButtonModule } from '@angular/material/button';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { NbActionsModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbProgressBarModule, NbRadioModule, NbSelectModule, NbSpinnerModule, NbTabsetModule, NbUserModule } from '@nebular/theme';
-import { FormsModule } from '@angular/forms';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { ThemeModule } from '../@theme/theme.module';
-import { NgxEchartsModule } from 'ngx-echarts';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { ChartModule } from 'angular2-chartjs';
+import { RouterModule } from '@angular/router';
 import { LoginPageComponent } from './components/login/loginpage.component';
 import { ThemeSettingComponent } from './components/windows/theme.setting.component/theme.setting.component';
 import { TerminalComponent } from './components/windows/terminal.component/terminal.component';
-import * as echarts from 'echarts';
-import { GuestRoleProvider } from './services/guest.role.provider';
-import { CommonService } from './services/common.service';
 import { DefaultPipe } from './pipes/default.pipe';
 import { TranslatorPipe } from './pipes/translator.pipe';
 import { DocumentTitleService } from './services/document.title.service';
 import { NetWorkService } from './services/network.sevrice';
-import { Exception } from './common/exception';
+import { NotFoundComponent } from './components/notfound/not-found.component';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { ThemeService } from './services/theme.service';
+import { BootstrapService } from './services/bootstrap.service';
+import { ErrorComponent } from './components/error/error.component';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+import { MenuService } from './services/menu.service';
+import { HoverDirective } from './directives/hover.directive';
+import { MutableDirective } from './directives/mutable.directive';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { GlobalErrorHandler } from './private/GlobalErrorHandler';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { TemplateService } from './services/template.service';
+import { UnSelectedDirective } from './directives/unselected.directive';
+import { NzDrawerService } from 'ng-zorro-antd/drawer';
+import { BrowserModule, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { OutSideEventPluginService } from './services/outside.event.plugin.service';
+import { SessionService } from './services/session.service';
+import { CacheService } from './services/cache.service';
 
 
-const PIPES = [
+const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
   TranslatorPipe
 ];
 
 
-/**
- * custom providers services
- */
-const SERVICES = [
-  DocumentTitleService,
-  RestfulService,
-  AuthGuardService,
-  DialogService,
-  AccountService,
-  EarningService,
-  CommonService,
-  NetWorkService
+const EXPORT_DIRECTIVES: Provider[] = [
+  HoverDirective,
+  MutableDirective,
+  UnSelectedDirective
 ];
+
 
 /**
  * EXPORT CONPONENTS
  */
 const EXPORT_COMPONENTS = [
   LoginPageComponent,
+  NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
+  ErrorComponent
 ];
 
 
 /**
- * theme material modules
+ * custom providers services
  */
-const THEME_MATERIAL_MODULES = [
-  MatFormFieldModule,
-  MatInputModule,
-  MatSelectModule,
-  MatNativeDateModule,
-  MatDatepickerModule,
-  MatCheckboxModule,
-  MatSlideToggleModule,
-  MatRadioModule,
-  MatButtonModule,
-  MatButtonToggleModule,
+const PROVIDERS: Provider[] = [
+  SessionService,
+  DocumentTitleService,
+  RestfulService,
+  AuthGuardService,
+  DialogService,
+  AccountService,
+  NetWorkService,
+  ThemeService,
+  BootstrapService,
+  MenuService,
+  TemplateService,
+  NzDrawerService,
+  CacheService
 ];
 
-/**
- *  nb core services
- */
-export const NB_CORE_PROVIDERS = [
-  { provide: MAT_RIPPLE_GLOBAL_OPTIONS, useExisting: RippleService },
-  { provide: NbRoleProvider, useClass: GuestRoleProvider },
-  ...NbAuthModule.forRoot().providers,
-  NbSecurityModule.forRoot({ accessControl: { guest: { view: '*' } } }).providers,
-  LayoutService,
-  PlayerService,
-  StateService
-];
+
+
 
 
 @NgModule({
   imports: [
     CommonModule,
-    NbActionsModule,
-    NbRadioModule,
-    NbDatepickerModule,
-    NbLayoutModule,
-    NbCheckboxModule,
-    NbAlertModule,
-    NbInputModule,
-    NbButtonModule,
+    // BrowserModule,
     RouterModule,
     FormsModule,
-    ThemeModule,
-    NbCardModule,
-    NbUserModule,
-    NbIconModule,
-    NbTabsetModule,
-    NbSelectModule,
-    NbListModule,
-    ChartModule,
-    NbSpinnerModule,
+    ReactiveFormsModule,
     DragDropModule,
-    NbProgressBarModule,
-    NgxEchartsModule.forRoot({ echarts }),
-    NgxChartsModule,
-    ...THEME_MATERIAL_MODULES,
+    NzIconModule,
+    NzMenuModule,
+    NzLayoutModule,
+    NzGridModule,
+    NzInputModule,
+    NzFormModule,
+    NzModalModule,
+    NzSpaceModule,
+    NzButtonModule,
+    NzFormModule,
+    NzNotificationModule,
+    NzMessageModule,
+    NzAvatarModule,
+    NzPopoverModule
   ],
   exports: [
-    NbAuthModule
+    EXPORT_COMPONENTS,
+    EXPORT_DIRECTIVES,
+    EXPORT_PIPES
   ],
   declarations: [
-    ...EXPORT_COMPONENTS
-  ],
+    EXPORT_COMPONENTS,
+    EXPORT_DIRECTIVES,
+    EXPORT_PIPES,
+  ]
 })
 
 export class CoreModule {
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) {
-    // documentTitleService.globalSuffix = { value: 'Hello ', needsTranslator: false };
-    documentTitleService.defaultTitle = { value: 'Administrator System', needsTranslator: false };
-    // documentTitleService.globalPrefix = { value: ' - admin', needsTranslator: false };
-
-    documentTitleService.register();
-
-
-    this.test();
-
-
-
-
-    if (parentModule) {
-      throw new Error(`${'CoreModule'} has already been loaded. Import Core modules in the AppModule only.`);
-    }
-
-  }
-
-
-
-  private async test() {
-    try {
-      await this.networkService.send('dasds', '12345', 10000);
-    } catch (e) {
-      if (e instanceof Exception) {
-        console.error(e.toString());
-      } else {
-        console.error(e);
-      }
-    }
-  }
-
-
-
-
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule, private themeService: ThemeService, private documentTitleService: DocumentTitleService, private networkService: NetWorkService) { }
 
 
   public static forRoot(): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [
-        ...NB_CORE_PROVIDERS,
-        ...SERVICES,
-        ...PIPES,
+        ...PROVIDERS,
+        {
+          provide: APP_BOOTSTRAP_LISTENER,
+          useFactory: BootstrapService.BootstrapFactory,
+          deps: [BootstrapService],
+          multi: true
+        },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: BootstrapService.InitializerFactory,
+          deps: [BootstrapService],
+          multi: true
+        },
+        {
+          provide: ErrorHandler,
+          useClass: GlobalErrorHandler,
+          deps: [NzNotificationService, TemplateService]
+        },
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: OutSideEventPluginService,
+          multi: true
+        }
       ]
     };
   }

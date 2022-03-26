@@ -1,20 +1,19 @@
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
-import { Component, OnInit } from '@angular/core';
+import { Component, Injector } from '@angular/core';
+import { GenericComponent } from '@core/components/basic/generic.component';
 
 @Component({
-  selector: 'ngx-app',
-  template: '<router-outlet></router-outlet>'
+  selector: 'app-root',
+  template: '<router-outlet></router-outlet>',
+  styleUrls: ['./app.component.less']
 })
-export class AppComponent implements OnInit {
+export class AppComponent extends GenericComponent {
 
-  constructor() {
+  constructor(injector: Injector) {
+    super(injector);
   }
 
-  public ngOnInit(): void {
 
-  }
+
+
+
 }

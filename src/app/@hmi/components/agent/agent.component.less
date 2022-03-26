@@ -1,0 +1,101 @@
+@import "mixin.less";
+
+.themeMixin( {
+    :host {
+      ::ng-deep {
+        .ant-divider-vertical {
+          border-left: @header-menu-divider;
+          box-shadow: @header-menu-divider-shadow;
+        }
+      }
+    }
+  }
+
+);
+
+:host {
+
+  .agent-component{
+    position: absolute;
+  }
+
+  .agent-component:first-child {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: inline-block;
+  }
+
+
+  .comphost{
+    width: 100%;
+    height: 100%;
+  }
+
+
+  .anchor {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    border: #007acc solid 1px;
+    background-color: #fcfcfc;
+    z-index: 10;
+  }
+  .left-button {
+    left: -5px;
+    top: calc(50% - 5px);
+    cursor: w-resize;
+  }
+  .right-button {
+    right: -5px;
+    top: calc(50% - 5px);
+    cursor: e-resize;
+  }
+  .top-button {
+    top: -5px;
+    left: calc(50% - 5px);
+    cursor: n-resize;
+  }
+  .down-button {
+    bottom: -5px;
+    left: calc(50% - 5px);
+    cursor: s-resize;
+  }
+  .lTop-button {
+    left: -5px;
+    top: -5px;
+    cursor: nw-resize;
+  }
+  .rTop-button {
+    right: -5px;
+    top: -5px;
+    cursor: sw-resize;
+  }
+  .lDown-button {
+    left: -5px;
+    bottom: -5px;
+    cursor: sw-resize;
+  }
+  .rDown-button {
+    right: -5px;
+    bottom: -5px;
+    cursor: nw-resize;
+  }
+
+
+
+
+  .move-button {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    // cursor: grab;
+    background-color: transparent;
+    border: #007acc solid 1px;
+    z-index: 5;
+  }
+}

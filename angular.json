@@ -1,5 +1,9 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": false,
+    "defaultCollection": "@angular-eslint/schematics"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -7,6 +11,14 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "less"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -16,7 +28,12 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
-
+            "inlineStyleLanguage": "less",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles/themes"
+              ]
+            },
             "assets": [
               "src/assets",
               "src/favicon.ico",
@@ -24,12 +41,22 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.css",
-              "node_modules/nebular-icons/scss/nebular-icons.scss",
-              "src/app/@core/styles/style.scss",
-              "src/app/@theme/styles/styles.scss",
-              "node_modules/xterm/css/xterm.css",
-              "node_modules/ionicons/scss/ionicons.scss"
+              "src/styles/style.less",
+              {
+                "input": "src/styles/default.less",
+                "bundleName": "theme-default",
+                "inject": false
+              },
+              {
+                "input": "src/styles/white.less",
+                "bundleName": "theme-white",
+                "inject": false
+              },
+              {
+                "input": "src/styles/dark.less",
+                "bundleName": "theme-dark",
+                "inject": false
+              }
             ],
             "scripts": [
               "node_modules/echarts/dist/echarts.min.js",
@@ -40,8 +67,7 @@
               "echarts",
               "lodash",
               "zrender/lib/svg/svg",
-              "zrender/lib/vml/vml",
-              "crypto-js"
+              "zrender/lib/vml/vml"
             ],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -52,10 +78,18 @@
           },
           "configurations": {
             "production": {
-              "budgets": [{
-                "type": "anyComponentStyle",
-                "maximumWarning": "6kb"
-              }],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -63,24 +97,18 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "fileReplacements": [{
-                "replace": "src/environments/environment.ts",
-                "with": "src/environments/environment.prod.ts"
-              }]
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
-              "optimization": true,
-              "namedChunks": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "aot": true,
-              "sourceMap": true,
-              "budgets": [{
-                "type": "initial",
-                "maximumWarning": "3mb",
-                "maximumError": "5mb"
-              }]
+              "optimization": false,
+              "outputHashing": "all",
+              "buildOptimizer": false,
+              "sourceMap": true
             }
           },
           "defaultConfiguration": "production"
@@ -89,7 +117,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "defaultConfiguration": "development",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "ngx-admin-demo:build:development"
           },
           "configurations": {
             "production": {
@@ -99,6 +127,15 @@
               "browserTarget": "ngx-admin-demo:build:development"
             }
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
@@ -107,7 +144,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",
-      "style": "scss"
+      "style": "less"
     },
     "@schematics/angular:directive": {
       "prefix": "ngx"

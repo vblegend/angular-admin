@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "importHelpers": true,
+    "baseUrl": "src",
     "module": "es2020",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -23,11 +24,34 @@
       "es2017",
       "dom"
     ],
-    "plugins": [{
-      "name": "tslint-language-service"
-    }]
+    "plugins": [
+      {
+        "name": "tslint-language-service"
+      }
+    ],
+    "paths": {
+      "@node_modules/*": [
+        "../node_modules/*"
+      ],
+      "@core/*": [
+        "app/@core/*"
+      ],
+      "@hmi/*": [
+        "app/@hmi/*"
+      ],
+      "@layouts/*": [
+        "app/@layouts/*"
+      ],
+      "@antd": [
+        "../node_modules/ng-zorro-antd/*"
+      ]
+    }
   },
   "exclude": [
-
-  ],
+    "node_modules",
+    ".angular",
+    ".git",
+    "**/*.spec.ts",
+    "build/**"
+  ]
 }

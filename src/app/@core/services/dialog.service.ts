@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NbWindowRef, NbWindowService, NbWindowState } from '@nebular/theme';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
+
 import { TerminalComponent } from '../components/windows/terminal.component/terminal.component';
 import { ThemeSettingComponent } from '../components/windows/theme.setting.component/theme.setting.component';
 
@@ -7,34 +8,35 @@ import { ThemeSettingComponent } from '../components/windows/theme.setting.compo
   providedIn: 'root'
 })
 export class DialogService {
-  constructor(private windowService: NbWindowService) {
+  constructor(private modalService: NzModalService) {
+
+
   }
 
 
-  public createTerminalWindow(): NbWindowRef {
-    return this.windowService.open(TerminalComponent, {
-      title: 'Bash',
-      initialState: NbWindowState.FULL_SCREEN,
-      windowClass: 'terminal',
-      hasBackdrop: false,
-      closeOnEsc: false
+  public createTerminalWindow(): NzModalRef<TerminalComponent, boolean> {
+    return this.modalService.create<TerminalComponent, boolean>({
+      nzTitle: 'terminal',
+      nzWidth:'646px',
+      // nzClassName : 'terminal',
+      nzContent: TerminalComponent,
     });
   }
 
 
-  public createThemeWindow(): NbWindowRef {
-    return this.windowService.open(ThemeSettingComponent, {
-      title: 'Theme Setting',
-      initialState: NbWindowState.FULL_SCREEN,
-      windowClass: 'terminal',
-      hasBackdrop: true,
-      closeOnBackdropClick: false,
-      closeOnEsc: false,
-      buttons: {
-        maximize: false,
-        minimize: false
-      }
-    });
+  public createThemeWindow(): void {
+    // return this.windowService.open(ThemeSettingComponent, {
+    //   title: 'Theme Setting',
+    //   initialState: NbWindowState.FULL_SCREEN,
+    //   windowClass: 'terminal',
+    //   hasBackdrop: true,
+    //   closeOnBackdropClick: false,
+    //   closeOnEsc: false,
+    //   buttons: {
+    //     maximize: false,
+    //     minimize: false
+    //   }
+    // });
   }
 
 

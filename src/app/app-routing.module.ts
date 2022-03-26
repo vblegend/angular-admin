@@ -1,34 +1,48 @@
-import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { ErrorComponent } from './@core/components/error/error.component';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
+import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 import { AuthGuardService } from './@core/services/auth.guard.service';
 
-
-
-export const routes: Routes = [
+const routes: Routes = [
   {
-    data: { title: "" },
+    path: 'login',
+    title: { value: 'login', needsTranslator: false },
+    component: LoginPageComponent
+  },
+  {
+    path: 'notfound',
+    title: { value: 'not found', needsTranslator: false },
+    component: NotFoundComponent,
+    canActivate: [AuthGuardService]
+  },
+  {
+    path: 'error',
+    title: { value: 'error', needsTranslator: false },
+    component: ErrorComponent,
+  },
+  {
     path: 'pages',
-    title: { value: 'pages' },
     loadChildren: () => import('./pages/pages.module').then(m => m.PagesModule),
     canActivate: [AuthGuardService]
   },
   {
-    path: 'login',
-    title: { value: 'login' },
-    component: LoginPageComponent
+    path: '',
+    redirectTo: 'pages',
+    pathMatch: 'full'
   },
-  { path: 'pages', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' }
+  {
+    path: '**',
+    component: NotFoundComponent,
+    canActivate: [AuthGuardService]
+  },
 ];
 
-const config: ExtraOptions = {
-  useHash: false
-};
-
 @NgModule({
-  imports: [RouterModule.forRoot(routes, config)],
+  imports: [
+    RouterModule.forRoot(routes, { useHash: true })
+  ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {
-}
+export class AppRoutingModule { }

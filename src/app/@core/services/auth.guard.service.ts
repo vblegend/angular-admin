@@ -1,14 +1,14 @@
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-
-import { map, takeUntil } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NbAuthService } from '@nebular/auth';
-import { CommonService } from './common.service';
+import { NetWorkService } from './network.sevrice';
+import { SessionService } from './session.service';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private authService: NbAuthService, public commonService: CommonService) {
+  constructor(private router: Router,
+    private sessionService: SessionService,
+    private netWorkService: NetWorkService) {
 
   }
 
@@ -23,13 +23,24 @@ export class AuthGuardService implements CanActivate {
     //       return authenticated;
     //     })
     //   );
-
-    const userCookie = this.commonService.session.get<{ userName: string }>("user");
-    if (userCookie && userCookie.userName) {
-      return true;
-    } else {
-      this.commonService.navigateByUrl('/login');
+    const userCookie = this.sessionService.get<{ userName: string }>("user");
+    if (!this.verifyLoginState(userCookie) || !this.verifyNetWorkState()) {
+      this.router.navigateByUrl('/login');
       return false;
+    } else {
+      return true;
     }
   }
+
+
+  private verifyNetWorkState(): boolean {
+    return true;// this.netWorkService.isConnect;
+  }
+
+  private verifyLoginState(state: { userName: string }): boolean {
+    return state != null && state.userName != null;
+  }
+
+
+
 }

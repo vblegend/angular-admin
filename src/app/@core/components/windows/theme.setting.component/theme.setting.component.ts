@@ -1,6 +1,7 @@
-import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { GenericComponent } from '@core/components/basic/generic.component';
 
-import { NbThemeService, NbWindowRef } from '@nebular/theme';
+
 import { StringNameValue } from '../../../../../typings';
 
 
@@ -9,10 +10,10 @@ import { StringNameValue } from '../../../../../typings';
 
 @Component({
   selector: 'ngx-theme-setting-component',
-  styleUrls: ['./theme.setting.component.scss'],
+  styleUrls: ['./theme.setting.component.less'],
   templateUrl: './theme.setting.component.html'
 })
-export class ThemeSettingComponent implements OnInit, OnDestroy {
+export class ThemeSettingComponent extends GenericComponent {
   @ViewChild('TerminalParent', { static: true }) private terminalDiv: ElementRef;
   public themes: StringNameValue[] = [
     {
@@ -40,21 +41,21 @@ export class ThemeSettingComponent implements OnInit, OnDestroy {
       name: 'Material Dark'
     }
   ];
-  public constructor(public windowRef: NbWindowRef, public themeService: NbThemeService) {
-
+  constructor(injector: Injector) {
+    super(injector)
   }
 
   public changeTheme(themeName: string): void {
-    this.themeService.changeTheme(themeName);
-    this.windowRef.close();
+    // this.themeService.changeTheme(themeName);
+    // this.windowRef.close();
   }
 
 
-  public ngOnInit(): void {
+  protected onInit(): void {
 
   }
 
-  public ngOnDestroy(): void {
+  protected onDestroy(): void {
 
   }
 

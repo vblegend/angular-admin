@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild,ComponentFactoryResolver } from '@angular/core';
-import { NbWindowComponent, NbWindowRef } from '@nebular/theme';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, Injector } from '@angular/core';
+import { Exception } from '@core/common/exception';
+import { GenericComponent } from '@core/components/basic/generic.component';
+import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal'
 import { Terminal } from 'xterm';
 import { AttachAddon } from 'xterm-addon-attach';
 
@@ -9,23 +11,23 @@ import { AttachAddon } from 'xterm-addon-attach';
 
 @Component({
   selector: 'ngx-terminal-component',
-  styleUrls: ['./terminal.component.scss'],
+  styleUrls: ['./terminal.component.less'],
   templateUrl: './terminal.component.html'
 })
-export class TerminalComponent  implements OnInit, OnDestroy {
+export class TerminalComponent extends GenericComponent {
   @ViewChild('TerminalParent', { static: true }) public terminalDiv: ElementRef;
   public term: Terminal;
   private command: string;
-  public constructor(public windowRef: NbWindowRef) {
-   
+  constructor(injector: Injector, private modal: NzModalRef) {
+    super(injector)
+
   }
 
-  /**
-   * cdkDrag cdkDragHandle
-   */
+  handleCancel(): void {
+    this.modal.close(true);
+  }
 
-
-  public ngOnInit(): void {
+  protected onInit(): void {
     this.term = new Terminal({
       fontFamily: '"Cascadia Code", Menlo, monospace',
       cursorStyle: 'underline', // 光标样式
@@ -80,6 +82,9 @@ export class TerminalComponent  implements OnInit, OnDestroy {
     ].join('\n\r'));
 
     const socket = new WebSocket('wss://docker.example.com/containers/mycontainerid/attach/ws');
+    socket.onerror = (e) => {
+      throw Exception.fromCatch('Terminal does not work ', e, `Unable to connect to server：${socket.url}`);
+    };
     const attachAddon = new AttachAddon(socket);
     // Attach the socket to term
     this.term.loadAddon(attachAddon);
@@ -137,7 +142,7 @@ export class TerminalComponent  implements OnInit, OnDestroy {
     term.write('\r\n$ ');
   }
 
-  public ngOnDestroy(): void {
+  public onDestroy(): void {
 
   }
 

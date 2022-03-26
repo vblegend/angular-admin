@@ -1,29 +1,78 @@
 import { NgModule } from '@angular/core';
-import { NbMenuModule } from '@nebular/theme';
 
-import { ThemeModule } from '../@theme/theme.module';
+
 import { PagesComponent } from './pages.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { ECommerceModule } from './e-commerce/e-commerce.module';
+// import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
-import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
+// import { ButtonsComponent } from './buttons/buttons.component';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { LayoutModule } from '@layouts/layout.module';
+import { CoreModule } from '@core/core.module';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
+// import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { FormsModule } from '@angular/forms';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
+import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
+import { HmiSchemaService } from './services/hmi.schema.service';
+import { ComponentSchemaService } from '@hmi/services/component.schema.service';
 
 @NgModule({
   imports: [
+    CoreModule,
+    CommonModule,
+    FormsModule,
+    // TranslationModule.forRoot({ root: './i18n/' }),
+    HmiModule.forRoot(),
+    LayoutModule.forRoot(),
+    NzIconModule,
+    NzMenuModule,
+    NzLayoutModule,
     PagesRoutingModule,
-    ThemeModule,
-    NbMenuModule,
-    DashboardModule,
-    ECommerceModule,
-    MiscellaneousModule
+    NzTableModule,
+    NzFormModule,
+    NzPageHeaderModule,
+    NzTabsModule,
+    NzStatisticModule,
+    NzDescriptionsModule,
+    NzButtonModule,
+    NzPopconfirmModule,
+    NzDropDownModule,
+    NzInputModule,
+    NzDividerModule,
+    DragDropModule
   ],
   declarations: [
-    PagesComponent
+    PagesComponent,
+    WelcomeComponent,
+    DashboardComponent,
+    SvgViewerComponent
   ],
   providers: [
-    // otherProviders...
+    {
+      provide: ComponentSchemaService,
+      useClass: HmiSchemaService,
+    }
   ]
 })
 export class PagesModule {
+
+
+
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent } from '@angular/router';
+import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot, NavigationCancel, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { RouteTitle } from '../models/RouteTitle';
 import { Subscription } from 'rxjs';
@@ -59,6 +59,24 @@ export class DocumentTitleService {
     }
 
 
+    public getUrl(route: ActivatedRouteSnapshot): string {
+        let next = this.getTruthRoute(route);
+        const segments: string[] = [];
+        while (next) {
+            segments.unshift(...next.url.map(e => e.path));
+            next = next.parent;
+        }
+        return segments.join('/');
+    }
+
+    private getTruthRoute(route: ActivatedRouteSnapshot): ActivatedRouteSnapshot {
+        let next = route;
+        while (next.firstChild) {
+            next = next.firstChild;
+        }
+        return next;
+    }
+
     public unRegister(): void {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -67,16 +85,27 @@ export class DocumentTitleService {
     }
 
     private router_event(event: RouterEvent) {
-        if (event instanceof NavigationEnd) {
+        // console.log(event.constructor.name);
+
+        if(event instanceof NavigationStart){
+
+            // console.log(event);
+
+        }
+
+
+
+        if (event instanceof NavigationEnd || event instanceof NavigationCancel) {
             let title = this.getCurrentTitle(this.router);
+            // console.log(title);s
             if (title == null) title = this._defaultTitle;
             const suffixText = this.getTitleText(this._globalSuffix);
             const titleText = this.getTitleText(title);
             const prefixText = this.getTitleText(this._globalPrefix);
+            if (event instanceof NavigationCancel) this.titleService.setTitle('');
             this.titleService.setTitle(suffixText + titleText + prefixText);
         }
     }
-
 
     private getTitleText(title: RouteTitle): string {
         let value: string = '';
@@ -89,11 +118,9 @@ export class DocumentTitleService {
         return value;
     }
 
-
-
     private getCurrentTitle(router: Router): RouteTitle {
         let title: RouteTitle = null;
-        const state: RouterState = this.router.routerState;
+        const state: RouterState = router.routerState;
         const snapshot: RouterStateSnapshot = state.snapshot;
         let node = snapshot.root;
         while (node != null) {
@@ -104,8 +131,5 @@ export class DocumentTitleService {
         }
         return title;
     }
-
-
-
 
 }

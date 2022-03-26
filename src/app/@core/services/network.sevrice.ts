@@ -5,6 +5,8 @@ import { Exception } from '../common/exception';
 export interface WebSocketTask {
     tickcount: number;
     timeout: number;
+    complate: boolean;
+    timer: number;
     resolve: (data: any) => void;
     rejects: (data: any) => void;
 }
@@ -19,15 +21,17 @@ export interface WebSocketMessage<T> {
     providedIn: 'root'
 })
 export class NetWorkService {
-
+    private _connectPromise: Promise<boolean>;
     private webSocket: WebSocket;
     private serialNumber: number;
     private tasklist: Map<number, WebSocketTask>;
     public timeout = 120000;
+    private _url: string;
 
     constructor() {
         this.serialNumber = 0;
         this.tasklist = new Map();
+        // console.log('NetWorkService');
     }
 
     private getSerialNumber(): number {
@@ -35,33 +39,55 @@ export class NetWorkService {
         return this.serialNumber;
     }
 
+    public get url(): string {
+        return this._url;
+    }
+
+    public set url(value: string) {
+        if (this._connectPromise) throw Exception.build('network service', 'websocket url must be modified when the connection request is not established.');
+        this._url = value;
+    }
+
+    /**
+     * connect to server
+     * @param url 
+     * @returns 
+     */
+    public async connection(): Promise<boolean> {
+        if (this._connectPromise) return this._connectPromise;
+        this._connectPromise = this.connectionAsync(this._url);
+        return this._connectPromise;
+    }
 
 
 
-    private connection() {
-
+    private async connectionAsync(url: string): Promise<boolean> {
         if (this.webSocket) {
-            if (this.webSocket.readyState === WebSocket.OPEN) return;
+            if (this.webSocket.readyState === WebSocket.OPEN) return Promise.resolve(true);
             if (this.webSocket.readyState === WebSocket.CONNECTING) {
                 this.close();
             }
             this.webSocket = null;
         }
-
-
-        // this.webSocket.readyState
-        // WebSocket.CONNECTING
-        // WebSocket.OPEN
-        // WebSocket.CLOSING
-        // WebSocket.CLOSED
-        this.webSocket = new WebSocket('ws://localhost:8080');
-        this.webSocket.onerror = this.socket_error.bind(this);
-        this.webSocket.onclose = this.socket_closed.bind(this);
-        this.webSocket.onopen = this.socket_opend.bind(this);
-        this.webSocket.onmessage = this.socket_message.bind(this);
-
-
+        return new Promise((resolve, reject) => {
+            this.webSocket = new WebSocket(url);
+            this.webSocket.onopen = (_ev: Event) => {
+                resolve(true);
+                this.socket_opend(_ev);
+            };
+            this.webSocket.onerror = (_ev: Event) => {
+                reject(_ev);
+                this.socket_error(_ev);
+                this._connectPromise = null;
+            };
+            this.webSocket.onclose = this.socket_closed.bind(this);
+            this.webSocket.onmessage = this.socket_message.bind(this);
+        });
     }
+
+
+
+
 
 
 
@@ -72,29 +98,46 @@ export class NetWorkService {
      * @param timeout  default = 120000
      * @returns 
      */
-    public async send<D, T>(method: string, data: D, timeout?: number): Promise<T> {
-        const sn = this.getSerialNumber();
+    public async send<TData, TResult>(method: string, data: TData, timeout?: number): Promise<TResult> {
         if (timeout == null) timeout = this.timeout;
-        const promise = new Promise<T>((resolve, rejects) => {
-            if (this.webSocket == null) return rejects(Exception.build('websocket is not initialized!'));
-            if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('websocket is not connected!'));
-            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout };
-            this.tasklist.set(sn, task);
-            const message: WebSocketMessage<D> = { sn, method, data };
+        const promise = new Promise<TResult>((resolve, rejects) => {
+            const sn = this.getSerialNumber();
+            if (this.webSocket == null) return rejects(Exception.build('network service', 'websocket is not initialized!'));
+            if (this.webSocket.readyState != WebSocket.OPEN) return rejects(Exception.build('network service', 'websocket is not connected!'));
+            const message: WebSocketMessage<TData> = { sn, method, data };
             this.webSocket.send(JSON.stringify(message));
+            // console.log(sn);
+            // check timeout
+            const timer = window.setTimeout(() => {
+                if (!task.complate) {
+                    task.rejects(Exception.build('network service', 'websocket call timeout!'));
+                    task.complate = true;
+                    this.tasklist.delete(sn);
+                }
+            }, timeout);
+            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout, complate: false, timer: timer };
+            this.tasklist.set(sn, task);
         });
         return promise;
     }
 
 
-    private socket_message(socket: WebSocket, ev: MessageEvent): void {
-        if (typeof ev.data != 'string') return;
-        const message: WebSocketMessage<any> = JSON.parse(ev.data);
-        if (message.sn == null) return;
-        const task = this.tasklist.get(message.sn);
-        if (task) {
-            this.tasklist.delete(message.sn);
-            task.resolve(message.data);
+
+    private socket_message(ev: MessageEvent): void {
+        try {
+            if (typeof ev.data != 'string') return;
+            const message: WebSocketMessage<any> = JSON.parse(ev.data);
+            if (message.sn == null) return;
+            const task = this.tasklist.get(message.sn);
+            if (task) {
+                window.clearTimeout(task.timer);
+                task.complate = true;
+                this.tasklist.delete(message.sn);
+                task.resolve(message.data);
+
+            }
+        } catch (e) {
+
         }
     }
 
@@ -124,19 +167,19 @@ export class NetWorkService {
 
 
 
-    private socket_opend(socket: WebSocket, ev: Event): void {
+    private socket_opend(_ev: Event): void {
 
     }
 
-    private socket_closed(socket: WebSocket, ev: CloseEvent): void {
+    private socket_closed(ev: CloseEvent): void {
         var code = ev.code;
         var reason = ev.reason;
         var wasClean = ev.wasClean;
 
     }
 
-    private socket_error(socket: WebSocket, ev: Event): void {
-
+    private socket_error(_ev: Event): void {
+        throw Exception.fromCatch('NetService websocket', _ev, 'Unable to connect to Websocket server !');
     }
 
 
