@@ -10,14 +10,12 @@ export class HistoryManager {
     private redos: BasicCommand[];
     public disabled: boolean;
     private idCounter: number;
-    private lastCmdTime: Date;
 
 
     public constructor(editor: EditorComponent) {
         this.editor = editor;
         this.undos = [];
         this.redos = [];
-        this.lastCmdTime = new Date();
         this.idCounter = 0;
         this.disabled = false;
     }
@@ -37,8 +35,6 @@ export class HistoryManager {
         return this.redos.length > 0;
     }
 
-    private stickTime: number;
-
 
     /**
      * 执行某条可以被插销、重做的指令
@@ -47,18 +43,16 @@ export class HistoryManager {
      * @param cmd 
      * @param optionalName 
      */
-    public execute(cmd: BasicCommand, optionalName?: string, stickTime?: number):void {
-        const lastCmd = this.undos[this.undos.length - 1];
-        const timeDifference = new Date().getTime() - this.lastCmdTime.getTime();
+    public execute(cmd: BasicCommand):void {
+
         let newCommand = true;
-        if (lastCmd) {
-            // 当前命令与最后一条命令相同
+        console.log(this.undos.length);
+
+        if (this.undos.length > 0) {
+            const lastCmd = this.undos[this.undos.length - 1];
+            const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();
             if (lastCmd.type === cmd.type && lastCmd.attributeName === cmd.attributeName) {
                 if (lastCmd.batchNo === cmd.batchNo) {
-                    lastCmd.update(cmd);
-                    cmd = lastCmd;
-                    newCommand = false;
-                } else if (this.stickTime && timeDifference < this.stickTime) {
                     lastCmd.update(cmd);
                     cmd = lastCmd;
                     newCommand = false;
@@ -69,12 +63,9 @@ export class HistoryManager {
             this.undos.push(cmd);
             cmd.id = ++this.idCounter;
         }
-        cmd.name = optionalName ? optionalName : cmd.name;
         cmd.execute();
-        this.lastCmdTime = new Date();
-        this.stickTime = stickTime;
+        cmd.executeTime = new Date();
         this.redos = [];
-        // this._onChanged.dispatch(cmd);
     }
 
     /**

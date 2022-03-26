@@ -12,19 +12,25 @@ import { Subscription } from 'rxjs';
 })
 export class BasicComponent extends GenericComponent {
 
-  public data: ComponentDataConfigure;
+  private _data: ComponentDataConfigure;
+
+  public get data(): ComponentDataConfigure {
+    return this._data;
+  }
 
   constructor(injector: Injector) {
     super(injector)
   }
 
-  protected onInit() {
-
+  /**
+   * 保证变量data不可修改
+   * @param _data 
+   */
+  public initialization(_data: ComponentDataConfigure): void {
+    if(this._data) throw 'This method is only available on first run ';
+    this._data = _data;
   }
 
-  protected onDestroy() {
-
-  }
 
 
   /**

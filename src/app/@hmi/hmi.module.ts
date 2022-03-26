@@ -5,12 +5,14 @@ import { AgentComponent } from './components/agent/agent.component';
 import { ReSizeAnchorDirective } from './directives/resize.anchor.directive';
 import { MoveAnchorDirective } from './directives/move.anchor.directive';
 import { BasicComponent } from './components/basic/basic.component';
-import { CanvasComponent } from './components/canvas/canvas.component';
+import { PlayCanvasComponent } from './components/play-canvas/play.canvas.component';
 import { ZoomViewerDirective } from './directives/zoom.viewer.directive';
 import { PanViewerDirective } from './directives/pan.viewer.directive';
 import { EditorComponent } from './editor.component';
 import { ComponentSchemaService } from './services/component.schema.service';
 import { SelectRectangleDirective } from './directives/select.rectangle.directive';
+import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
+import { HotkeysDirective } from './directives/hotkeys.directive';
 
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES : ComponentSchemaService;
@@ -33,7 +35,8 @@ const EXPORT_DIRECTIVES: Provider[] = [
   MoveAnchorDirective,
   ZoomViewerDirective,
   PanViewerDirective,
-  SelectRectangleDirective
+  SelectRectangleDirective,
+  HotkeysDirective
 ];
 
 
@@ -43,7 +46,8 @@ const EXPORT_DIRECTIVES: Provider[] = [
 const EXPORT_COMPONENTS = [
   AgentComponent,
   BasicComponent,
-  CanvasComponent,
+  PlayCanvasComponent,
+  DisignerCanvasComponent,
   EditorComponent
 ];
 
