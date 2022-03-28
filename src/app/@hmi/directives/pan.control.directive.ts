@@ -5,10 +5,10 @@ import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigne
 
 
 @Directive({
-    selector: '[panViewer]'
+    selector: '[pan-control]'
 })
 
-export class PanViewerDirective extends BaseDirective {
+export class PanControlDirective extends BaseDirective {
     @Input() canvas: DisignerCanvasComponent;
 
     private buttonDown: boolean;
@@ -25,7 +25,7 @@ export class PanViewerDirective extends BaseDirective {
 
 
 
-    @HostListener('mousedown', ['$event'])
+    @HostListener('mousedown@outside', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
         if (ev.button == 2) {
             this.buttonDown = true;
@@ -37,11 +37,11 @@ export class PanViewerDirective extends BaseDirective {
         }
     }
 
-    @HostListener('document:mousemove', ['$event'])
+    @HostListener('document:mousemove@outside', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
 
         if (this.buttonDown) {
-            this.zone.runOutsideAngular(() => {
+            // this.zone.runOutsideAngular(() => {
                 const scrollWidth = this.element.scrollWidth - this.element.clientWidth;
                 const scrollHeight = this.element.scrollHeight - this.element.clientHeight;
                 let left = -(ev.clientX - this.disX);
@@ -56,11 +56,11 @@ export class PanViewerDirective extends BaseDirective {
                 this.disX = ev.clientX;
                 this.disY = ev.clientY;
                 ev.preventDefault();
-            });
+            // });
         }
     }
 
-    @HostListener('document:mouseup', ['$event'])
+    @HostListener('document:mouseup@outside', ['$event'])
     public onMouseUp(ev: MouseEvent): void {
         if (this.buttonDown) {
             this.buttonDown = false;

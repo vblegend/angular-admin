@@ -1,0 +1,42 @@
+<div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button" (contextmenu)="contextMenu($event, menu)"
+  moveAnchor [host]="this" [editor]="editor"> </div>
+<div class="anchor left-button" resizeAnchor [host]="this" [editor]="editor" position="left"> </div>
+<div class="anchor right-button" resizeAnchor [host]="this" [editor]="editor" position="right"> </div>
+<div class="anchor top-button" resizeAnchor [host]="this" [editor]="editor" position="top"> </div>
+<div class="anchor down-button" resizeAnchor [host]="this" [editor]="editor" position="down"> </div>
+<div class="anchor lTop-button" resizeAnchor [host]="this" [editor]="editor" position="lTop"> </div>
+<div class="anchor rTop-button" resizeAnchor [host]="this" [editor]="editor" position="rTop"> </div>
+<div class="anchor lDown-button" resizeAnchor [host]="this" [editor]="editor" position="lDown"> </div>
+<div class="anchor rDown-button" resizeAnchor [host]="this" [editor]="editor" position="rDown"> </div>
+
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item>置于顶层</li>
+    <li nz-menu-item>置于底层</li>
+    <li nz-menu-item>移至上一层</li>
+    <li nz-menu-item>移至下一层</li>
+    <hr>
+    <li nz-menu-item>撤销(ctrl + z)</li>
+    <li nz-menu-item>重做(ctrl + y)</li>
+    <hr>
+    <li nz-menu-item>剪切(ctrl + x)</li>
+    <li nz-menu-item>拷贝(ctrl + c)</li>
+    <li nz-menu-item>粘贴(ctrl + v)</li>
+    <li nz-menu-item>删除(delete)</li>
+
+    <!-- <li nz-submenu nzTitle="拷贝">
+      <ul>
+        <li nz-menu-item>控件</li>
+        <li nz-menu-item>样式</li>
+      </ul>
+    </li>
+    <li nz-submenu nzDisabled nzTitle="disabled sub menu">
+      <ul>
+        <li nz-menu-item>3rd menu item</li>
+        <li nz-menu-item>4th menu item</li>
+      </ul>
+    </li> -->
+  </ul>
+</nz-dropdown-menu>

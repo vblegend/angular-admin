@@ -1,13 +1,11 @@
-import { ComponentRef } from "@angular/core";
+import { BasicComponent } from "@hmi/components/basic-component/basic.component";
 import { EditorComponent } from "@hmi/editor.component";
-import { AgentComponent } from "../components/agent/agent.component";
-import { ElementLocation } from "../configuration/component.element.configure";
 import { BasicCommand } from "./basic.command";
 
 
 export class ObjecrAddedCommand extends BasicCommand {
 
-    constructor(editor: EditorComponent, objects: AgentComponent[], indexs?: number[]) {
+    constructor(editor: EditorComponent, objects: BasicComponent[], indexs?: number[]) {
         super(editor);
         this.objects = objects;
     }

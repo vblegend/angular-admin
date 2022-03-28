@@ -1,4 +1,4 @@
-import { AgentComponent } from '@hmi/components/agent/agent.component';
+import { BasicComponent } from '@hmi/components/basic-component/basic.component';
 import { EditorComponent } from '@hmi/editor.component';
 import { BasicCommand } from './basic.command';
 
@@ -16,7 +16,7 @@ export class ObjectAttributeCommand extends BasicCommand {
      * @param path   $开头的变量将设置对象的binding的属性中
      * @param newValue 
      */
-    public constructor(editor: EditorComponent, objects: AgentComponent[], path: string, newValues: Object[], batchNo?: number) {
+    public constructor(editor: EditorComponent, objects: BasicComponent[], path: string, newValues: Object[], batchNo?: number) {
         super(editor);
         this.name = '修改属性';
         this.objects = objects;
@@ -35,7 +35,7 @@ export class ObjectAttributeCommand extends BasicCommand {
         }
     }
 
-    public getTarget(object: AgentComponent): Object {
+    public getTarget(object: BasicComponent): Object {
         let root = object;
         for (let i = 0; i < this.attributePaths.length; i++) {
             const key = this.attributePaths[i];

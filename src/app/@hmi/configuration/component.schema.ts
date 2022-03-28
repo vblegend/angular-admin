@@ -1,6 +1,5 @@
 import { Type } from "@angular/core";
-import { BasicComponent } from "app/@hmi/components/basic/basic.component";
-import { SvgViewerComponent } from "app/pages/graphics/svg.viewer/svg.viewer.component";
+import { BasicComponent } from "@hmi/components/basic-component/basic.component";
 import { ComponentDefaultConfigure } from "./component.element.configure";
 
 

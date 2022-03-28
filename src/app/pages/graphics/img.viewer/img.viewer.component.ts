@@ -1,5 +1,6 @@
-import { Component, Injector } from '@angular/core';
-import { BasicComponent } from 'app/@hmi/components/basic/basic.component';
+import { Component, HostListener, Injector } from '@angular/core';
+import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { ComponentDataConfigure } from '@hmi/configuration/component.element.configure';
 
 @Component({
   selector: 'app-img-viewer',
@@ -12,6 +13,8 @@ export class ImgViewerComponent extends BasicComponent {
     super(injector)
   }
 
+
+
   protected onInit() {
 
   }
@@ -20,6 +23,10 @@ export class ImgViewerComponent extends BasicComponent {
 
   }
 
+  @HostListener('mousedown', ['$event'])
+  public onMouseDown(ev: MouseEvent): void {
+    console.log('img.click');
+  }
 
 
 }

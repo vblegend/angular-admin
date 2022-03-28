@@ -14,6 +14,7 @@ import { NzMessageDataOptions, NzMessageService } from "ng-zorro-antd/message";
 import { MessageType } from "@core/common/messagetype";
 import { SessionService } from "@core/services/session.service";
 import { CacheService } from "@core/services/cache.service";
+import { NzContextMenuService } from "ng-zorro-antd/dropdown";
 
 /**
  * Generic basic components, commonly used services are integrated internally \
@@ -46,8 +47,10 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected readonly changeDetector: ChangeDetectorRef;
     protected readonly modalService: NzModalService;
     protected readonly drawerService: NzDrawerService;
+    protected readonly contextMenuService: NzContextMenuService;
     protected readonly overlay: Overlay;
     public readonly viewContainerRef: ViewContainerRef;
+
 
     public readonly viewComponentRef: ComponentRef<this>;
     /**
@@ -79,6 +82,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.sessionService = injector.get(SessionService);
         this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
+        this.contextMenuService =  injector.get(NzContextMenuService);
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
