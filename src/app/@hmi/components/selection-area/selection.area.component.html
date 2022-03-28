@@ -1,13 +1,13 @@
 <div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button" (contextmenu)="contextMenu($event, menu)"
   moveAnchor [host]="this" [editor]="editor"> </div>
-<div class="anchor left-button" resizeAnchor [host]="this" [editor]="editor" position="left"> </div>
-<div class="anchor right-button" resizeAnchor [host]="this" [editor]="editor" position="right"> </div>
-<div class="anchor top-button" resizeAnchor [host]="this" [editor]="editor" position="top"> </div>
-<div class="anchor down-button" resizeAnchor [host]="this" [editor]="editor" position="down"> </div>
-<div class="anchor lTop-button" resizeAnchor [host]="this" [editor]="editor" position="lTop"> </div>
-<div class="anchor rTop-button" resizeAnchor [host]="this" [editor]="editor" position="rTop"> </div>
-<div class="anchor lDown-button" resizeAnchor [host]="this" [editor]="editor" position="lDown"> </div>
-<div class="anchor rDown-button" resizeAnchor [host]="this" [editor]="editor" position="rDown"> </div>
+<div class="anchor left-button" resizeAnchor [host]="this" [editor]="editor" position="l"> </div>
+<div class="anchor right-button" resizeAnchor [host]="this" [editor]="editor" position="r"> </div>
+<div class="anchor top-button" resizeAnchor [host]="this" [editor]="editor" position="t"> </div>
+<div class="anchor down-button" resizeAnchor [host]="this" [editor]="editor" position="d"> </div>
+<div class="anchor lTop-button" resizeAnchor [host]="this" [editor]="editor" position="lt"> </div>
+<div class="anchor rTop-button" resizeAnchor [host]="this" [editor]="editor" position="rt"> </div>
+<div class="anchor lDown-button" resizeAnchor [host]="this" [editor]="editor" position="ld"> </div>
+<div class="anchor rDown-button" resizeAnchor [host]="this" [editor]="editor" position="rd"> </div>
 
 
 
@@ -17,6 +17,7 @@
     <li nz-menu-item>置于底层</li>
     <li nz-menu-item>移至上一层</li>
     <li nz-menu-item>移至下一层</li>
+    <li nz-menu-item>拷贝样式</li>
     <hr>
     <li nz-menu-item>撤销(ctrl + z)</li>
     <li nz-menu-item>重做(ctrl + y)</li>

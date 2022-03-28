@@ -38,7 +38,7 @@ export class EditorComponent extends GenericComponent {
   protected onInit(): void {
     this.canvas.editor = this;
 
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 10; i++) {
 
 
 
@@ -50,8 +50,8 @@ export class EditorComponent extends GenericComponent {
         rect: {
           left: Math.floor(Math.random() * 1920),
           top: Math.floor(Math.random() * 1080),
-          width: Math.floor(Math.random() * 100 + 10),
-          height: Math.floor(Math.random() * 50 + 5),
+          width: Math.floor(Math.random() * 100 + 100),
+          height: Math.floor(Math.random() * 50 + 50),
         },
         style: { opacity: 0.8, ignoreEvent: true ,border: 'solid 1px yellow' },
         data: {}
