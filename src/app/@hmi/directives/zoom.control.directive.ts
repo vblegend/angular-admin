@@ -4,10 +4,13 @@ import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigne
 import { EditorComponent } from '@hmi/editor.component';
 
 @Directive({
-    selector: '[zoomViewer]'
+    selector: '[zoom-control]'
 })
-
-export class ZoomViewerDirective extends BaseDirective {
+/**
+ * 编辑器的缩放指令
+ * 实现了鼠标滚轮的缩放功能。
+ */
+export class ZoomControlDirective extends BaseDirective {
     // @Input() editor: EditorComponent;
     @Input() canvas: DisignerCanvasComponent;
     @Output() mouseEnter = new EventEmitter<boolean>();
@@ -23,10 +26,8 @@ export class ZoomViewerDirective extends BaseDirective {
     @HostListener('mousewheel', ['$event'])
     public onMouseWheel(ev: MouseEvent): void {
         const delta = ev['wheelDelta'] / 120;
-        this.index += delta;
-        this.index = Math.max(0, Math.min(this.index, this.scales.length));
-        const zoom = this.scales[this.index];
-        this.canvas.zoomScale = zoom;
+        this.index = Math.max(0, Math.min(this.index + delta, this.scales.length - 1));
+        this.canvas.zoomScale = this.scales[this.index];
         this.element.scrollTo();
         ev.preventDefault();
         ev.stopPropagation();

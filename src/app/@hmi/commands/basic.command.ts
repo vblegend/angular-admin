@@ -1,5 +1,5 @@
+import { BasicComponent } from "@hmi/components/basic-component/basic.component";
 import { EditorComponent } from "@hmi/editor.component";
-import { AgentComponent } from "../components/agent/agent.component";
 
 
 export class BasicCommand {
@@ -11,7 +11,7 @@ export class BasicCommand {
     public attributeName: string;
     public attributePaths: string[];
 
-    protected objects: AgentComponent[];
+    protected objects: BasicComponent[];
     protected oldValues: Object[];
     protected newValues: Object[];
     protected editor: EditorComponent;

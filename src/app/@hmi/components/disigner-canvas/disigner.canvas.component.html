@@ -1,7 +1,7 @@
-<div class="disigner-continer" panViewer zoomViewer [canvas]="this">
-    <div class="scrollViewer" [ngStyle]="{'transform': 'scale(' + zoomScale + ')' }">
-        <ng-container #ChildrenView class="divcontiner">
+<div class="disigner-continer" pan-control zoom-control rubber-band [canvas]="this">
+  <div class="scrollViewer" [ngStyle]="{'transform': 'scale(' + zoomScale + ')' }">
+    <ng-container #ChildrenView>
 
-        </ng-container>
-    </div>
+    </ng-container>
+  </div>
 </div>

@@ -24,7 +24,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -32,6 +32,7 @@ import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
 import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
 import { HmiSchemaService } from './services/hmi.schema.service';
 import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+import { ImgViewerComponent } from './graphics/img.viewer/img.viewer.component';
 
 @NgModule({
   imports: [
@@ -42,6 +43,7 @@ import { ComponentSchemaService } from '@hmi/services/component.schema.service';
     HmiModule.forRoot(),
     LayoutModule.forRoot(),
     NzIconModule,
+    ReactiveFormsModule,
     NzMenuModule,
     NzLayoutModule,
     PagesRoutingModule,
@@ -62,7 +64,8 @@ import { ComponentSchemaService } from '@hmi/services/component.schema.service';
     PagesComponent,
     WelcomeComponent,
     DashboardComponent,
-    SvgViewerComponent
+    SvgViewerComponent,
+    ImgViewerComponent
   ],
   providers: [
     {

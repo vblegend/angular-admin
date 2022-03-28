@@ -26,6 +26,12 @@ export interface ComponentStyle {
      * 组件层级索引
      */
     zIndex?: number;
+
+    /**
+     * 边框
+     */
+    border?: string;
+
     /**
      * 固定住的 不可移动的
      */

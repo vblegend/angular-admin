@@ -1,8 +1,7 @@
 // https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
 
-@font-family: Roboto, sans-serif, 'Microsoft Yahei UI', "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-
-
+@font-family: Roboto, sans-serif, "Microsoft Yahei UI", "Segoe UI",
+  -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
 
 // .ant-btn>.anticon {
 //   line-height: 0px;
@@ -31,21 +30,20 @@
 body {
   margin: 0;
   font-size: 14px;
-  font-family: Roboto, 'Segoe UI', Arial, sans-serif;
+  font-family: Roboto, "Segoe UI", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.5715;
-  font-feature-settings: 'tnum', "tnum";
+  font-feature-settings: "tnum", "tnum";
 }
-
 
 // side menu style
 .ant-menu.ant-menu-inline-collapsed {
   width: 64px !important;
 }
-.ant-menu-submenu-popup>.ant-menu {
+.ant-menu-submenu-popup > .ant-menu {
   background-color: @component-background;
 }
-.ant-menu-submenu-popup>.ant-menu>.nz-menu-item,
+.ant-menu-submenu-popup > .ant-menu > .nz-menu-item,
 .ant-menu-item,
 .ant-menu-submenu,
 .ant-menu-submenu-title {
@@ -60,16 +58,14 @@ body {
 .ant-menu-submenu-title .anticon {
   min-width: 14px;
   font-size: 20px;
-  transition: font-size 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0.3s;
+  transition: font-size 0.15s cubic-bezier(0.215, 0.61, 0.355, 1),
+    margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0.3s;
 }
-
-
 
 // fix side menu border-botton
 .ant-menu-submenu.ant-menu-submenu-inline {
   border-bottom: solid 0px;
 }
-
 
 // drop down icon
 .ant-dropdown-menu .anticon {
@@ -77,16 +73,32 @@ body {
   margin-right: 15px;
 }
 
+.ant-dropdown {
+  min-width: 150px;
 
+  .ant-dropdown-menu {
+    border-width: 1px;
+    border-style: solid;
+    border-color: @border-color-base;
+
+    .ant-dropdown-menu-item {
+      line-height: 30px;
+    }
+
+    hr {
+      margin: 3px 10px;
+    }
+  }
+}
 
 /* 全局滚动条样式 */
 @scroll-width: 5px;
 @scroll-height: 5px;
-@scroll-background: #1D1D1D;
+@scroll-background: #1d1d1d;
 @scroll-thumb-radius: 2px;
 @scroll-thumb-color: #535353;
 @scroll-thumb-hover-color: #164a72;
-@scroll-thumb-active-color: #157DCF;
+@scroll-thumb-active-color: #157dcf;
 
 /*滚动条整体样式*/
 ::-webkit-scrollbar {
@@ -122,10 +134,6 @@ body {
 // 页头 菜单的分割线
 @header-menu-divider: 1px solid rgba(255, 255, 255, 0.12);
 @header-menu-divider-shadow: 0px 0px 10px 1px #3a3e3e;
-
-
-
-
 
 // .ant-tooltip-content>.ant-tooltip-arrow>.ant-tooltip-arrow-content {
 //   background-color: red;

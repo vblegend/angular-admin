@@ -4,20 +4,18 @@ import { EditorComponent } from "@hmi/editor.component";
 
 
 @Directive({
-    selector: '[hmi-hotkey]'
+    selector: '[hmi-disigner-hotkey]'
 })
-
-export class HotkeysDirective extends BaseDirective {
+/**
+ * 快捷键指令
+ * 用于在编辑器下快捷键的实现
+ */
+export class DisignerHotkeysDirective extends BaseDirective {
     @Input() editor: EditorComponent;
 
     protected onInit(): void {
 
     }
-
-
-
-
-
 
     @HostListener('document:keydown', ['$event'])
     public onKeyDown(event: KeyboardEvent): void {

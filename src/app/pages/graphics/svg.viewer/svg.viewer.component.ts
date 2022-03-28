@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { BasicComponent } from 'app/@hmi/components/basic/basic.component';
+import { BasicComponent } from '@hmi/components/basic-component/basic.component';
 
 @Component({
   selector: 'app-svg-viewer',
