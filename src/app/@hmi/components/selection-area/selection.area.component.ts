@@ -1,4 +1,4 @@
-import { Component, ComponentRef, HostBinding, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { ComponentConfigure } from '../../configuration/component.element.configure';
 import { PlayCanvasComponent } from '../play-canvas/play.canvas.component';
@@ -38,11 +38,50 @@ export class SelectionAreaComponent extends GenericComponent {
   }
 
 
-  contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
-    this.contextMenuService.create($event, menu);
+  public contextMenu($event: MouseEvent, menu: NzDropdownMenuComponent): void {
+    if (!this.canvas.ignoreContextMenu) {
+      this.contextMenuService.create($event, menu);
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
   }
 
-  closeMenu(): void {
+  @HostListener('document:keydown', ['$event'])
+  public onKeyDown(event: KeyboardEvent): void {
+    switch (event.code) {
+      case 'ArrowUp':
+        if (this.editor.selection.length === 0) return;
+        // 往上微调  留空
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+      case 'ArrowDown':
+        if (this.editor.selection.length === 0) return;
+        // 往下微调  留空
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+      case 'ArrowLeft':
+        if (this.editor.selection.length === 0) return;
+        // 往左微调  留空
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+      case 'ArrowRight':
+        if (this.editor.selection.length === 0) return;
+        // 往右微调  留空
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+    }
+  }
+
+
+
+
+
+
+  public closeMenu(): void {
     this.contextMenuService.close();
   }
 

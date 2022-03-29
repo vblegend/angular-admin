@@ -51,10 +51,18 @@ export class RubberBandDirective extends BaseDirective {
 
     @HostListener('mousedown', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
-        if (ev.button === 0) {
+        if (ev.buttons === 1 || ev.buttons == 2) {
+            // 过滤滚动条上的点击事件
+            if (ev.clientX - this.element.offsetLeft > this.element.clientWidth ||
+            ev.clientY - this.element.offsetTop > this.element.clientHeight) return;
+
+
+
+
             this.buttonDown = true;
             const rect = this.element.getBoundingClientRect();
-            this.element.style.cursor = 'crosshair';
+            // 仅限左键更改指针,右键为菜单项 不修改指针样式
+            if (ev.buttons == 1) this.element.style.cursor = 'crosshair';
             this.endX = this.startX = (ev.clientX - rect.left);
             this.endY = this.startY = (ev.clientY - rect.top);
             this.updatePosition();
@@ -62,6 +70,14 @@ export class RubberBandDirective extends BaseDirective {
             ev.preventDefault();
             ev.stopPropagation();
         }
+        if (ev.buttons == 2) {
+
+
+
+
+        }
+
+
     }
 
     /**
@@ -71,7 +87,7 @@ export class RubberBandDirective extends BaseDirective {
      */
     @HostListener('document:mousemove@outside', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
-        if (this.buttonDown) {
+        if (this.buttonDown && ev.buttons === 1) {
             const rect = this.element.getBoundingClientRect();
             this.endX = ev.clientX - rect.left;
             this.endY = ev.clientY - rect.top;
@@ -84,7 +100,7 @@ export class RubberBandDirective extends BaseDirective {
 
     @HostListener('document:mouseup', ['$event'])
     public onMouseUp(ev: MouseEvent): void {
-        if (this.buttonDown && ev.button === 0) {
+        if (this.buttonDown) {
             this.element.style.cursor = '';
             this.buttonDown = false;
             const rect = this.element.getBoundingClientRect();
@@ -148,14 +164,14 @@ export class RubberBandDirective extends BaseDirective {
             });
             selecteds.push(...hitObjects);
         }
-        if (selecteds.length > 0) {
-            if (ctrlKey) {
-                command = new SelectionToggleCommand(this.editor, selecteds);
-            } else {
-                command = new SelectionFillCommand(this.editor, selecteds);
-            }
-            this.editor.execute(command);
+        // if (selecteds.length > 0) {
+        if (ctrlKey) {
+            command = new SelectionToggleCommand(this.editor, selecteds);
+        } else {
+            command = new SelectionFillCommand(this.editor, selecteds);
         }
+        this.editor.execute(command);
+        // }
 
 
     }

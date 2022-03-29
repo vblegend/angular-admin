@@ -116,6 +116,10 @@ export interface ComponentConfigure extends ComponentDefaultConfigure {
     type: string;
 
     /**
+     * 被锁定的
+     */
+    locked?:boolean;
+    /**
      * 组件所属分组
      */
     group?: string;

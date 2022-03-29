@@ -3,7 +3,7 @@ import { EditorComponent } from "../editor.component";
 
 
 
-export class HistoryManager {
+export class HistoryService {
 
     private editor: EditorComponent;
     private undos: BasicCommand[];
@@ -43,11 +43,8 @@ export class HistoryManager {
      * @param cmd 
      * @param optionalName 
      */
-    public execute(cmd: BasicCommand):void {
-
+    public execute(cmd: BasicCommand): void {
         let newCommand = true;
-        console.log(this.undos.length);
-
         if (this.undos.length > 0) {
             const lastCmd = this.undos[this.undos.length - 1];
             const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();

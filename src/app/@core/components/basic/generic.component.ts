@@ -52,7 +52,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     public readonly viewContainerRef: ViewContainerRef;
 
 
-    public readonly viewComponentRef: ComponentRef<this>;
     /**
      * get current route request parameters \
      * do not cache the variable 
@@ -83,6 +82,10 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         this.contextMenuService =  injector.get(NzContextMenuService);
+
+
+
+
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 

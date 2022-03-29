@@ -19,6 +19,9 @@ import { SelectionAreaComponent } from './components/selection-area/selection.ar
 import { RubberbandComponent } from './components/rubber-band/rubber.band.component';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
+import { SnapLineComponent } from './components/snap-line/snap.line.component';
+import { PanControlComponent } from './components/pan-control/pan.control.component';
+
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: ComponentSchemaService;
 
 /**
@@ -38,7 +41,6 @@ const EXPORT_DIRECTIVES: Provider[] = [
   ReSizeAnchorDirective,
   MoveAnchorDirective,
   ZoomControlDirective,
-  PanControlDirective,
   RubberBandDirective,
   DisignerHotkeysDirective
 ];
@@ -55,6 +57,8 @@ const EXPORT_COMPONENTS = [
   EditorComponent,
   SelectionAreaComponent,
   RubberbandComponent,
+  SnapLineComponent,
+  PanControlComponent
 ];
 
 /**

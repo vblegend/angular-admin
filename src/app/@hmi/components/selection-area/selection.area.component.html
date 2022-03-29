@@ -1,5 +1,5 @@
-<div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button" (contextmenu)="contextMenu($event, menu)"
-  moveAnchor [host]="this" [editor]="editor"> </div>
+<div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button"
+  (contextmenu)="contextMenu($event, menu)" moveAnchor [host]="this" [editor]="editor"> </div>
 <div class="anchor left-button" resizeAnchor [host]="this" [editor]="editor" position="l"> </div>
 <div class="anchor right-button" resizeAnchor [host]="this" [editor]="editor" position="r"> </div>
 <div class="anchor top-button" resizeAnchor [host]="this" [editor]="editor" position="t"> </div>
@@ -17,10 +17,8 @@
     <li nz-menu-item>置于底层</li>
     <li nz-menu-item>移至上一层</li>
     <li nz-menu-item>移至下一层</li>
+    <li nz-menu-item>锁定</li>
     <li nz-menu-item>拷贝样式</li>
-    <hr>
-    <li nz-menu-item>撤销(ctrl + z)</li>
-    <li nz-menu-item>重做(ctrl + y)</li>
     <hr>
     <li nz-menu-item>剪切(ctrl + x)</li>
     <li nz-menu-item>拷贝(ctrl + c)</li>

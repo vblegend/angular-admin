@@ -102,7 +102,6 @@ export class SelectionService {
             const index = this.components.indexOf(component);
             if (index === -1) {
                 this.components.push(component);
-                component.instance.isSelected = true;
                 const element = component.location.nativeElement as HTMLElement;
                 element.classList.add('hmi-selected-component');
                 return component;
@@ -120,7 +119,6 @@ export class SelectionService {
         const index = this.components.indexOf(component);
         if (index > -1) {
             this.components.splice(index, 1);
-            component.instance.isSelected = false;
             const element = component.location.nativeElement as HTMLElement;
             element.classList.remove('hmi-selected-component');
             return component;
