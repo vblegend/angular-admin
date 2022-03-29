@@ -27,9 +27,6 @@ export class PanControlComponent extends GenericComponent {
   constructor(protected injector: Injector) {
     super(injector);
     this.buttonDown = false;
-
-
-
   }
 
   protected onInit(): void {

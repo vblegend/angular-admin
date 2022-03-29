@@ -7,7 +7,6 @@ import { MoveAnchorDirective } from './directives/move.anchor.directive';
 import { BasicComponent } from './components/basic-component/basic.component';
 import { PlayCanvasComponent } from './components/play-canvas/play.canvas.component';
 import { ZoomControlDirective } from './directives/zoom.control.directive';
-import { PanControlDirective } from './directives/pan.control.directive';
 import { EditorComponent } from './editor.component';
 import { ComponentSchemaService } from './services/component.schema.service';
 import { RubberBandDirective } from './directives/rubber.band.directive';
