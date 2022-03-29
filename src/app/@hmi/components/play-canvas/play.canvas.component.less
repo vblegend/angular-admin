@@ -1,9 +1,8 @@
-
 .disigner-continer {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: inherit;
 }
 
 .divcontiner {
@@ -13,4 +12,16 @@
   overflow: hidden;
   overflow-y: hidden;
   overflow-x: hidden;
+}
+
+
+
+:host {
+  ::ng-deep {
+    .hmi-base-component {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

@@ -7,6 +7,9 @@
           border-left: @header-menu-divider;
           box-shadow: @header-menu-divider-shadow;
         }
+        .ant-dropdown-menu-item {
+          padding: 5px 12px;
+        }
       }
     }
   }
@@ -14,76 +17,78 @@
 );
 
 :host {
+  z-index: 99999;
 
-  .agent-component{
-    position: absolute;
+  ::ng-deep {
+    .ant-dropdown-menu-item {
+      padding: 5px 12px;
+    }
   }
 
-  .agent-component:first-child {
+  .comphost {
     width: 100%;
     height: 100%;
-    position: relative;
-    display: inline-block;
+    /* 内容不会溢出边框 */
+    overflow: hidden;
   }
-
-
-  .comphost{
-    width: 100%;
-    height: 100%;
-  }
-
 
   .anchor {
     position: absolute;
     width: 9px;
     height: 9px;
-    border: #007acc solid 1px;
-    background-color: #fcfcfc;
+    border: #3A8EE6 solid 1px;
+    border-radius: 5px;
+    background-color: #F1F3F4;
     z-index: 10;
   }
+
   .left-button {
-    left: -5px;
+    left: -4.5px;
     top: calc(50% - 5px);
     cursor: w-resize;
   }
+
   .right-button {
-    right: -5px;
+    right: -4px;
     top: calc(50% - 5px);
     cursor: e-resize;
   }
+
   .top-button {
-    top: -5px;
+    top: -4px;
     left: calc(50% - 5px);
     cursor: n-resize;
   }
+
   .down-button {
-    bottom: -5px;
+    bottom: -4px;
     left: calc(50% - 5px);
     cursor: s-resize;
   }
+
   .lTop-button {
-    left: -5px;
-    top: -5px;
+    left: -4.5px;
+    top: -4.5px;
     cursor: nw-resize;
   }
+
   .rTop-button {
-    right: -5px;
-    top: -5px;
+    right: -4px;
+    top: -4.5px;
     cursor: sw-resize;
   }
+
   .lDown-button {
-    left: -5px;
-    bottom: -5px;
+    left: -4.5px;
+    bottom: -4px;
     cursor: sw-resize;
   }
+
   .rDown-button {
-    right: -5px;
-    bottom: -5px;
+    right: -4px;
+    bottom: -4px;
     cursor: nw-resize;
   }
-
-
-
 
   .move-button {
     position: absolute;
@@ -95,7 +100,7 @@
     height: 100%;
     // cursor: grab;
     background-color: transparent;
-    border: #007acc solid 1px;
+    border: #3A8EE6 solid 1px;
     z-index: 5;
   }
 }

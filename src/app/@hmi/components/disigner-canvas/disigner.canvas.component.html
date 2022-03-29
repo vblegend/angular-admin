@@ -1,7 +1,41 @@
-<div class="disigner-continer" panViewer zoomViewer [canvas]="this">
-    <div class="scrollViewer" [ngStyle]="{'transform': 'scale(' + zoomScale + ')' }">
-        <ng-container #ChildrenView class="divcontiner">
+<div class="scrollViewer" #scrollViewer zoom-control rubber-band (contextmenu)="contextMenu($event, menu)"
+  [canvas]="this">
+  <div class="continer" [ngStyle]="{'transform': 'scale(' + zoomScale + ')' }">
+    <ng-container #ChildrenView>
+    </ng-container>
+  </div>
 
-        </ng-container>
-    </div>
+  <ngx-pan-control *ngIf="spaceKeyDown" pan-control [canvas]="this">
+    <!-- 编辑器工作区域平移面板 -->
+  </ngx-pan-control> 
+
+
+  <!-- 对齐线 -->
+  <ngx-snap-line *ngIf="hSnapLines[0]" [canvas]="this" [position]="hSnapLines[0]" class="snap-line-h">
+  </ngx-snap-line>
+  <ngx-snap-line *ngIf="hSnapLines[1]" [canvas]="this" [position]="hSnapLines[1]" class="snap-line-h">
+  </ngx-snap-line>
+  <ngx-snap-line *ngIf="hSnapLines[2]" [canvas]="this" [position]="hSnapLines[2]" class="snap-line-h">
+  </ngx-snap-line>
+
+  <ngx-snap-line *ngIf="vSnapLines[0]" [canvas]="this" [position]="vSnapLines[0]" class="snap-line-v">
+  </ngx-snap-line>
+  <ngx-snap-line *ngIf="vSnapLines[1]" [canvas]="this" [position]="vSnapLines[1]" class="snap-line-v">
+  </ngx-snap-line>
+  <ngx-snap-line *ngIf="vSnapLines[2]" [canvas]="this" [position]="vSnapLines[2]" class="snap-line-v">
+  </ngx-snap-line>
 </div>
+ 
+
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+  <ul nz-menu>
+    <li nz-menu-item>撤销</li>
+    <li nz-menu-item>重做</li>
+    <hr>
+    <!-- <li nz-menu-item>剪切</li> -->
+    <li nz-menu-item>刷新</li>
+    <li nz-menu-item>粘贴</li>
+    <li nz-menu-item>全选</li>
+  </ul>
+</nz-dropdown-menu>

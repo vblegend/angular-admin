@@ -36,7 +36,7 @@ export class MenuService {
         {
             title: '健康监控',
             icon: 'grace-jiankang2',
-            link: 'welcome/3',
+            link: 'examples',
         },
         {
             title: '服务进程',

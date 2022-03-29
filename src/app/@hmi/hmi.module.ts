@@ -1,21 +1,27 @@
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '@core/core.module';
-import { AgentComponent } from './components/agent/agent.component';
+// import { AgentComponent } from './components/agent/agent.component';
 import { ReSizeAnchorDirective } from './directives/resize.anchor.directive';
 import { MoveAnchorDirective } from './directives/move.anchor.directive';
-import { BasicComponent } from './components/basic/basic.component';
+import { BasicComponent } from './components/basic-component/basic.component';
 import { PlayCanvasComponent } from './components/play-canvas/play.canvas.component';
-import { ZoomViewerDirective } from './directives/zoom.viewer.directive';
-import { PanViewerDirective } from './directives/pan.viewer.directive';
+import { ZoomControlDirective } from './directives/zoom.control.directive';
 import { EditorComponent } from './editor.component';
 import { ComponentSchemaService } from './services/component.schema.service';
-import { SelectRectangleDirective } from './directives/select.rectangle.directive';
+import { RubberBandDirective } from './directives/rubber.band.directive';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
-import { HotkeysDirective } from './directives/hotkeys.directive';
+import { DisignerHotkeysDirective } from './directives/disigner.hotkeys.directive';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { SelectionAreaComponent } from './components/selection-area/selection.area.component';
+import { RubberbandComponent } from './components/rubber-band/rubber.band.component';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
+import { SnapLineComponent } from './components/snap-line/snap.line.component';
+import { PanControlComponent } from './components/pan-control/pan.control.component';
 
-export declare const HMI_COMPONENT_SCHEMA_DECLARES : ComponentSchemaService;
+export declare const HMI_COMPONENT_SCHEMA_DECLARES: ComponentSchemaService;
 
 /**
  * services
@@ -33,10 +39,9 @@ const EXPORT_PIPES: Provider[] = [
 const EXPORT_DIRECTIVES: Provider[] = [
   ReSizeAnchorDirective,
   MoveAnchorDirective,
-  ZoomViewerDirective,
-  PanViewerDirective,
-  SelectRectangleDirective,
-  HotkeysDirective
+  ZoomControlDirective,
+  RubberBandDirective,
+  DisignerHotkeysDirective
 ];
 
 
@@ -44,11 +49,15 @@ const EXPORT_DIRECTIVES: Provider[] = [
  * EXPORT CONPONENTS
  */
 const EXPORT_COMPONENTS = [
-  AgentComponent,
-  BasicComponent,
+  // AgentComponent,
+  // BasicComponent,
   PlayCanvasComponent,
   DisignerCanvasComponent,
-  EditorComponent
+  EditorComponent,
+  SelectionAreaComponent,
+  RubberbandComponent,
+  SnapLineComponent,
+  PanControlComponent
 ];
 
 /**
@@ -57,7 +66,11 @@ const EXPORT_COMPONENTS = [
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
     CoreModule,
+    NzDropDownModule
   ],
   exports: [
     EXPORT_COMPONENTS,
