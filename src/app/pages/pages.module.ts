@@ -33,6 +33,7 @@ import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
 import { HmiSchemaService } from './services/hmi.schema.service';
 import { ComponentSchemaService } from '@hmi/services/component.schema.service';
 import { ImgViewerComponent } from './graphics/img.viewer/img.viewer.component';
+import { ExamplesComponent } from './examples/examples.component';
 
 @NgModule({
   imports: [
@@ -63,9 +64,10 @@ import { ImgViewerComponent } from './graphics/img.viewer/img.viewer.component';
   declarations: [
     PagesComponent,
     WelcomeComponent,
+    ExamplesComponent,
     DashboardComponent,
     SvgViewerComponent,
-    ImgViewerComponent
+    ImgViewerComponent,
   ],
   providers: [
     {

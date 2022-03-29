@@ -172,8 +172,6 @@ export class RubberBandDirective extends BaseDirective {
         }
         this.editor.execute(command);
         // }
-
-
     }
 
 

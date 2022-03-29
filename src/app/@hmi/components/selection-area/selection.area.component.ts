@@ -7,6 +7,7 @@ import { ComponentSchemaService } from '@hmi/services/component.schema.service';
 import { Rectangle } from '@hmi/core/common';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
+import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
 
 @Component({
   selector: 'ngx-selection-area',
@@ -46,9 +47,23 @@ export class SelectionAreaComponent extends GenericComponent {
     }
   }
 
+  public closeMenu(): void {
+    this.contextMenuService.close();
+  }
+
+
+
   @HostListener('document:keydown', ['$event'])
   public onKeyDown(event: KeyboardEvent): void {
     switch (event.code) {
+      case 'Escape':
+        if (this.editor.selection.length === 0) return;
+        this.contextMenuService.close();
+        this.editor.execute(new SelectionFillCommand(this.editor, []));
+        // 往上微调  留空
+        event.preventDefault();
+        event.stopPropagation();
+        break;
       case 'ArrowUp':
         if (this.editor.selection.length === 0) return;
         // 往上微调  留空
@@ -80,10 +95,6 @@ export class SelectionAreaComponent extends GenericComponent {
 
 
 
-
-  public closeMenu(): void {
-    this.contextMenuService.close();
-  }
 
 
 
