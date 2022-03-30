@@ -63,7 +63,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.left')
-  public get $left(): string {
+  public get left$(): string {
     return `${this.configure.rect.left}px`;
   }
 
@@ -72,7 +72,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.top')
-  public get $top(): string {
+  public get top$(): string {
     return `${this.configure.rect.top}px`;
   }
 
@@ -81,7 +81,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.width')
-  public get $width(): string {
+  public get width$(): string {
     return `${this.configure.rect.width}px`;
   }
 
@@ -90,7 +90,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.height')
-  public get $height(): string {
+  public get height$(): string {
     return `${this.configure.rect.height}px`;
   }
 
@@ -99,7 +99,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.background')
-  public get $background(): string {
+  public get background(): string {
     return this.configure.style.background;
   }
 
@@ -108,7 +108,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.opacity')
-  public get $opacity(): number {
+  public get opacity(): number {
     return this.configure.style.opacity;
   }
 
@@ -126,7 +126,7 @@ export class BasicComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.border')
-  public get $border(): string {
+  public get border(): string {
     return this.configure.style.border;
   }
 

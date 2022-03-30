@@ -61,14 +61,14 @@ export class EditorComponent extends GenericComponent {
 
   protected onInit(): void {
     this.canvas.editor = this;
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 50; i++) {
       const defaultConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
         type: (i % 2 == 0) ? 'SvgViewer' : 'ImgViewer',
         rect: {
-          left: Math.floor(Math.random() * 1920),
-          top: Math.floor(Math.random() * 1080),
+          left: Math.floor(Math.random() * 2560),
+          top: Math.floor(Math.random() * 1280),
           width: 200, // Math.floor(Math.random() * 100 + 100),
           height: 80 // Math.floor(Math.random() * 50 + 50),
         },

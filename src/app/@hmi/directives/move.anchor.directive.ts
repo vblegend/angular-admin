@@ -84,7 +84,7 @@ export class MoveAnchorDirective extends BaseDirective {
         const r = this.editor.adsorb.matchXAxis(pos.x + bounds.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const xOffset = bounds.width / 2;
         // 把左中右侧左边全部转换为左侧坐标
-        const xRes = [l, c ? c - xOffset : null, r ? r - xOffset * 2 : null];
+        const xRes = [l, c ? c - xOffset : null, r ? r - bounds.width : null];
         const xIndex = this.getMinValueInArray([l, c, r]);
         for (let i = 0; i < xRes.length; i++) {
             // 循环左中右侧坐标点  如果索引相同  或者 坐标数值相同则显示坐标辅助线
@@ -99,7 +99,7 @@ export class MoveAnchorDirective extends BaseDirective {
         const m = this.editor.adsorb.matchYAxis(pos.y + bounds.height / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const b = this.editor.adsorb.matchYAxis(pos.y + bounds.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const yOffset = bounds.height / 2;
-        const yRes = [t, m ? m - yOffset : null, b ? b - yOffset * 2 : null];
+        const yRes = [t, m ? m - yOffset : null, b ? b - bounds.height : null];
         const yIndex = this.getMinValueInArray([t, m, b]);
         for (let i = 0; i < yRes.length; i++) {
             if (yRes[i] != null && (i == yIndex || (yRes[i] == yRes[yIndex]))) {

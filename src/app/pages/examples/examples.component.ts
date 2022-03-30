@@ -30,8 +30,8 @@ export class ExamplesComponent extends GenericComponent {
         name: `name:${i}`,
         type: (i % 2 == 0) ? 'SvgViewer' : 'ImgViewer',
         rect: {
-          left: Math.floor(Math.random() * 3000),
-          top: Math.floor(Math.random() * 2000),
+          left: Math.floor(Math.random() * 2560),
+          top: Math.floor(Math.random() * 1280),
           width: 200, // Math.floor(Math.random() * 100 + 100),
           height: 80 // Math.floor(Math.random() * 50 + 50),
         },
@@ -55,7 +55,7 @@ export class ExamplesComponent extends GenericComponent {
       const rect = this.canvas.getComponentsBound();
       const rx = parentRect.width / rect.width;
       const ry = parentRect.height / rect.height;
-      const zoomScale = Math.min(rx, ry);
+      const zoomScale = Math.min(rx, ry)-0.001;
       if (zoomScale != 1) {
         result['transform'] = 'scale(' + zoomScale + ')';
       }
