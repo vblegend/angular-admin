@@ -61,7 +61,7 @@ export class EditorComponent extends GenericComponent {
 
   protected onInit(): void {
     this.canvas.editor = this;
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       const defaultConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,

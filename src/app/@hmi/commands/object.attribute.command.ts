@@ -4,17 +4,13 @@ import { BasicCommand } from './basic.command';
 
 export class ObjectAttributeCommand extends BasicCommand {
 
-
-
-
-
-
     /**
      * 设置对象属性值
+     * 如果objects 对象含有 setXXX() 方法时会调用该方法更新
      * @param editor 
-     * @param object 
-     * @param path   $开头的变量将设置对象的binding的属性中
-     * @param newValue 
+     * @param objects 
+     * @param path  属性路径 如‘configure/rect’
+     * @param newValues
      */
     public constructor(editor: EditorComponent, objects: BasicComponent[], path: string, newValues: Object[], batchNo?: number) {
         super(editor);
@@ -49,24 +45,26 @@ export class ObjectAttributeCommand extends BasicCommand {
 
     public execute(): void {
         for (let i = 0; i < this.objects.length; i++) {
-            const object = this.getTarget(this.objects[i]);
+            const rootObject = this.objects[i];
+            const object = this.getTarget(rootObject);
             object[this.attributeName] = this.newValues[i];
             // call setXXX();
             const setter = `set${this.attributeName[0].toUpperCase()}${this.attributeName.substring(1)}`;
-            if (object[setter] && typeof object[setter] === 'function') {
-                object[setter](this.newValues[i]);
+            if (rootObject[setter] && typeof rootObject[setter] === 'function') {
+                rootObject[setter](this.newValues[i]);
             }
         }
     }
 
     public undo(): void {
         for (let i = 0; i < this.objects.length; i++) {
-            const object = this.getTarget(this.objects[i]);
+            const rootObject = this.objects[i];
+            const object = this.getTarget(rootObject);
             object[this.attributeName] = this.oldValues[i];
             // call setXXX();
             const setter = `set${this.attributeName[0].toUpperCase()}${this.attributeName.substring(1)}`;
-            if (object[setter] && typeof object[setter] === 'function') {
-                object[setter](this.oldValues[i]);
+            if (rootObject[setter] && typeof rootObject[setter] === 'function') {
+                rootObject[setter](this.oldValues[i]);
             }
         }
     }
