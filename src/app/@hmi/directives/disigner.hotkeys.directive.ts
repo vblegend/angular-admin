@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { BaseDirective } from "@core/directives/base.directive";
-import { EditorComponent } from "@hmi/editor.component";
+import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
 
 @Directive({
@@ -11,7 +11,7 @@ import { EditorComponent } from "@hmi/editor.component";
  * 用于在编辑器下快捷键的实现
  */
 export class DisignerHotkeysDirective extends BaseDirective {
-    @Input() editor: EditorComponent;
+    @Input() editor: HmiEditorComponent;
 
     protected onInit(): void {
 

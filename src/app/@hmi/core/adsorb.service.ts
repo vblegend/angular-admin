@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Vector2 } from "@hmi/core/common";
-import { EditorComponent } from "@hmi/editor.component";
+import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +14,7 @@ export class AdsorbService {
     /**
      *
      */
-    constructor(private editor: EditorComponent) {
+    constructor(private editor: HmiEditorComponent) {
         this.version = Math.random() * Number.MAX_VALUE;
 
         this.axisX = [];

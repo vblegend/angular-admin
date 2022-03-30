@@ -1,6 +1,6 @@
 import { ComponentRef } from "@angular/core";
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
-import { EditorComponent } from "@hmi/editor.component";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 import { BasicCommand } from "./basic.command";
 
 /**
@@ -8,9 +8,9 @@ import { BasicCommand } from "./basic.command";
  * 在编辑器选取内 切换当前数组的选中状态
  */
 export class SelectionToggleCommand extends BasicCommand {
-    protected newObjects: ComponentRef<BasicComponent>[];
+    protected newObjects: ComponentRef<BasicWidgetComponent>[];
 
-    constructor(editor: EditorComponent, objects: ComponentRef<BasicComponent>[]) {
+    constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {
         super(editor);
         this.newObjects = objects;
     }

@@ -1,11 +1,11 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
-import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { ElementLocation } from '@hmi/configuration/component.element.configure';
 import { Rectangle, Vector2 } from '@hmi/core/common';
-import { EditorComponent } from '@hmi/editor.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 
 
@@ -30,7 +30,7 @@ export enum AnchorPosition {
 export class ReSizeAnchorDirective extends BaseDirective {
     @Input() host: SelectionAreaComponent;
     @Input() position: AnchorPosition;
-    @Input() editor: EditorComponent;
+    @Input() editor: HmiEditorComponent;
     private buttonDown: boolean;
 
     /* 鼠标按下时的坐标 */
@@ -92,16 +92,15 @@ export class ReSizeAnchorDirective extends BaseDirective {
             this.rectRealTime.width = this.rectOrigin.width;
             this.rectRealTime.height = this.rectOrigin.height;
             const scale = this.editor.canvas.zoomScale;
-
             const currentPoint: Vector2 = {
                 x: ev.clientX / scale + this.editor.canvas.scrollViewer.nativeElement.scrollLeft,
                 y: ev.clientY / scale + this.editor.canvas.scrollViewer.nativeElement.scrollTop
             }
             let xLen = (currentPoint.x - this.pressedPoint.x);
             let yLen = (currentPoint.y - this.pressedPoint.y);
-
             if (Number.isNaN(xLen)) return;
             if (Number.isNaN(yLen)) return;
+
             if (this.position.indexOf(AnchorPosition.Left) > -1) {
                 xLen = -Math.min(this.rectRealTime.left, -xLen);
                 this.rectRealTime.left = this.rectOrigin.left + xLen;
@@ -117,7 +116,6 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 yLen = -Math.min(this.rectRealTime.top, -yLen);
                 this.rectRealTime.top = this.rectOrigin.top + yLen;
                 this.rectRealTime.height = this.rectOrigin.height - yLen;
-
                 const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.top = result;
@@ -125,6 +123,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                     this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: this.rectRealTime.top * scale };
                 }
             }
+
             if (this.position.indexOf(AnchorPosition.Right) > -1) { 
                 this.rectRealTime.width = this.rectOrigin.width + xLen;
                 const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
@@ -133,6 +132,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                     this.editor.canvas.vSnapLines[2] = { x: (this.rectRealTime.left + this.rectRealTime.width) * scale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
                 }
             }
+
             if (this.position.indexOf(AnchorPosition.Down) > -1) {
                 this.rectRealTime.height = this.rectOrigin.height + yLen;
                 const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top + this.rectRealTime.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
@@ -141,11 +141,9 @@ export class ReSizeAnchorDirective extends BaseDirective {
                     this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: (this.rectRealTime.top + this.rectRealTime.height) * scale };
                 }
             }
-            // this.rectRealTime.top = Math.max(this.rectRealTime.top, 0);
             this.executeResizeCommand();
             ev.preventDefault();
             ev.stopPropagation();
-
         }
 
     }
@@ -161,25 +159,25 @@ export class ReSizeAnchorDirective extends BaseDirective {
     }
 
 
-
+    /** 获取各个方位的鼠标样式 */
     private getCursor(): string {
         switch (this.position) {
             case AnchorPosition.Left:
                 return 'w-resize';
             case AnchorPosition.LeftTop:
-                return 'nw-resize';
+                return 'se-resize';
             case AnchorPosition.Top:
-                return 'n-resize';
+                return 's-resize';
             case AnchorPosition.RightTop:
-                return 'sw-resize';
+                return 'ne-resize';
             case AnchorPosition.Right:
-                return 'e-resize';
+                return 'w-resize';
             case AnchorPosition.RightDown:
-                return 'nw-resize';
+                return 'se-resize';
             case AnchorPosition.Down:
                 return 's-resize';
             case AnchorPosition.LeftDown:
-                return 'sw-resize';
+                return 'ne-resize';
         }
     }
 
@@ -191,7 +189,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
      * @returns 
      */
     private executeResizeCommand() {
-        const comps: BasicComponent[] = [];
+        const comps: BasicWidgetComponent[] = [];
         const attrs: Rectangle[] = [];
         for (let i = 0; i < this.editor.selection.objects.length; i++) {
             const rect: Rectangle = {

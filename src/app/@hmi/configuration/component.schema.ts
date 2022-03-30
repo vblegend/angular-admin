@@ -1,5 +1,5 @@
 import { Type } from "@angular/core";
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
 import { ComponentDefaultConfigure } from "./component.element.configure";
 
 
@@ -31,7 +31,7 @@ export interface ComponentSchema {
     /**
      * 组建的实例
      */
-    component: Type<BasicComponent>;
+    component: Type<BasicWidgetComponent>;
 
     /**
      * 组件的默认配置

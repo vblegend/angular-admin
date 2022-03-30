@@ -1,11 +1,11 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
-import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { ElementLocation } from '@hmi/configuration/component.element.configure';
 import { Rectangle, Vector2 } from '@hmi/core/common';
-import { EditorComponent } from '@hmi/editor.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 @Directive({
     selector: '[moveAnchor]'
@@ -13,7 +13,7 @@ import { EditorComponent } from '@hmi/editor.component';
 
 export class MoveAnchorDirective extends BaseDirective {
     @Input() host: SelectionAreaComponent;
-    @Input() editor: EditorComponent;
+    @Input() editor: HmiEditorComponent;
 
     private buttonDown = false;
     private batchNo: number;
@@ -140,7 +140,7 @@ export class MoveAnchorDirective extends BaseDirective {
      * @param pos 
      */
     private objectsMoveToCommand(pos: Vector2): void {
-        const objects: BasicComponent[] = [];
+        const objects: BasicWidgetComponent[] = [];
         const propertys: Rectangle[] = [];
         const bounds = this.editor.selection.bounds;
         for (const component of this.editor.selection.objects) {

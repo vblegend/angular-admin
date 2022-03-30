@@ -1,4 +1,5 @@
 import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, Output } from '@angular/core';
+import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { ComponentConfigure, ComponentDataConfigure } from '../../configuration/component.element.configure';
 
@@ -8,7 +9,7 @@ import { ComponentConfigure, ComponentDataConfigure } from '../../configuration/
   template: '<div></div>',
   styles: []
 })
-export class BasicComponent extends GenericComponent {
+export class BasicWidgetComponent extends GenericComponent {
   private _config: ComponentConfigure;
 
 
@@ -179,6 +180,20 @@ export class BasicComponent extends GenericComponent {
   protected onDataChanged(data: ComponentDataConfigure) {
 
   }
+
+
+
+  /**
+   * 组件异常事件
+   * 通常发生在onInit 与 onDestroy中
+   * @param ex 
+   */
+  protected onError(source: string, ex: AnyObject) {
+
+
+    console.error(`异常出现在 => ${source}：${ex}`);
+  }
+
 
 
 }

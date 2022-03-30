@@ -1,12 +1,12 @@
 import { ComponentRef } from "@angular/core";
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
 import { HmiMath } from "@hmi/utility/hmi.math";
 import { Rectangle } from "./common";
 
 
 export class SelectionService {
 
-    private components: ComponentRef<BasicComponent>[];
+    private components: ComponentRef<BasicWidgetComponent>[];
 
     private _selectionBounds: Rectangle;
 
@@ -20,7 +20,7 @@ export class SelectionService {
     /**
      * 获取所有已选中对象
      */
-    public get objects(): ComponentRef<BasicComponent>[] {
+    public get objects(): ComponentRef<BasicWidgetComponent>[] {
         return this.components.slice();
     }
 
@@ -36,7 +36,7 @@ export class SelectionService {
      * 填充一组对象至选区
      * @param comps 
      */
-    public fill(comps: ComponentRef<BasicComponent>[]): void {
+    public fill(comps: ComponentRef<BasicWidgetComponent>[]): void {
         let x = this.components.length;
         this.clear();
         for (let i = 0; i < comps.length; i++) {
@@ -51,7 +51,7 @@ export class SelectionService {
      * 将多个对象的状态由选中/未选中之间切换
      * @param comps 
      */
-    public toggle(comps: ComponentRef<BasicComponent>[]): void {
+    public toggle(comps: ComponentRef<BasicWidgetComponent>[]): void {
         for (let i = 0; i < comps.length; i++) {
             if (comps[i]) {
                 const comp = this.addItem(comps[i]);
@@ -65,7 +65,7 @@ export class SelectionService {
      * 添加一个对象至选区。
      * @param component 
      */
-    public add(component: ComponentRef<BasicComponent>): ComponentRef<BasicComponent> {
+    public add(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
         const comp = this.addItem(component);
         if (comp) this.update();
         return comp;
@@ -76,7 +76,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    public contains(component: ComponentRef<BasicComponent>): boolean {
+    public contains(component: ComponentRef<BasicWidgetComponent>): boolean {
         return this.components.indexOf(component) > -1;
     }
 
@@ -84,7 +84,7 @@ export class SelectionService {
      * 从选区删除一个对象，取消对象的选中状态
      * @param component 
      */
-    public remove(component: ComponentRef<BasicComponent>): ComponentRef<BasicComponent> {
+    public remove(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
         const comp = this.removeItem(component);
         if (comp) this.update();
         return comp;
@@ -97,7 +97,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    public addItem(component: ComponentRef<BasicComponent>): ComponentRef<BasicComponent> {
+    public addItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
         if (component) {
             const index = this.components.indexOf(component);
             if (index === -1) {
@@ -115,7 +115,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    private removeItem(component: ComponentRef<BasicComponent>): ComponentRef<BasicComponent> {
+    private removeItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
         const index = this.components.indexOf(component);
         if (index > -1) {
             this.components.splice(index, 1);

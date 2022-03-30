@@ -1,13 +1,11 @@
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '@core/core.module';
-// import { AgentComponent } from './components/agent/agent.component';
 import { ReSizeAnchorDirective } from './directives/resize.anchor.directive';
 import { MoveAnchorDirective } from './directives/move.anchor.directive';
-import { BasicComponent } from './components/basic-component/basic.component';
-import { PlayCanvasComponent } from './components/play-canvas/play.canvas.component';
+import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
 import { ZoomControlDirective } from './directives/zoom.control.directive';
-import { EditorComponent } from './editor.component';
+import { HmiEditorComponent } from './hmi.editor.component';
 import { ComponentSchemaService } from './services/component.schema.service';
 import { RubberBandDirective } from './directives/rubber.band.directive';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
@@ -20,6 +18,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
+import { HmiViewerComponent } from './hmi.viewer.component';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: ComponentSchemaService;
 
@@ -51,9 +50,10 @@ const EXPORT_DIRECTIVES: Provider[] = [
 const EXPORT_COMPONENTS = [
   // AgentComponent,
   // BasicComponent,
-  PlayCanvasComponent,
+  ViewCanvasComponent,
   DisignerCanvasComponent,
-  EditorComponent,
+  HmiEditorComponent,
+  HmiViewerComponent,
   SelectionAreaComponent,
   RubberbandComponent,
   SnapLineComponent,

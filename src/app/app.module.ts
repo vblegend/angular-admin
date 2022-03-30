@@ -71,7 +71,7 @@ export class AppModule {
 
 
     // this.testClone();
-    this.zone.runOutsideAngular(this.testClone.bind(this));
+    // this.zone.runOutsideAngular(this.testClone.bind(this));
 
 
     // initialization theme
@@ -154,19 +154,19 @@ export class AppModule {
   private async init(): Promise<void> {
     this.netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
     try {
-      const state = await this.netWorkService.connection();
-      if (!state) throw Exception.build('app init', 'failed to connect to server!');
-      console.time('websocket');
-      const list: Promise<string>[] = [];
+      // const state = await this.netWorkService.connection();
+      // if (!state) throw Exception.build('app init', 'failed to connect to server!');
+      // console.time('websocket');
+      // const list: Promise<string>[] = [];
 
-      for (let i = 0; i < 1000; i++) {
-        list.push(this.networkService.send<string, string>('dasds', `data-${Math.random() * 1000000}`, 10000));
-        // .then(result => {
-        //   console.log(`result：${result}`);
-        // });
-      }
-      await Promise.all(list);
-      console.timeEnd('websocket');
+      // for (let i = 0; i < 1000; i++) {
+      //   list.push(this.networkService.send<string, string>('dasds', `data-${Math.random() * 1000000}`, 10000));
+      //   // .then(result => {
+      //   //   console.log(`result：${result}`);
+      //   // });
+      // }
+      // await Promise.all(list);
+      // console.timeEnd('websocket');
     } catch (e) {
     }
   }

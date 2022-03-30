@@ -1,7 +1,7 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
-import { EditorComponent } from '@hmi/editor.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 @Directive({
     selector: '[zoom-control]'

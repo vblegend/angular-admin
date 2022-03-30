@@ -4,8 +4,8 @@ import { Vector2 } from '@hmi/core/common';
 import { ComponentSchemaService } from '@hmi/services/component.schema.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { ComponentConfigure } from '../../configuration/component.element.configure';
-import { EditorComponent } from '../../editor.component';
-import { PlayCanvasComponent } from '../play-canvas/play.canvas.component';
+import { HmiEditorComponent } from '../../hmi.editor.component';
+import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
 
 @Component({
@@ -14,8 +14,8 @@ import { SelectionAreaComponent } from '../selection-area/selection.area.compone
   styleUrls: ['./disigner.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DisignerCanvasComponent extends PlayCanvasComponent {
-  @Input() editor: EditorComponent;
+export class DisignerCanvasComponent extends ViewCanvasComponent {
+  @Input() editor: HmiEditorComponent;
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
   @ViewChild('scrollViewer', { static: true }) scrollViewer: ElementRef<HTMLDivElement>;
   // @ViewChild('snapLineAxisV', { static: true }) snapLineAxisV: DisignerCanvasComponent;

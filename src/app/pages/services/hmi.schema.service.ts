@@ -1,3 +1,4 @@
+import { Injectable } from "@angular/core";
 import { ComponentSchemaService } from "@hmi/services/component.schema.service";
 import { ComponentSchema } from "app/@hmi/configuration/component.schema";
 import { ImgViewerComponent } from "../graphics/img.viewer/img.viewer.component";
@@ -30,7 +31,9 @@ export const CustomComponentSchemas: Record<string, ComponentSchema> = {
 }
 
 
-
+@Injectable({
+    providedIn: 'root',
+})
 export class HmiSchemaService extends ComponentSchemaService {
     constructor() {
         super();

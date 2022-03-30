@@ -1,12 +1,12 @@
 import { Component, Injector } from '@angular/core';
-import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 
 @Component({
   selector: 'app-svg-viewer',
   templateUrl: './svg.viewer.component.html',
   styleUrls: ['./svg.viewer.component.less']
 })
-export class SvgViewerComponent extends BasicComponent {
+export class SvgViewerComponent extends BasicWidgetComponent {
 
   constructor(injector: Injector) {
     super(injector)

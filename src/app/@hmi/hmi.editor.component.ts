@@ -4,7 +4,7 @@ import { Console } from 'console';
 
 import { BasicCommand } from './commands/basic.command';
 
-import { BasicComponent } from './components/basic-component/basic.component';
+import { BasicWidgetComponent } from './components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
 import { HistoryService } from './core/history.service';
 import { SelectionService } from './core/selection.service';
@@ -13,10 +13,10 @@ import { ComponentSchemaService } from './services/component.schema.service';
 
 @Component({
   selector: 'ngx-hmi-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.less']
+  templateUrl: './hmi.editor.component.html',
+  styleUrls: ['./hmi.editor.component.less']
 })
-export class EditorComponent extends GenericComponent {
+export class HmiEditorComponent extends GenericComponent {
 
   /**
    * 默认坐标吸附阈值

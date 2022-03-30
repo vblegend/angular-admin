@@ -20,6 +20,3 @@ export interface Rectangle {
 /**
  * 表示一个任意类型的数据
  */
-export interface AnyObject {
-
-}
