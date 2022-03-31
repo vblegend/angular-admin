@@ -6,7 +6,7 @@ import { MoveAnchorDirective } from './directives/move.anchor.directive';
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
 import { ZoomControlDirective } from './directives/zoom.control.directive';
 import { HmiEditorComponent } from './hmi.editor.component';
-import { ComponentSchemaService } from './services/component.schema.service';
+import { WidgetSchemaService } from './services/widget.schema.service';
 import { RubberBandDirective } from './directives/rubber.band.directive';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
 import { DisignerHotkeysDirective } from './directives/disigner.hotkeys.directive';
@@ -19,14 +19,15 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
 import { HmiViewerComponent } from './hmi.viewer.component';
+import { EventBusService } from '@hmi/services/event.bus.service';
 
-export declare const HMI_COMPONENT_SCHEMA_DECLARES: ComponentSchemaService;
+export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
 /**
  * services
  */
 const PROVIDERS: Provider[] = [
-
+  EventBusService
 ];
 
 

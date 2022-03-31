@@ -1,14 +1,18 @@
 import { Component, HostListener, Injector } from '@angular/core';
+
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { ComponentDataConfigure } from '@hmi/configuration/component.element.configure';
-import { AnyObject } from 'chart.js/types/basic';
+import { EventBusMessages, Widget } from '@hmi/core/common';
 
 @Component({
-  selector: 'app-img-viewer',
-  templateUrl: './img.viewer.component.html',
-  styleUrls: ['./img.viewer.component.less']
+  selector: 'app-img-widget',
+  templateUrl: './img.widget.component.html',
+  styleUrls: ['./img.widget.component.less']
 })
-export class ImgViewerComponent extends BasicWidgetComponent {
+@Widget({
+  eventEmits:[],
+  eventHandles:[]
+})
+export class ImgWidgetComponent extends BasicWidgetComponent {
 
   constructor(injector: Injector) {
     super(injector)
@@ -25,7 +29,7 @@ export class ImgViewerComponent extends BasicWidgetComponent {
 
   @HostListener('mousedown', ['$event'])
   public onMouseDown(ev: MouseEvent): void {
-    console.log('img.click');
+    this.eventBusService.broadcast(this, EventBusMessages.ObjectChanged, 222222);
   }
 
 

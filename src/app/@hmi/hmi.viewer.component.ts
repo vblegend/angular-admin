@@ -1,6 +1,6 @@
 import { Component, Injector, ViewChild } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentSchemaService } from './services/component.schema.service';
+import { WidgetSchemaService } from './services/widget.schema.service';
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
 
 @Component({
@@ -17,7 +17,7 @@ export class HmiViewerComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this.autoScale = true;
   }
@@ -25,21 +25,24 @@ export class HmiViewerComponent extends GenericComponent {
 
   protected onInit(): void {
     for (let i = 0; i < 10; i++) {
+      const randomWidget = Math.floor(Math.random() * (this.provider.length));
+      const widgetType = this.provider.getIndex(randomWidget);
       const defaultConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
-        type: (i % 2 == 0) ? 'SvgViewer' : 'ImgViewer',
+        type: widgetType.type,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),
-          width: 200, // Math.floor(Math.random() * 100 + 100),
-          height: 80 // Math.floor(Math.random() * 50 + 50),
+          width: 200,
+          height: 80
         },
-        style: { opacity: 0.8, ignoreEvent: true, border: 'solid 1px yellow' },
-        data: {}
+        style: widgetType.default.style,
+        data: widgetType.default.data
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
-      this.canvas.add(compRef);
+      if (compRef) this.canvas.add(compRef);
+
     }
     this.canvas.updatezIndexs();
 

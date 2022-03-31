@@ -1,9 +1,9 @@
 import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
+import { WidgetConfigure } from '../../configuration/widget.configure';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { Rectangle } from '@hmi/core/common';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
@@ -34,7 +34,7 @@ export class SelectionAreaComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
   }
 

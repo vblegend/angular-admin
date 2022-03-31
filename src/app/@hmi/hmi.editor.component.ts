@@ -9,7 +9,7 @@ import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.c
 import { HistoryService } from './core/history.service';
 import { SelectionService } from './core/selection.service';
 import { AdsorbService } from './core/adsorb.service';
-import { ComponentSchemaService } from './services/component.schema.service';
+import { WidgetSchemaService } from './services/widget.schema.service';
 
 @Component({
   selector: 'ngx-hmi-editor',
@@ -49,7 +49,7 @@ export class HmiEditorComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._history = new HistoryService(this);
     this._selection = new SelectionService();
@@ -62,21 +62,23 @@ export class HmiEditorComponent extends GenericComponent {
   protected onInit(): void {
     this.canvas.editor = this;
     for (let i = 0; i < 10; i++) {
+      const randomWidget = Math.floor(Math.random() * (this.provider.length));
+      const widgetType = this.provider.getIndex(randomWidget);
       const defaultConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
-        type: (i % 2 == 0) ? 'SvgViewer' : 'ImgViewer',
+        type: widgetType.type,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),
-          width: 200, // Math.floor(Math.random() * 100 + 100),
-          height: 80 // Math.floor(Math.random() * 50 + 50),
+          width: 200,
+          height: 80
         },
-        style: { opacity: 0.8, ignoreEvent: true, border: 'solid 1px yellow' },
-        data: {}
+        style: widgetType.default.style,
+        data: widgetType.default.data
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
-      this.canvas.add(compRef);
+      if (compRef) this.canvas.add(compRef);
     }
     this.canvas.updatezIndexs();
 

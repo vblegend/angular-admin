@@ -1,8 +1,11 @@
-import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, Output } from '@angular/core';
+import { Component, HostBinding, Injector } from '@angular/core';
+import { EventBusMessage } from '@hmi/core/common';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentConfigure, ComponentDataConfigure } from '../../configuration/component.element.configure';
-
+import { EventBusService } from '@hmi/services/event.bus.service';
+import { Widget } from '@hmi/core/common';
+import { WidgetConfigure, WidgetDataConfigure } from '../../configuration/widget.configure';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-basic-comp',
@@ -10,9 +13,11 @@ import { ComponentConfigure, ComponentDataConfigure } from '../../configuration/
   styles: []
 })
 export class BasicWidgetComponent extends GenericComponent {
-  private _config: ComponentConfigure;
+  private _config: WidgetConfigure;
 
-
+  public get defineEvent(): Widget {
+    return this.constructor.prototype.DEFINE_EVENT;
+  }
 
   public get left(): number {
     return this.configure.rect.left;
@@ -119,7 +124,7 @@ export class BasicWidgetComponent extends GenericComponent {
    */
   @HostBinding('style.zIndex')
   public get zIndex(): number {
-    return this.configure.style.zIndex;
+    return this.configure.zIndex;
   }
 
   /**
@@ -135,7 +140,7 @@ export class BasicWidgetComponent extends GenericComponent {
   /**
    * get component configure profile
    */
-  public get configure(): ComponentConfigure {
+  public get configure(): WidgetConfigure {
     return this._config;
   }
 
@@ -143,14 +148,26 @@ export class BasicWidgetComponent extends GenericComponent {
   /**
    * get component bind data
    */
-  public get data(): ComponentDataConfigure {
+  public get data(): WidgetDataConfigure {
     return this._config.data;
   }
 
+  protected readonly eventBusService: EventBusService;
 
   constructor(injector: Injector) {
     super(injector)
+    this.eventBusService = injector.get(EventBusService);
+    /* 订阅事件总线 */
+    const obser = this.eventBusService.filter(e => e.target != this).subscribe(this.eventHandle.bind(this));
+    this.managedSubscription(obser);
   }
+
+
+  protected eventHandle(message: EventBusMessage<any>) {
+    console.log(message);
+  }
+
+
 
 
   /**
@@ -158,9 +175,11 @@ export class BasicWidgetComponent extends GenericComponent {
    * 保证变量data不可修改
    * @param _data 
    */
-  public $initialization(_config: ComponentConfigure): void {
+  public $initialization(_config: WidgetConfigure): void {
     if (this._config) throw 'This method is only available on first run ';
     this._config = _config;
+
+    // console.log(this.defineEvent);
   }
 
 
@@ -177,7 +196,7 @@ export class BasicWidgetComponent extends GenericComponent {
    * 绑定数据更新
    * @param data 
    */
-  protected onDataChanged(data: ComponentDataConfigure) {
+  protected onDataChanged(data: WidgetDataConfigure) {
 
   }
 
@@ -188,10 +207,10 @@ export class BasicWidgetComponent extends GenericComponent {
    * 通常发生在onInit 与 onDestroy中
    * @param ex 
    */
-  protected onError(source: string, ex: AnyObject) {
+  protected onError(location: string, ex: AnyObject) {
 
 
-    console.error(`异常出现在 => ${source}：${ex}`);
+    console.error(`异常出现在 => ${location}：${ex}`);
   }
 
 

@@ -3,7 +3,7 @@ import { BaseDirective } from '@core/directives/base.directive';
 import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
-import { ElementLocation } from '@hmi/configuration/component.element.configure';
+import { Position } from '@hmi/configuration/widget.configure';
 import { Rectangle, Vector2 } from '@hmi/core/common';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 

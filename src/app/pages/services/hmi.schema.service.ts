@@ -1,43 +1,54 @@
-import { Injectable } from "@angular/core";
-import { ComponentSchemaService } from "@hmi/services/component.schema.service";
-import { ComponentSchema } from "app/@hmi/configuration/component.schema";
-import { ImgViewerComponent } from "../graphics/img.viewer/img.viewer.component";
-import { SvgViewerComponent } from "../graphics/svg.viewer/svg.viewer.component";
+import { Injectable, Injector } from "@angular/core";
+import { WidgetSchemaService } from "@hmi/services/widget.schema.service";
+import { WidgetSchema } from "@hmi/configuration/widget.schema";
+import { ImgWidgetComponent } from "../widgets/img.widget/img.widget.component";
+import { SvgWidgetComponent } from "../widgets/svg.widget/svg.widget.component";
+import { TaskWidgetComponent } from "../tasks/task-widget/task.widget.component";
 
 
 
 
-export const CustomComponentSchemas: Record<string, ComponentSchema> = {
-    SvgViewer: {
+export const CustomWidgets: WidgetSchema[] = [
+    {
         icon: '',
+        name: "图片部件",
         classify: '',
-        displayName: "Image图片",
-        component: ImgViewerComponent,
+        component: ImgWidgetComponent,
         default: {
             style: {},
             data: {}
         }
     },
-    ImgViewer: {
+    {
         icon: '',
+        name: "SVG部件",
         classify: '',
-        displayName: "SVG图片",
-        component: SvgViewerComponent,
+        component: SvgWidgetComponent,
+        default: {
+            style: {},
+            data: {}
+        }
+    },
+    {
+        icon: '',
+        name: "任务部件",
+        classify: '',
+        component: TaskWidgetComponent,
         default: {
             style: {},
             data: {}
         }
     }
-}
+];
 
 
 @Injectable({
     providedIn: 'root',
 })
-export class HmiSchemaService extends ComponentSchemaService {
-    constructor() {
-        super();
-        this.load(CustomComponentSchemas)
+export class HmiSchemaService extends WidgetSchemaService {
+    constructor(protected injector: Injector) {
+        super(injector);
+        this.load(CustomWidgets)
     }
 }
 

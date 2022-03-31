@@ -1,9 +1,9 @@
 
 import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Vector2 } from '@hmi/core/common';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
+import { WidgetConfigure } from '../../configuration/widget.configure';
 import { HmiEditorComponent } from '../../hmi.editor.component';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
@@ -66,7 +66,7 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector, provider);
     this.zoomScale = 1;
   }

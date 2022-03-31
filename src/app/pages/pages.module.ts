@@ -29,10 +29,10 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
-import { SvgViewerComponent } from './graphics/svg.viewer/svg.viewer.component';
+import { SvgWidgetComponent } from './widgets/svg.widget/svg.widget.component';
 import { HmiSchemaService } from './services/hmi.schema.service';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
-import { ImgViewerComponent } from './graphics/img.viewer/img.viewer.component';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
+import { ImgWidgetComponent } from './widgets/img.widget/img.widget.component';
 import { ExamplesComponent } from './examples/examples.component';
 
 @NgModule({
@@ -66,12 +66,12 @@ import { ExamplesComponent } from './examples/examples.component';
     WelcomeComponent,
     ExamplesComponent,
     DashboardComponent,
-    SvgViewerComponent,
-    ImgViewerComponent,
+    SvgWidgetComponent,
+    ImgWidgetComponent,
   ],
   providers: [
     {
-      provide: ComponentSchemaService,
+      provide: WidgetSchemaService,
       useClass: HmiSchemaService,
     }
   ]

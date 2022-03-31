@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+import { WidgetConfigure } from '../../configuration/widget.configure';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
 import { Rectangle } from '@hmi/core/common';
@@ -46,7 +46,7 @@ export class ViewCanvasComponent extends GenericComponent {
       this.container.insert(ref.hostView, index);
       this._children.push(ref);
       if (ref.instance.zIndex == null) {
-        ref.instance.configure.style.zIndex = this._children.length;
+        ref.instance.configure.zIndex = this._children.length;
       }
     }
     return ref;
@@ -77,7 +77,7 @@ export class ViewCanvasComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._children = [];
   }
@@ -95,20 +95,22 @@ export class ViewCanvasComponent extends GenericComponent {
 
   /**
    * 解析一个组件，返回组件对象。
+   * 当解析到象失败时返回null
    * @param configure 
    * @returns 
    */
-  public parseComponent(configure: ComponentConfigure): ComponentRef<BasicWidgetComponent> {
+  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> {
+    let componentRef: ComponentRef<BasicWidgetComponent> = null;
     const comRef = this.provider.getType(configure.type);
-    if (comRef == null) throw `未知的类型${configure.type}.`;
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
-    const componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
-    if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
-      componentRef.hostView.detach();
-      componentRef.instance.$initialization(configure);
-    } else {
-      throw 'load fail. ';
+    if (comRef) {
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
+      if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
+        componentRef.hostView.detach();
+        componentRef.instance.$initialization(configure);
+      }
     }
+    if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
     return componentRef;
   }
 

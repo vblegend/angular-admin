@@ -86,10 +86,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         this.contextMenuService = injector.get(NzContextMenuService);
-
-
-
-
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
@@ -147,6 +143,16 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         return subscription;
     }
 
+    /**
+     * 托管一个订阅对象，等对象销毁时取消订阅
+     * @param subscription 
+     */
+    protected managedSubscription(subscription: Subscription): void {
+        this.ifDisposeThrowException();
+        if (this._subscriptions.indexOf(subscription) === -1) {
+            this._subscriptions.push(subscription);
+        }
+    }
 
     private unsubscribe(sub: Subscription): void {
         const index = this._subscriptions.indexOf(sub);
@@ -345,12 +351,13 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     // }
 
 
+
     /**
      * 组件异常事件
-     * 通常发生在onInit 与 onDestroy中
-     * @param ex 
+     * @param location 发生位置
+     * @param ex 异常问题
      */
-    protected onError(source: string, ex: AnyObject) {
+    protected onError(location: string, ex: AnyObject) {
 
 
     }
