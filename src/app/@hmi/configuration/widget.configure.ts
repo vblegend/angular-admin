@@ -81,6 +81,12 @@ export interface WidgetDefaultConfigure {
      * 组态绑定数据，被动更新 需事件通知
      */
     data: WidgetDataConfigure;
+
+    /**
+     * 部件的事件触发
+     * 一个事件可以触发多个接口方法
+     */
+    events: Record<string, WidgetEventConfigure[]>;
 }
 
 
@@ -132,9 +138,5 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 是否可见
      */
     visible?: boolean;
-    /**
-     * 部件的事件触发
-     * 一个事件可以触发多个接口方法
-     */
-    events: Record<string, WidgetEventConfigure[]>;
+
 }

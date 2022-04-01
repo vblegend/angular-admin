@@ -77,9 +77,7 @@ export class HmiEditorComponent extends GenericComponent {
         },
         style: widgetType.default.style,
         data: widgetType.default.data,
-        events: {
-          'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }]
-        }
+        events: widgetType.default.events
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
       if (compRef) this.canvas.add(compRef);

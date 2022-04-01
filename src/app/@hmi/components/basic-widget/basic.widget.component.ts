@@ -11,10 +11,17 @@ import { MessageTypes, EventMessage, EventMessageData } from '@hmi/core/common';
   template: '<div></div>',
   styles: []
 })
+/**
+ * 小部件基类，实现了小部件的一些基础服务
+ */
 export class BasicWidgetComponent extends GenericComponent {
   private _config: WidgetConfigure;
+  private readonly eventBusService: EventBusService;
 
-
+  /**
+   * 小部件的元数据\
+   * 
+   */
   public get metaData(): WidgetMetaObject {
     if (this.constructor.prototype.METADATA == null) {
       this.constructor.prototype.METADATA = new WidgetMetaObject();
@@ -155,7 +162,7 @@ export class BasicWidgetComponent extends GenericComponent {
     return this._config.data;
   }
 
-  protected readonly eventBusService: EventBusService;
+
 
   constructor(injector: Injector) {
     super(injector)
@@ -230,21 +237,21 @@ export class BasicWidgetComponent extends GenericComponent {
   /**
    * 派遣一个事件
    * 使用此功能需要在class对象使用@WidgetEvent 注解
-   * @param eventName 事件名称，必须是使用在{@WidgetEvent}列表内的
+   * @param event 要触发的事件，必须是使用在{@WidgetEvent}列表内的
    * @param params 事件的参数
    */
-  protected dispatchEvent<T>(eventName: string, params: T) {
-    const event = this.metaData.events[eventName];
-    if (event == null) {
-      throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${eventName}”的声明。`;
+  protected dispatchEvent<T>(event: string, params: T) {
+    const _eventMeta = this.metaData.events[event];
+    if (_eventMeta == null) {
+      throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${event}”的声明。`;
     }
-    for (const key of event.eventParams) {
+    for (const key of _eventMeta.eventParams) {
       if (params[key] === undefined) {
-        throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${eventName}”缺少参数“${key}”。`;
+        throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${event}”缺少参数“${key}”。`;
       }
     }
     if (this.configure.events == null) return;
-    const eventCfg = this.configure.events[eventName];
+    const eventCfg = this.configure.events[event];
     if (eventCfg == null || eventCfg.length === 0) return;
     for (const cfg of eventCfg) {
       this.dispatch(MessageTypes.Event, cfg.target, {

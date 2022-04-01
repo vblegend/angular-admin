@@ -1,4 +1,5 @@
 import { Type } from "@angular/core";
+import { ObjectUtil } from "@core/util/object.util";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
 import { WidgetDefaultConfigure } from "@hmi/configuration/widget.configure";
 import { EventMeta, MethodArgument, WidgetMetaObject } from "./widget.meta.data";
@@ -47,8 +48,10 @@ export interface EventMessageData {
 
 
 /**
- * 定义一个Widget对象
- * 不适用于懒加载方案
+ * 定义一个Widget对象的所有可触发的事件列表\
+ * 使用小部件的 this.dispatchEvent()方法触发事件\
+ * 事件所使用的参数必须与事件声明里参数签名一致
+ * 
  * @param options 
  */
 export function WidgetEvent(events: EventMeta[]): (target: Function) => void {
@@ -61,7 +64,7 @@ export function WidgetEvent(events: EventMeta[]): (target: Function) => void {
                 metaData.events[event.event] = event;
             }
         }
-        console.log(metaData);
+        ObjectUtil.freeze(metaData.events);
     };
 }
 
@@ -89,6 +92,7 @@ export function WidgetInterface(name: string, description: string, strict?: bool
         method.description = description;
         method.descriptor = descriptor;
         method.methodName = methodName;
+        ObjectUtil.freeze(metaData.interface);
     };
 }
 

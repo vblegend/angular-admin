@@ -22,12 +22,6 @@ export class TaskWidgetComponent extends BasicWidgetComponent {
 
   protected onInit() {
 
-    // this.eventBusService.subscribe(e => {
-    //   console.log(e.data);
-    // });
-
-
-    throw '芭比Q了';
 
   }
 

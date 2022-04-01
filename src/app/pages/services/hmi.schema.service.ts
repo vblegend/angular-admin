@@ -23,7 +23,8 @@ export const CustomWidgets: WidgetSchema[] = [
                 height: 128
             },
             style: {},
-            data: {}
+            data: {},
+            events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }
     },
     {
@@ -39,7 +40,8 @@ export const CustomWidgets: WidgetSchema[] = [
                 height: 100
             },
             style: {},
-            data: {}
+            data: {},
+            events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }
     },
     {
@@ -55,7 +57,8 @@ export const CustomWidgets: WidgetSchema[] = [
                 height: 150
             },
             style: {},
-            data: {}
+            data: {},
+            events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }
     },
     {
@@ -72,7 +75,8 @@ export const CustomWidgets: WidgetSchema[] = [
             },
             style: {
             },
-            data: {}
+            data: {},
+            events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }
     }
 

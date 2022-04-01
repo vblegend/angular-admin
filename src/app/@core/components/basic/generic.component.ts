@@ -364,25 +364,36 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * 组件的初始化事件[生命周期开始]
-     * 用于组件加载后的数据初始化
+     * 组件的初始化事件[生命周期开始]\
+     * 用于组件加载后的数据初始化\
+     * 本方法已 no catch ，方法内触发catch不影响主逻辑
      */
     protected onInit(): void {
 
     }
 
     /**
-     * 组件的销毁事件[生命周期结束]
-     * 用于组件内数据的销毁操作
+     * 组件的销毁事件[生命周期结束]\
+     * 用于组件内数据的销毁操作\
+     * 本方法已 no catch ，方法内触发catch不影响主逻辑\
+     * 为保证数据释放重写本方法请在首行调用{super.onDestroy();}
      */
     protected onDestroy(): void {
 
     }
 
+
+    /**
+     * 组件附加至容器后触发\
+     * 本方法已 no catch ，方法内触发catch不影响主逻辑\
+     */
     protected onAfterViewInit(): void {
 
     }
 
+    /**
+     * 如果当前组件已被销毁，则抛出一个异常信息。
+     */
     protected ifDisposeThrowException() {
         if (this._isDispose) {
             throw Exception.build(`${typeof this} has been destroyed.`, 'cannot continue to operate components that have been destroyed.');
@@ -390,7 +401,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * 
+     * 当前组件释放已被销毁
      */
     public get IsDispose(): boolean {
         return this._isDispose;
@@ -399,7 +410,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
 
 
     /**
-     * 组件的初始化事件
+     * 组件的初始化事件\
      * 禁止子类重写该方法请使用 @onInit
      */
     @Sealed()
@@ -430,7 +441,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      */
     @Sealed()
     public ngAfterViewInit(): void {
-        this.onAfterViewInit();
+        this.callMethodNoCatch(this.onAfterViewInit, 'onAfterViewInit');
     }
 
     /**

@@ -23,8 +23,8 @@ export class SubmitButtonWidgetComponent extends BasicWidgetComponent {
 
   }
 
-  @HostListener('mousedown', ['$event'])
-  public onMouseDown(ev: MouseEvent): void {
+
+  public btn_onClick(): void {
     this.dispatchEvent('click', { deviceId: 9999999, stationId: 1000000 });
   }
 
