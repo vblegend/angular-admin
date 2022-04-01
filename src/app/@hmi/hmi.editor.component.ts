@@ -4,19 +4,20 @@ import { Console } from 'console';
 
 import { BasicCommand } from './commands/basic.command';
 
-import { BasicComponent } from './components/basic-component/basic.component';
+import { BasicWidgetComponent } from './components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
 import { HistoryService } from './core/history.service';
 import { SelectionService } from './core/selection.service';
 import { AdsorbService } from './core/adsorb.service';
-import { ComponentSchemaService } from './services/component.schema.service';
+import { WidgetSchemaService } from './services/widget.schema.service';
+import { WidgetConfigure } from './configuration/widget.configure';
 
 @Component({
   selector: 'ngx-hmi-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.less']
+  templateUrl: './hmi.editor.component.html',
+  styleUrls: ['./hmi.editor.component.less']
 })
-export class EditorComponent extends GenericComponent {
+export class HmiEditorComponent extends GenericComponent {
 
   /**
    * 默认坐标吸附阈值
@@ -49,7 +50,7 @@ export class EditorComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._history = new HistoryService(this);
     this._selection = new SelectionService();
@@ -62,21 +63,26 @@ export class EditorComponent extends GenericComponent {
   protected onInit(): void {
     this.canvas.editor = this;
     for (let i = 0; i < 10; i++) {
-      const defaultConfigure = {
+      const randomWidget = Math.floor(Math.random() * (this.provider.length));
+      const widgetType = this.provider.getIndex(randomWidget);
+      const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
-        type: (i % 2 == 0) ? 'SvgViewer' : 'ImgViewer',
+        type: widgetType.type,
         rect: {
-          left: Math.floor(Math.random() * 1920),
-          top: Math.floor(Math.random() * 1080),
-          width: 200, // Math.floor(Math.random() * 100 + 100),
-          height: 80 // Math.floor(Math.random() * 50 + 50),
+          left: Math.floor(Math.random() * 2560),
+          top: Math.floor(Math.random() * 1280),
+          width: widgetType.default.rect.width,
+          height: widgetType.default.rect.height
         },
-        style: { opacity: 0.8, ignoreEvent: true, border: 'solid 1px yellow' },
-        data: {}
+        style: widgetType.default.style,
+        data: widgetType.default.data,
+        events: {
+          'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }]
+        }
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
-      this.canvas.add(compRef);
+      if (compRef) this.canvas.add(compRef);
     }
     this.canvas.updatezIndexs();
 

@@ -1,5 +1,5 @@
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
-import { EditorComponent } from "@hmi/editor.component";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
 
 export class BasicCommand {
@@ -11,10 +11,10 @@ export class BasicCommand {
     public attributeName: string;
     public attributePaths: string[];
 
-    protected objects: BasicComponent[];
+    protected objects: BasicWidgetComponent[];
     protected oldValues: Object[];
     protected newValues: Object[];
-    protected editor: EditorComponent;
+    protected editor: HmiEditorComponent;
 
     public executeTime: Date;
 
@@ -23,7 +23,7 @@ export class BasicCommand {
     /**
      *
      */
-    constructor(editor: EditorComponent) {
+    constructor(editor: HmiEditorComponent) {
         this.id = -1;
         this.editor = editor;
         this.objects = [];

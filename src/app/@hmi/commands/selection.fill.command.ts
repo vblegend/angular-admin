@@ -1,6 +1,6 @@
 import { ComponentRef } from "@angular/core";
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
-import { EditorComponent } from "@hmi/editor.component";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 import { BasicCommand } from "./basic.command";
 
 /**
@@ -8,10 +8,10 @@ import { BasicCommand } from "./basic.command";
  * 将编辑器的选区内所有选中对象全部取消选中，选中当前对象数组
  */
 export class SelectionFillCommand extends BasicCommand {
-    protected oldObjects: ComponentRef<BasicComponent>[];
-    protected newObjects: ComponentRef<BasicComponent>[];
+    protected oldObjects: ComponentRef<BasicWidgetComponent>[];
+    protected newObjects: ComponentRef<BasicWidgetComponent>[];
 
-    constructor(editor: EditorComponent, objects: ComponentRef<BasicComponent>[]) {
+    constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {
         super(editor);
         this.oldObjects = editor.selection.objects;
         this.newObjects = objects;

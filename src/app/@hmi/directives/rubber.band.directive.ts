@@ -3,12 +3,12 @@ import { BaseDirective } from '@core/directives/base.directive';
 import { BasicCommand } from '@hmi/commands/basic.command';
 import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
 import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
-import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 import { RubberbandComponent } from '@hmi/components/rubber-band/rubber.band.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Rectangle } from '@hmi/core/common';
-import { EditorComponent } from '@hmi/editor.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { Console } from 'console';
 
 @Directive({
@@ -16,7 +16,7 @@ import { Console } from 'console';
 })
 
 export class RubberBandDirective extends BaseDirective {
-    @Input() editor: EditorComponent;
+    @Input() editor: HmiEditorComponent;
     @Input() canvas: DisignerCanvasComponent;
     private rectComponent: ComponentRef<RubberbandComponent>;
     /**
@@ -150,7 +150,7 @@ export class RubberBandDirective extends BaseDirective {
      * 更新Selection选择器
      */
     private updateSelectionArea(isClick: boolean, ctrlKey: boolean) {
-        const selecteds: ComponentRef<BasicComponent>[] = [];
+        const selecteds: ComponentRef<BasicWidgetComponent>[] = [];
         let command: BasicCommand = null;
         const children = this.editor.canvas.children;
         if (isClick) {

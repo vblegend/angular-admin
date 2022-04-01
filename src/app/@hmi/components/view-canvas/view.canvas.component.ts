@@ -1,26 +1,26 @@
 import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
-import { BasicComponent } from '../basic-component/basic.component';
+import { WidgetConfigure } from '../../configuration/widget.configure';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
+import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
 import { Rectangle } from '@hmi/core/common';
 
 @Component({
-  selector: 'ngx-play-canvas',
-  templateUrl: './play.canvas.component.html',
-  styleUrls: ['./play.canvas.component.less'],
+  selector: 'ngx-view-canvas',
+  templateUrl: './view.canvas.component.html',
+  styleUrls: ['./view.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlayCanvasComponent extends GenericComponent {
+export class ViewCanvasComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
 
-  private _children: ComponentRef<BasicComponent>[];
+  private _children: ComponentRef<BasicWidgetComponent>[];
 
   /**
    * 获取容器内所有组件列表
    */
-  public get children(): ComponentRef<BasicComponent>[] {
+  public get children(): ComponentRef<BasicWidgetComponent>[] {
     return this._children.slice();
   }
 
@@ -40,13 +40,13 @@ export class PlayCanvasComponent extends GenericComponent {
    * @param index 
    * @returns 
    */
-  public add(ref: ComponentRef<BasicComponent>, index?: number): ComponentRef<BasicComponent> {
+  public add(ref: ComponentRef<BasicWidgetComponent>, index?: number): ComponentRef<BasicWidgetComponent> {
     const ofIndex = this._children.indexOf(ref);
     if (ofIndex === -1) {
       this.container.insert(ref.hostView, index);
       this._children.push(ref);
       if (ref.instance.zIndex == null) {
-        ref.instance.configure.style.zIndex = this._children.length;
+        ref.instance.configure.zIndex = this._children.length;
       }
     }
     return ref;
@@ -57,7 +57,7 @@ export class PlayCanvasComponent extends GenericComponent {
    * @param ref 
    * @returns 
    */
-  public remove(ref: ComponentRef<BasicComponent>): ComponentRef<BasicComponent> {
+  public remove(ref: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
     const ofIndex = this._children.indexOf(ref);
     if (ofIndex > -1) {
       this._children.splice(ofIndex, 1);
@@ -77,7 +77,7 @@ export class PlayCanvasComponent extends GenericComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._children = [];
   }
@@ -95,22 +95,22 @@ export class PlayCanvasComponent extends GenericComponent {
 
   /**
    * 解析一个组件，返回组件对象。
+   * 当解析到象失败时返回null
    * @param configure 
    * @returns 
    */
-  public parseComponent(configure: ComponentConfigure): ComponentRef<BasicComponent> {
+  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> {
+    let componentRef: ComponentRef<BasicWidgetComponent> = null;
     const comRef = this.provider.getType(configure.type);
-    if (comRef == null) {
-      throw `未知的类型${configure.type}.`;
+    if (comRef) {
+      const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
+      if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
+        componentRef.hostView.detach();
+        componentRef.instance.$initialization(configure);
+      }
     }
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicComponent>(comRef.component);
-    const componentRef = this.container.createComponent<BasicComponent>(componentFactory, null, this.injector);
-    if (componentRef && componentRef.instance instanceof BasicComponent) {
-      componentRef.hostView.detach();
-      componentRef.instance.$initialization(configure);
-    } else {
-      throw 'load fail. ';
-    }
+    if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
     return componentRef;
   }
 

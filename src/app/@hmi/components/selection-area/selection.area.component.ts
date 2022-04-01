@@ -1,9 +1,9 @@
 import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { ComponentConfigure } from '../../configuration/component.element.configure';
-import { PlayCanvasComponent } from '../play-canvas/play.canvas.component';
-import { EditorComponent } from 'app/@hmi/editor.component';
-import { ComponentSchemaService } from '@hmi/services/component.schema.service';
+import { WidgetConfigure } from '../../configuration/widget.configure';
+import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { Rectangle } from '@hmi/core/common';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
@@ -17,7 +17,7 @@ import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
 export class SelectionAreaComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
   private _canvas: DisignerCanvasComponent;
-  private _editor: EditorComponent;
+  private _editor: HmiEditorComponent;
 
 
   /**
@@ -27,14 +27,14 @@ export class SelectionAreaComponent extends GenericComponent {
     return this._canvas;
   }
 
-  public get editor(): EditorComponent {
+  public get editor(): HmiEditorComponent {
     return this._editor;
   }
 
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: ComponentSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
   }
 

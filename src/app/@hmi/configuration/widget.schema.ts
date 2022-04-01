@@ -1,9 +1,9 @@
 import { Type } from "@angular/core";
-import { BasicComponent } from "@hmi/components/basic-component/basic.component";
-import { ComponentDefaultConfigure } from "./component.element.configure";
+import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { WidgetDefaultConfigure } from "./widget.configure";
 
 
-export interface ComponentSchema {
+export interface WidgetSchema {
     /**
      * 组件类型
      * schema文件中不需要定义，当service load时会自动填充
@@ -26,16 +26,16 @@ export interface ComponentSchema {
      * 组件的名称
      * 默认名称，对象列表中显示
      */
-    displayName: String;
+    name: String;
 
     /**
      * 组建的实例
      */
-    component: Type<BasicComponent>;
+    component: Type<BasicWidgetComponent>;
 
     /**
      * 组件的默认配置
      */
-    default: ComponentDefaultConfigure;
+    default: WidgetDefaultConfigure;
 }
 

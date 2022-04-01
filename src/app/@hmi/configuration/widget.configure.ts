@@ -4,14 +4,14 @@ import { Rectangle } from "@hmi/core/common";
 /**
  * 2D组态的绑定数据结构
  */
-export interface ComponentDataConfigure {
+export interface WidgetDataConfigure {
 
 }
 
 /**
  * 2D组态元素样式
  */
-export interface ComponentStyle {
+export interface WidgetStyle {
     /**
      * 组件默认背景色
      */
@@ -23,46 +23,34 @@ export interface ComponentStyle {
     opacity?: number;
 
     /**
-     * 组件层级索引
-     */
-    zIndex?: number;
-
-    /**
      * 边框
      */
     border?: string;
 
     /**
-     * 固定住的 不可移动的
-     */
-    fixed?: boolean;
-    /**
      * 是否忽略鼠标事件 默认为 false
      * 为true时鼠标事件穿透
      */
     ignoreEvent?: boolean;
+
+    /**
+     * 部件的默认字体大小
+     */
+    fontSize?: number;
 }
 
-export interface ElementLocation {
+export interface Position {
     /**
      * 左侧间距
      */
     left: number;
     /**
-     * 右侧间距（未使用）
-     */
-    // right?: number;
-    /**
      * 顶侧间距
      */
     top: number;
-    /**
-     * 下侧间距（未使用）
-     */
-    // bottom?: number;
 }
 
-export interface ElementSize {
+export interface Size {
     /**
      * 组件宽度
      */
@@ -78,7 +66,7 @@ export interface ElementSize {
 
 
 
-export interface ComponentDefaultConfigure {
+export interface WidgetDefaultConfigure {
     /**
      * 位置与大小
      */
@@ -87,20 +75,35 @@ export interface ComponentDefaultConfigure {
      * 
      * 样式属性，主动更新。
      */
-    style: ComponentStyle;
+    style: WidgetStyle;
 
     /**
      * 组态绑定数据，被动更新 需事件通知
      */
-    data: ComponentDataConfigure;
+    data: WidgetDataConfigure;
 }
 
+
+export interface WidgetEventConfigure {
+    /**
+     * 目标对象，为空则广播给所有部件
+     */
+    target?: string;
+    /**
+     * 对象的接口方法名
+     */
+    method: string;
+    /**
+     * 指定参数，重写参数
+     */
+    params?: Record<string, any>;
+}
 
 
 /**
  * 2D组态元素配置
  */
-export interface ComponentConfigure extends ComponentDefaultConfigure {
+export interface WidgetConfigure extends WidgetDefaultConfigure {
     /**
      * 对象唯一ID
      */
@@ -109,22 +112,29 @@ export interface ComponentConfigure extends ComponentDefaultConfigure {
      * 对象名字
      */
     name: string;
-
     /**
      * 对象类型
      */
     type: string;
-
     /**
      * 被锁定的
      */
-    locked?:boolean;
+    locked?: boolean;
     /**
      * 组件所属分组
      */
     group?: string;
     /**
+     * 组件层级索引
+     */
+    zIndex?: number;
+    /**
      * 是否可见
      */
     visible?: boolean;
+    /**
+     * 部件的事件触发
+     * 一个事件可以触发多个接口方法
+     */
+    events: Record<string, WidgetEventConfigure[]>;
 }

@@ -1,18 +1,18 @@
 import { BasicCommand } from "../commands/basic.command";
-import { EditorComponent } from "../editor.component";
+import { HmiEditorComponent } from "../hmi.editor.component";
 
 
 
 export class HistoryService {
 
-    private editor: EditorComponent;
+    private editor: HmiEditorComponent;
     private undos: BasicCommand[];
     private redos: BasicCommand[];
     public disabled: boolean;
     private idCounter: number;
 
 
-    public constructor(editor: EditorComponent) {
+    public constructor(editor: HmiEditorComponent) {
         this.editor = editor;
         this.undos = [];
         this.redos = [];

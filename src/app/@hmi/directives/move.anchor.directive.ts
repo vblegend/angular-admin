@@ -1,11 +1,11 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
-import { BasicComponent } from '@hmi/components/basic-component/basic.component';
+import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
-import { ElementLocation } from '@hmi/configuration/component.element.configure';
+import { Position } from '@hmi/configuration/widget.configure';
 import { Rectangle, Vector2 } from '@hmi/core/common';
-import { EditorComponent } from '@hmi/editor.component';
+import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 @Directive({
     selector: '[moveAnchor]'
@@ -13,7 +13,7 @@ import { EditorComponent } from '@hmi/editor.component';
 
 export class MoveAnchorDirective extends BaseDirective {
     @Input() host: SelectionAreaComponent;
-    @Input() editor: EditorComponent;
+    @Input() editor: HmiEditorComponent;
 
     private buttonDown = false;
     private batchNo: number;
@@ -84,7 +84,7 @@ export class MoveAnchorDirective extends BaseDirective {
         const r = this.editor.adsorb.matchXAxis(pos.x + bounds.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const xOffset = bounds.width / 2;
         // 把左中右侧左边全部转换为左侧坐标
-        const xRes = [l, c ? c - xOffset : null, r ? r - xOffset * 2 : null];
+        const xRes = [l, c ? c - xOffset : null, r ? r - bounds.width : null];
         const xIndex = this.getMinValueInArray([l, c, r]);
         for (let i = 0; i < xRes.length; i++) {
             // 循环左中右侧坐标点  如果索引相同  或者 坐标数值相同则显示坐标辅助线
@@ -99,7 +99,7 @@ export class MoveAnchorDirective extends BaseDirective {
         const m = this.editor.adsorb.matchYAxis(pos.y + bounds.height / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const b = this.editor.adsorb.matchYAxis(pos.y + bounds.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const yOffset = bounds.height / 2;
-        const yRes = [t, m ? m - yOffset : null, b ? b - yOffset * 2 : null];
+        const yRes = [t, m ? m - yOffset : null, b ? b - bounds.height : null];
         const yIndex = this.getMinValueInArray([t, m, b]);
         for (let i = 0; i < yRes.length; i++) {
             if (yRes[i] != null && (i == yIndex || (yRes[i] == yRes[yIndex]))) {
@@ -140,7 +140,7 @@ export class MoveAnchorDirective extends BaseDirective {
      * @param pos 
      */
     private objectsMoveToCommand(pos: Vector2): void {
-        const objects: BasicComponent[] = [];
+        const objects: BasicWidgetComponent[] = [];
         const propertys: Rectangle[] = [];
         const bounds = this.editor.selection.bounds;
         for (const component of this.editor.selection.objects) {

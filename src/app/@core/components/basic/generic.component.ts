@@ -15,6 +15,11 @@ import { MessageType } from "@core/common/messagetype";
 import { SessionService } from "@core/services/session.service";
 import { CacheService } from "@core/services/cache.service";
 import { NzContextMenuService } from "ng-zorro-antd/dropdown";
+import { Action } from "@core/common/delegate";
+import { AnyObject } from "@core/common/types";
+import { Sealed } from "@core/decorators/sealed";
+
+
 
 /**
  * Generic basic components, commonly used services are integrated internally \
@@ -81,11 +86,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.sessionService = injector.get(SessionService);
         this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
-        this.contextMenuService =  injector.get(NzContextMenuService);
-
-
-
-
+        this.contextMenuService = injector.get(NzContextMenuService);
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
@@ -143,6 +144,16 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         return subscription;
     }
 
+    /**
+     * 托管一个订阅对象，等对象销毁时取消订阅
+     * @param subscription 
+     */
+    protected managedSubscription(subscription: Subscription): void {
+        this.ifDisposeThrowException();
+        if (this._subscriptions.indexOf(subscription) === -1) {
+            this._subscriptions.push(subscription);
+        }
+    }
 
     private unsubscribe(sub: Subscription): void {
         const index = this._subscriptions.indexOf(sub);
@@ -152,8 +163,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
                 sub.unsubscribe();
             }
         }
-        // {{{{{{}}}}}}
-        // [[[[[[]]]]]]
     }
 
 
@@ -342,10 +351,30 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
 
     // }
 
+
+
+    /**
+     * 组件异常事件
+     * @param location 发生位置
+     * @param ex 异常问题
+     */
+    protected onError(location: string, ex: AnyObject) {
+
+
+    }
+
+    /**
+     * 组件的初始化事件[生命周期开始]
+     * 用于组件加载后的数据初始化
+     */
     protected onInit(): void {
 
     }
 
+    /**
+     * 组件的销毁事件[生命周期结束]
+     * 用于组件内数据的销毁操作
+     */
     protected onDestroy(): void {
 
     }
@@ -370,24 +399,45 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
 
 
     /**
-     * 一个生命周期钩子，它会在 Angular 初始化完了该指令的所有数据绑定属性之后调用。 定义 ngOnInit() 方法可以处理所有附加的初始化任务。\
-     * 它的调用时机在默认的变更检测器首次检查完该指令的所有数据绑定属性之后，任何子视图或投影内容检查完之前。 它会且只会在指令初始化时调用一次。
+     * 组件的初始化事件
+     * 禁止子类重写该方法请使用 @onInit
      */
+    @Sealed()
     public ngOnInit(): void {
-        this.onInit();
+        try {
+            this.onInit();
+        } catch (ex) {
+            this.callMethodNoCatch(this.onError, 'onInit', ex);
+        }
+    }
+
+
+
+    /**
+     * 安全调用一个方法，屏蔽掉方法内所有可能出现的catch
+     * @param method 
+     */
+    protected callMethodNoCatch(method: Action, ...params: AnyObject[]) {
+        try {
+            if (method) method(...params);
+        }
+        catch { }
     }
 
 
     /**
      * 
      */
+    @Sealed()
     public ngAfterViewInit(): void {
         this.onAfterViewInit();
     }
 
     /**
-     * 一个生命周期钩子，它会在指令、管道或服务被销毁时调用。 用于在实例被销毁时，执行一些自定义清理代码。
+     * 组件的销毁事件
+     * 禁止子类重写该方法请使用 @onDestroy
      */
+    @Sealed()
     public ngOnDestroy(): void {
         if (this._isDispose) return;
         while (this._times.length) {
@@ -397,6 +447,12 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
             this.unsubscribe(this._subscriptions[0]);
         }
         this._isDispose = true;
-        this.onDestroy();
+        try {
+            this.onDestroy();
+        } catch (ex) {
+            this.callMethodNoCatch(this.onError, 'onDestroy', ex);
+        }
+
+
     }
 }

@@ -98,9 +98,18 @@ export class PanControlComponent extends GenericComponent {
       this.buttonDown = false;
     }
     ev.preventDefault();
-    ev.stopPropagation();
+    ev.stopPropagation();        
   }
 
+  /**
+   * 屏蔽右键菜单
+   * @param ev 
+   */
+  @HostListener('contextmenu@outside', ['$event'])
+  public onContextMenu(ev: MouseEvent): void {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
 
 
 }
