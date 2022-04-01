@@ -1,11 +1,10 @@
 import { Component, HostBinding, Injector } from '@angular/core';
-import { EventBusMessage } from '@hmi/core/common';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { EventBusService } from '@hmi/services/event.bus.service';
-import { Widget } from '@hmi/core/common';
 import { WidgetConfigure, WidgetDataConfigure } from '../../configuration/widget.configure';
-import { map, filter } from 'rxjs/operators';
+import { WidgetMetaObject } from '@hmi/core/widget.meta.data';
+import { MessageTypes, EventMessage, EventMessageData } from '@hmi/core/common';
 
 @Component({
   selector: 'app-basic-comp',
@@ -15,8 +14,12 @@ import { map, filter } from 'rxjs/operators';
 export class BasicWidgetComponent extends GenericComponent {
   private _config: WidgetConfigure;
 
-  public get defineEvent(): Widget {
-    return this.constructor.prototype.DEFINE_EVENT;
+
+  public get metaData(): WidgetMetaObject {
+    if (this.constructor.prototype.METADATA == null) {
+      this.constructor.prototype.METADATA = new WidgetMetaObject();
+    }
+    return this.constructor.prototype.METADATA;
   }
 
   public get left(): number {
@@ -158,13 +161,97 @@ export class BasicWidgetComponent extends GenericComponent {
     super(injector)
     this.eventBusService = injector.get(EventBusService);
     /* 订阅事件总线 */
-    const obser = this.eventBusService.filter(e => e.target != this).subscribe(this.eventHandle.bind(this));
-    this.managedSubscription(obser);
+    const eventObser = this.eventBusService.filter(this.eventFilter.bind(this)).subscribe(this.eventHandle.bind(this));
+    this.managedSubscription(eventObser);
   }
 
 
-  protected eventHandle(message: EventBusMessage<any>) {
-    console.log(message);
+  private eventFilter(e: EventMessage): boolean {
+    // 事件类型必须是事件
+    if (e.type != MessageTypes.Event) return false;
+    // 接收者为空 或 自己就是接收者
+    if (e.receiver && e.receiver != this.configure.id) return false;
+    // 发给自己的条件 接收者必须是自己
+    if (e.sender == this && e.receiver != this.configure.id) return false;
+    return true;
+  }
+
+
+  /**
+   * 事件处理（并入 部件事件总线服务）
+   * @param message 
+   * @returns 
+   */
+  private eventHandle(message: EventMessage) {
+    if (message.type === MessageTypes.Event) {
+      const methodName = message.data.method as string;
+      const params = message.data.params;
+      const method = this.metaData.interface[methodName];
+      if (method) {
+        const args: AnyObject = [];
+        for (let i = 0; i < method.args.length; i++) {
+          const arg = method.args[i];
+          const value = params[arg.argName];
+          if (method.strict && value === undefined) {
+            // 严格模式，跳出
+            return;
+          }
+          args[i] = value;
+        }
+        const methodFunc = this[methodName];
+        if (methodFunc) {
+          methodFunc.apply(this, args);
+        }
+      }
+    }
+  }
+
+
+
+
+
+  /**
+   * 派遣一个指定事件到事件总线
+   * @param type 事件类型
+   * @param target 目标对象
+   * @param data 数据
+   */
+  protected dispatch(type: MessageTypes, target?: string, data?: EventMessageData) {
+    this.eventBusService.dispatch({
+      sender: this,
+      receiver: target,
+      type: type,
+      data: data
+    });
+  }
+
+
+
+  /**
+   * 派遣一个事件
+   * 使用此功能需要在class对象使用@WidgetEvent 注解
+   * @param eventName 事件名称，必须是使用在{@WidgetEvent}列表内的
+   * @param params 事件的参数
+   */
+  protected dispatchEvent<T>(eventName: string, params: T) {
+    const event = this.metaData.events[eventName];
+    if (event == null) {
+      throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${eventName}”的声明。`;
+    }
+    for (const key of event.eventParams) {
+      if (params[key] === undefined) {
+        throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${eventName}”缺少参数“${key}”。`;
+      }
+    }
+    if (this.configure.events == null) return;
+    const eventCfg = this.configure.events[eventName];
+    if (eventCfg == null || eventCfg.length === 0) return;
+    for (const cfg of eventCfg) {
+      this.dispatch(MessageTypes.Event, cfg.target, {
+        method: cfg.method,
+        params: Object.assign({}, params, cfg.params)
+      });
+    }
   }
 
 
