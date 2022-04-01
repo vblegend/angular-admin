@@ -2,6 +2,7 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { WidgetSchemaService } from './services/widget.schema.service';
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
+import { WidgetConfigure } from './configuration/widget.configure';
 
 @Component({
   selector: 'ngx-hmi-viewer',
@@ -27,18 +28,19 @@ export class HmiViewerComponent extends GenericComponent {
     for (let i = 0; i < 10; i++) {
       const randomWidget = Math.floor(Math.random() * (this.provider.length));
       const widgetType = this.provider.getIndex(randomWidget);
-      const defaultConfigure = {
+      const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
         type: widgetType.type,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),
-          width: 200,
-          height: 80
+          width: widgetType.default.rect.width,
+          height: widgetType.default.rect.height
         },
         style: widgetType.default.style,
-        data: widgetType.default.data
+        data: widgetType.default.data,
+        events: {}
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
       if (compRef) this.canvas.add(compRef);

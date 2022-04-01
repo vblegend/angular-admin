@@ -4,6 +4,7 @@ import { WidgetSchema } from "@hmi/configuration/widget.schema";
 import { ImgWidgetComponent } from "../widgets/img.widget/img.widget.component";
 import { SvgWidgetComponent } from "../widgets/svg.widget/svg.widget.component";
 import { TaskWidgetComponent } from "../tasks/task-widget/task.widget.component";
+import { SubmitButtonWidgetComponent } from "../widgets/submit.button.widget/submit.button.widget.component";
 
 
 
@@ -15,6 +16,12 @@ export const CustomWidgets: WidgetSchema[] = [
         classify: '',
         component: ImgWidgetComponent,
         default: {
+            rect: {
+                left: 0,
+                top: 0,
+                width: 64,
+                height: 128
+            },
             style: {},
             data: {}
         }
@@ -25,6 +32,12 @@ export const CustomWidgets: WidgetSchema[] = [
         classify: '',
         component: SvgWidgetComponent,
         default: {
+            rect: {
+                left: 0,
+                top: 0,
+                width: 250,
+                height: 100
+            },
             style: {},
             data: {}
         }
@@ -35,10 +48,37 @@ export const CustomWidgets: WidgetSchema[] = [
         classify: '',
         component: TaskWidgetComponent,
         default: {
+            rect: {
+                left: 0,
+                top: 0,
+                width: 300,
+                height: 150
+            },
             style: {},
             data: {}
         }
+    },
+    {
+        icon: '',
+        name: "提交按钮",
+        classify: '',
+        component: SubmitButtonWidgetComponent,
+        default: {
+            rect: {
+                left: 0,
+                top: 0,
+                width: 86,
+                height: 32
+            },
+            style: {
+            },
+            data: {}
+        }
     }
+
+
+
+
 ];
 
 

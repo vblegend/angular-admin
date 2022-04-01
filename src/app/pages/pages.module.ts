@@ -34,6 +34,7 @@ import { HmiSchemaService } from './services/hmi.schema.service';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { ImgWidgetComponent } from './widgets/img.widget/img.widget.component';
 import { ExamplesComponent } from './examples/examples.component';
+import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/submit.button.widget.component';
 
 @NgModule({
   imports: [
@@ -68,6 +69,7 @@ import { ExamplesComponent } from './examples/examples.component';
     DashboardComponent,
     SvgWidgetComponent,
     ImgWidgetComponent,
+    SubmitButtonWidgetComponent
   ],
   providers: [
     {

@@ -1,20 +1,18 @@
 import { Component, HostListener, Injector } from '@angular/core';
-import { EventBusMessages } from '@hmi/core/common';
+import { MessageTypes } from '@hmi/core/common';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { Widget } from '@hmi/core/common';
+import { WidgetEvent } from '@hmi/core/common';
 
 @Component({
   selector: 'app-task-widget',
   templateUrl: './task.widget.component.html',
   styleUrls: ['./task.widget.component.less']
 })
-@Widget({
-
-  events: [
-    {}
-  ]
-
-})
+@WidgetEvent([
+  { event: 'click', eventName: '单击事件', eventParams: ['taskId'] },
+  { event: 'mouseEnter', eventName: '鼠标移入', eventParams: ['taskId'] },
+  { event: 'mouseLeave', eventName: '鼠标移出', eventParams: ['taskId'] },
+])
 export class TaskWidgetComponent extends BasicWidgetComponent {
 
   constructor(injector: Injector) {
@@ -39,7 +37,7 @@ export class TaskWidgetComponent extends BasicWidgetComponent {
 
   @HostListener('mousedown', ['$event'])
   public onMouseDown(ev: MouseEvent): void {
-    this.eventBusService.broadcast(this, EventBusMessages.ObjectChanged, 333333);
+    this.dispatchEvent('click', {});
   }
 
 

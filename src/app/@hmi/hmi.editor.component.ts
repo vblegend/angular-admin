@@ -10,6 +10,7 @@ import { HistoryService } from './core/history.service';
 import { SelectionService } from './core/selection.service';
 import { AdsorbService } from './core/adsorb.service';
 import { WidgetSchemaService } from './services/widget.schema.service';
+import { WidgetConfigure } from './configuration/widget.configure';
 
 @Component({
   selector: 'ngx-hmi-editor',
@@ -64,18 +65,21 @@ export class HmiEditorComponent extends GenericComponent {
     for (let i = 0; i < 10; i++) {
       const randomWidget = Math.floor(Math.random() * (this.provider.length));
       const widgetType = this.provider.getIndex(randomWidget);
-      const defaultConfigure = {
+      const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
         type: widgetType.type,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),
-          width: 200,
-          height: 80
+          width: widgetType.default.rect.width,
+          height: widgetType.default.rect.height
         },
         style: widgetType.default.style,
-        data: widgetType.default.data
+        data: widgetType.default.data,
+        events: {
+          'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }]
+        }
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
       if (compRef) this.canvas.add(compRef);

@@ -22,13 +22,10 @@ export interface WidgetStyle {
      */
     opacity?: number;
 
-
-
     /**
      * 边框
      */
     border?: string;
-
 
     /**
      * 是否忽略鼠标事件 默认为 false
@@ -36,10 +33,10 @@ export interface WidgetStyle {
      */
     ignoreEvent?: boolean;
 
-
+    /**
+     * 部件的默认字体大小
+     */
     fontSize?: number;
-
-
 }
 
 export interface Position {
@@ -87,6 +84,21 @@ export interface WidgetDefaultConfigure {
 }
 
 
+export interface WidgetEventConfigure {
+    /**
+     * 目标对象，为空则广播给所有部件
+     */
+    target?: string;
+    /**
+     * 对象的接口方法名
+     */
+    method: string;
+    /**
+     * 指定参数，重写参数
+     */
+    params?: Record<string, any>;
+}
+
 
 /**
  * 2D组态元素配置
@@ -100,12 +112,10 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 对象名字
      */
     name: string;
-
     /**
      * 对象类型
      */
     type: string;
-
     /**
      * 被锁定的
      */
@@ -122,4 +132,9 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 是否可见
      */
     visible?: boolean;
+    /**
+     * 部件的事件触发
+     * 一个事件可以触发多个接口方法
+     */
+    events: Record<string, WidgetEventConfigure[]>;
 }

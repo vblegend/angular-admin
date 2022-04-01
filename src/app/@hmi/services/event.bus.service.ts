@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
-import { EventBusMessage, EventBusMessages } from "@hmi/core/common";
+import { EventMessage, EventMessageData, MessageTypes } from "@hmi/core/common";
 import { Observable, Subject, Subscriber, Subscription, TeardownLogic } from "rxjs";
 import { map, filter } from 'rxjs/operators';
 
@@ -8,26 +8,18 @@ import { map, filter } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class EventBusService {
-    private _subscriber: Subject<EventBusMessage<any>> = new Subject<EventBusMessage<any>>();
+    private _subscriber: Subject<EventMessage> = new Subject<EventMessage>();
 
 
-    public get subscriber(): Subject<EventBusMessage<any>> {
+    public get subscriber(): Subject<EventMessage> {
         return this._subscriber;
     }
 
-    public subscribeTarget<T>(target: String, next?: (value: EventBusMessage<T>) => void): Subscription {
-        return this._subscriber.pipe(
-            filter(value => value.identity == null || value.identity === target)
-        ).subscribe(next);
-    }
-
-
-
-    public subscribe<T>(next?: (value: EventBusMessage<T>) => void): Subscription {
+    public subscribe(next?: (value: EventMessage) => void): Subscription {
         return this._subscriber.subscribe(next);
     }
 
-    public filter<T>(predicate: (value: EventBusMessage<T>, index: number) => boolean): Observable<EventBusMessage<T>> {
+    public filter(predicate: (value: EventMessage, index: number) => boolean): Observable<EventMessage> {
         return this._subscriber.pipe(filter(predicate, this));
     }
 
@@ -40,24 +32,12 @@ export class EventBusService {
     }
 
     /**
-     * 把事件派遣给指定ID的对象
+     * 把事件派遣给指定ID的对象 type: MessageTypes, sender: BasicWidgetComponent, receiver: string, data: EventMessageData
      * @param target 
      * @param type 
      * @param data 
      */
-    public dispatch<T>(target: BasicWidgetComponent, identity: string, type: EventBusMessages, data: T): void {
-        const message: EventBusMessage<T> = { target, identity: identity, type, data };
-        this._subscriber.next(message);
-    }
-
-
-    /**
-     * 把事件广播给所有订阅对象
-     * @param type 
-     * @param data 
-     */
-    public broadcast<T>(target: BasicWidgetComponent, type: EventBusMessages, data: T) {
-        const message: EventBusMessage<T> = { target, identity: null, type, data };
+    public dispatch(message: EventMessage): void {
         this._subscriber.next(message);
     }
 

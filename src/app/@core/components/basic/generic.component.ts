@@ -17,6 +17,7 @@ import { CacheService } from "@core/services/cache.service";
 import { NzContextMenuService } from "ng-zorro-antd/dropdown";
 import { Action } from "@core/common/delegate";
 import { AnyObject } from "@core/common/types";
+import { Sealed } from "@core/decorators/sealed";
 
 
 
@@ -401,6 +402,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * 组件的初始化事件
      * 禁止子类重写该方法请使用 @onInit
      */
+    @Sealed()
     public ngOnInit(): void {
         try {
             this.onInit();
@@ -426,6 +428,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * 
      */
+    @Sealed()
     public ngAfterViewInit(): void {
         this.onAfterViewInit();
     }
@@ -434,6 +437,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * 组件的销毁事件
      * 禁止子类重写该方法请使用 @onDestroy
      */
+    @Sealed()
     public ngOnDestroy(): void {
         if (this._isDispose) return;
         while (this._times.length) {
