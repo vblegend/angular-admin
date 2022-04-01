@@ -28,7 +28,6 @@ export class EventBusService {
      */
     constructor() {
         this._subscriber = new Subject();
-        console.log('new EventBusService');
     }
 
     /**

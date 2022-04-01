@@ -40,7 +40,7 @@ export class HmiViewerComponent extends GenericComponent {
         },
         style: widgetType.default.style,
         data: widgetType.default.data,
-        events: {}
+        events: widgetType.default.events
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
       if (compRef) this.canvas.add(compRef);
