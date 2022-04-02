@@ -48,6 +48,8 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { OutSideEventPluginService } from './services/outside.event.plugin.service';
 import { SessionService } from './services/session.service';
 import { CacheService } from './services/cache.service';
+import { EventBusService } from './services/event.bus.service';
+import { AngularSplitModule } from 'angular-split';
 
 
 const EXPORT_PIPES: Provider[] = [
@@ -91,7 +93,8 @@ const PROVIDERS: Provider[] = [
   MenuService,
   TemplateService,
   NzDrawerService,
-  CacheService
+  CacheService,
+  EventBusService
 ];
 
 
@@ -119,7 +122,8 @@ const PROVIDERS: Provider[] = [
     NzNotificationModule,
     NzMessageModule,
     NzAvatarModule,
-    NzPopoverModule
+    NzPopoverModule,
+    AngularSplitModule
   ],
   exports: [
     EXPORT_COMPONENTS,

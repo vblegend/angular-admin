@@ -1,3 +1,21 @@
-<ngx-disigner-canvas #canvas hmi-disigner-hotkey [editor]="this"  >
-
-</ngx-disigner-canvas>
+<div class="hmi-editor-area">
+    <as-split direction="horizontal" gutterSize="5" (gutterClick)="gutterDblClick($event)">
+        <!-- 左侧小部件对象列表  和小部件组件列表 -->
+        <as-split-area [size]="10" [visible]="leftAreaVisible">
+            <p>LEFT</p>
+        </as-split-area>
+        <!-- 中测工作区 -->
+        <as-split-area [size]="80">
+            <ngx-disigner-canvas #canvas hmi-disigner-hotkey [editor]="this">
+            </ngx-disigner-canvas>
+            <div *ngIf="!leftAreaVisible" class="sidebar-gutter left" (click)="gutterDblClick({gutterNum:1})">
+            </div>
+            <div *ngIf="!rightAreaVisible" class="sidebar-gutter right" (click)="gutterDblClick({gutterNum:2})">
+            </div>
+        </as-split-area>
+        <!-- 右侧属性栏 -->
+        <as-split-area [size]="10" [visible]="rightAreaVisible">
+            <p>RIGHT</p>
+        </as-split-area>
+    </as-split>
+</div>

@@ -7,12 +7,14 @@ import { WidgetConfigure } from '../../configuration/widget.configure';
 import { HmiEditorComponent } from '../../hmi.editor.component';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
+import { WidgetEventService } from '@hmi/services/widget.event.service';
 
 @Component({
   selector: 'ngx-disigner-canvas',
   templateUrl: './disigner.canvas.component.html',
   styleUrls: ['./disigner.canvas.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: WidgetEventService }]
 })
 export class DisignerCanvasComponent extends ViewCanvasComponent {
   @Input() editor: HmiEditorComponent;

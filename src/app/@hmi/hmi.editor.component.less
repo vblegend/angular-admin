@@ -1,4 +1,47 @@
 :host {
   position: relative;
+  width: 100%;
+  height: 100%;
+  .hmi-editor-area {
+    width: 100%;
+    height: 100%;
+
+    ngx-disigner-canvas {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .sidebar-gutter {
+    width: 5px;
+    height: 28px;
+    position: absolute;
+    cursor: pointer;
+
+    top: 50%;
+    background-color: #007acc;
+  }
+  .left {
+    left: 0;
+  }
+  .right {
+    right: 0;
+  }
 }
 
+::ng-deep .as-split-area {
+  position: relative;
+}
+
+::ng-deep .as-split-gutter {
+  transition: all 0.3s;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+::ng-deep .as-split-gutter:active {
+  background-color: #007acc !important;
+}
+::ng-deep .as-split-gutter-icon {
+  cursor: pointer;
+  height: 30px !important;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAIAAABrHEPqAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAUSURBVChTY2CoOoOCRvnDiF91BgCohr8F8n1mswAAAABJRU5ErkJggg==") !important;
+}

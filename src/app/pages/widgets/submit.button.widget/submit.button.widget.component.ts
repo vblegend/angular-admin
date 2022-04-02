@@ -1,7 +1,7 @@
 import { Component, HostListener, Injector } from '@angular/core';
 
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { MessageTypes, Params, WidgetEvent, WidgetInterface } from '@hmi/core/common';
+import { WidgetEvent } from '@hmi/core/common';
 
 @Component({
   selector: 'app-submit-button-widget',
@@ -25,7 +25,9 @@ export class SubmitButtonWidgetComponent extends BasicWidgetComponent {
 
 
   public btn_onClick(): void {
+    console.time('dispatchEvent');
     this.dispatchEvent('click', { deviceId: 9999999, stationId: 1000000 });
+    console.timeEnd('dispatchEvent');
   }
 
 

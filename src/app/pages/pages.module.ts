@@ -35,6 +35,7 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { ImgWidgetComponent } from './widgets/img.widget/img.widget.component';
 import { ExamplesComponent } from './examples/examples.component';
 import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/submit.button.widget.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   imports: [
@@ -60,7 +61,7 @@ import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/subm
     NzDropDownModule,
     NzInputModule,
     NzDividerModule,
-    DragDropModule
+    DragDropModule,
   ],
   declarations: [
     PagesComponent,
@@ -69,7 +70,8 @@ import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/subm
     DashboardComponent,
     SvgWidgetComponent,
     ImgWidgetComponent,
-    SubmitButtonWidgetComponent
+    SubmitButtonWidgetComponent,
+    EditorComponent
   ],
   providers: [
     {

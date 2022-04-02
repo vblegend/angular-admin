@@ -54,11 +54,7 @@ export class RubberBandDirective extends BaseDirective {
         if (ev.buttons === 1 || ev.buttons == 2) {
             // 过滤滚动条上的点击事件
             if (ev.clientX - this.element.offsetLeft > this.element.clientWidth ||
-            ev.clientY - this.element.offsetTop > this.element.clientHeight) return;
-
-
-
-
+                ev.clientY - this.element.offsetTop > this.element.clientHeight) return;
             this.buttonDown = true;
             const rect = this.element.getBoundingClientRect();
             // 仅限左键更改指针,右键为菜单项 不修改指针样式
@@ -70,14 +66,6 @@ export class RubberBandDirective extends BaseDirective {
             ev.preventDefault();
             ev.stopPropagation();
         }
-        if (ev.buttons == 2) {
-
-
-
-
-        }
-
-
     }
 
     /**
@@ -128,6 +116,14 @@ export class RubberBandDirective extends BaseDirective {
         this.endY = Math.max(Math.min(this.endY, this.element.clientHeight), 0);
         // 更新橡皮筋
         const scale = this.editor.canvas.zoomScale;
+
+
+        const left = Math.min(this.endX, this.startX);
+        const top = Math.min(this.endY, this.startY);
+        const width = Math.abs(this.endX - this.startX);
+        const height = Math.abs(this.endY - this.startY);
+
+
         this.rubberBandArea = {
             left: Math.min(this.endX, this.startX),
             top: Math.min(this.endY, this.startY),
@@ -137,10 +133,10 @@ export class RubberBandDirective extends BaseDirective {
         this.rectComponent.instance.updateRectangle(this.rubberBandArea);
         // 更新选中区域
         this.selectionArea = {
-            left: this.rubberBandArea.left / scale + this.element.scrollLeft / scale,
-            top: this.rubberBandArea.top / scale + this.element.scrollTop / scale,
-            width: this.rubberBandArea.width / scale,
-            height: this.rubberBandArea.height / scale
+            left: left / scale + this.element.scrollLeft / scale,
+            top: top / scale + this.element.scrollTop / scale,
+            width: width / scale,
+            height: height / scale
         };
     }
 

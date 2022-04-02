@@ -1,15 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { ErrorComponent } from './@core/components/error/error.component';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
 import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 import { AuthGuardService } from './@core/services/auth.guard.service';
+import { EditorComponent } from './pages/editor/editor.component';
+import { HmiSchemaService } from './pages/services/hmi.schema.service';
 
 const routes: Routes = [
   {
     path: 'login',
     title: { value: 'login', needsTranslator: false },
     component: LoginPageComponent
+  },
+  {
+    path: 'editor',
+    title: { value: 'editor', needsTranslator: false },
+    component: EditorComponent
   },
   {
     path: 'notfound',
@@ -43,6 +51,12 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, { useHash: true })
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers:[
+    {
+      provide: WidgetSchemaService,
+      useClass: HmiSchemaService,
+    }
+  ]
 })
 export class AppRoutingModule { }

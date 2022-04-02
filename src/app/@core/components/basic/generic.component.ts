@@ -18,6 +18,7 @@ import { NzContextMenuService } from "ng-zorro-antd/dropdown";
 import { Action } from "@core/common/delegate";
 import { AnyObject } from "@core/common/types";
 import { Sealed } from "@core/decorators/sealed";
+import { EventBusService } from "@core/services/event.bus.service";
 
 
 
@@ -55,7 +56,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected readonly contextMenuService: NzContextMenuService;
     protected readonly overlay: Overlay;
     public readonly viewContainerRef: ViewContainerRef;
-
+    protected readonly eventBusService: EventBusService;
 
     /**
      * get current route request parameters \
@@ -87,6 +88,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.cacheService = injector.get(CacheService);
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         this.contextMenuService = injector.get(NzContextMenuService);
+        this.eventBusService = injector.get(EventBusService);
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
@@ -359,8 +361,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param ex 异常问题
      */
     protected onError(location: string, ex: AnyObject) {
-
-
+        console.error(`${location}=> ${ex}`);
     }
 
     /**
@@ -418,6 +419,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         try {
             this.onInit();
         } catch (ex) {
+            console.warn(ex);
             this.callMethodNoCatch(this.onError, 'onInit', ex);
         }
     }
@@ -432,7 +434,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         try {
             if (method) method(...params);
         }
-        catch { }
+        catch {
+        }
     }
 
 
@@ -461,6 +464,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         try {
             this.onDestroy();
         } catch (ex) {
+            console.warn(ex);
             this.callMethodNoCatch(this.onError, 'onDestroy', ex);
         }
 

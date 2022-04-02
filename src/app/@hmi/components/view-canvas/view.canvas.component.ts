@@ -5,17 +5,30 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
 import { Rectangle } from '@hmi/core/common';
+import { WidgetEventService } from '@hmi/services/widget.event.service';
 
 @Component({
   selector: 'ngx-view-canvas',
   templateUrl: './view.canvas.component.html',
   styleUrls: ['./view.canvas.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: WidgetEventService }]
 })
 export class ViewCanvasComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-
   private _children: ComponentRef<BasicWidgetComponent>[];
+  private _eventHub: WidgetEventService;
+
+  /**
+   *
+   */
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+    super(injector);
+    this._children = [];
+    this._eventHub = injector.get(WidgetEventService);
+    this._eventHub.initCanvas$(this);
+  }
+
 
   /**
    * 获取容器内所有组件列表
@@ -74,13 +87,7 @@ export class ViewCanvasComponent extends GenericComponent {
     return false;
   }
 
-  /**
-   *
-   */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
-    super(injector);
-    this._children = [];
-  }
+
 
   /**
    * 清理并销毁掉所有组件

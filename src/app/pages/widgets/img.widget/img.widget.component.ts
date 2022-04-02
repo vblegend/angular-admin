@@ -1,7 +1,7 @@
 import { Component, HostListener, Injector } from '@angular/core';
 
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { MessageTypes, Params, WidgetEvent, WidgetInterface } from '@hmi/core/common';
+import { Params, WidgetEvent, WidgetInterface } from '@hmi/core/common';
 
 @Component({
   selector: 'app-img-widget',
@@ -22,7 +22,7 @@ export class ImgWidgetComponent extends BasicWidgetComponent {
 
 
   protected onInit() {
-    
+
   }
 
   protected onDestroy() {

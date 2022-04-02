@@ -1,8 +1,5 @@
-import { Type } from "@angular/core";
 import { ObjectUtil } from "@core/util/object.util";
-import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
-import { WidgetDefaultConfigure } from "@hmi/configuration/widget.configure";
-import { EventMeta, MethodArgument, WidgetMetaObject } from "./widget.meta.data";
+import { EventMeta, WidgetMetaObject } from "./widget.meta.data";
 
 
 
@@ -22,30 +19,6 @@ export interface Rectangle {
     width: number;
     height: number;
 }
-
-
-export enum MessageTypes {
-    None = 0,
-    Event = 1,
-}
-
-export interface EventMessage {
-    /* 发件人 */
-    sender: BasicWidgetComponent;
-    /* 收件人 当为空时为广播状态*/
-    receiver?: string;
-    /* 消息类型 */
-    type: MessageTypes;
-    /* 消息数据 */
-    data: EventMessageData;
-}
-
-export interface EventMessageData {
-    [key: string]: any;
-}
-
-
-
 
 /**
  * 定义一个Widget对象的所有可触发的事件列表\

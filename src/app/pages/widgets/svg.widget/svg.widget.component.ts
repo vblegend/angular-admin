@@ -1,6 +1,6 @@
 import { Component, HostListener, Injector } from '@angular/core';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { MessageTypes, Params, WidgetEvent, WidgetInterface } from '@hmi/core/common';
+import { Params, WidgetEvent, WidgetInterface } from '@hmi/core/common';
 
 @Component({
   selector: 'app-svg-widget',
@@ -30,7 +30,7 @@ export class SvgWidgetComponent extends BasicWidgetComponent {
   public updateSvg(@Params('stationId') stationId?: number,
     @Params('roomId') roomId?: number,
     @Params('deviceId') deviceId?: number) {
-    console.log(`触发事件 updateSvg => stationId:${stationId}，roomId:${roomId}，deviceId:${deviceId}`);
+    // console.log(`触发事件 updateSvg => stationId:${stationId}，roomId:${roomId}，deviceId:${deviceId}`);
   }
 
 

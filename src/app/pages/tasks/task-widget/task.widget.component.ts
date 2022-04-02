@@ -1,5 +1,4 @@
 import { Component, HostListener, Injector } from '@angular/core';
-import { MessageTypes } from '@hmi/core/common';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { WidgetEvent } from '@hmi/core/common';
 

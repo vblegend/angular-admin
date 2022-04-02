@@ -1,16 +1,14 @@
-import { Component, ComponentRef, ElementRef, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentRef, ElementRef, Injector, Input, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { Console } from 'console';
-
 import { BasicCommand } from './commands/basic.command';
-
-import { BasicWidgetComponent } from './components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
 import { HistoryService } from './core/history.service';
 import { SelectionService } from './core/selection.service';
 import { AdsorbService } from './core/adsorb.service';
 import { WidgetSchemaService } from './services/widget.schema.service';
 import { WidgetConfigure } from './configuration/widget.configure';
+import { AnyObject } from '@core/common/types';
+import { SplitComponent, SplitAreaDirective, IOutputData } from 'angular-split'
 
 @Component({
   selector: 'ngx-hmi-editor',
@@ -24,8 +22,14 @@ export class HmiEditorComponent extends GenericComponent {
    * 仅吸附该范围内坐标点
    */
   public readonly DEFAULT_ADSORB_THRESHOLD: number = 7;
+  @ViewChildren(SplitAreaDirective) areasEl: QueryList<SplitAreaDirective>
 
   @ViewChild('canvas', { static: true }) canvas: DisignerCanvasComponent;
+
+
+  public leftAreaVisible: boolean = true;
+  public rightAreaVisible: boolean = true;
+
 
   private _history: HistoryService;
   private _selection: SelectionService;
@@ -59,6 +63,10 @@ export class HmiEditorComponent extends GenericComponent {
 
 
 
+  public gutterDblClick(vv: IOutputData) {
+    if (vv.gutterNum == 1) this.leftAreaVisible = !this.leftAreaVisible;
+    if (vv.gutterNum == 2) this.leftAreaVisible = !this.leftAreaVisible;
+  }
 
   protected onInit(): void {
     this.canvas.editor = this;
@@ -103,4 +111,13 @@ export class HmiEditorComponent extends GenericComponent {
 
 
 
+  /**
+   * 组件异常事件
+   * 通常发生在onInit 与 onDestroy中
+   * @param ex 
+   */
+  protected onError(location: string, ex: AnyObject) {
+    console.error(`异常出现在 => ${location}：${ex}`);
+  }
 }
+

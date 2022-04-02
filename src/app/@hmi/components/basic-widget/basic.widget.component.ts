@@ -1,10 +1,10 @@
 import { Component, HostBinding, Injector } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { EventBusService } from '@hmi/services/event.bus.service';
+import { EventBusService } from '@core/services/event.bus.service';
 import { WidgetConfigure, WidgetDataConfigure } from '../../configuration/widget.configure';
 import { WidgetMetaObject } from '@hmi/core/widget.meta.data';
-import { MessageTypes, EventMessage, EventMessageData } from '@hmi/core/common';
+import { WidgetEventService } from '@hmi/services/widget.event.service';
 
 @Component({
   selector: 'app-basic-comp',
@@ -16,8 +16,12 @@ import { MessageTypes, EventMessage, EventMessageData } from '@hmi/core/common';
  */
 export class BasicWidgetComponent extends GenericComponent {
   private _config: WidgetConfigure;
-  private readonly eventBusService: EventBusService;
 
+  /**
+   * 小部件内部事件处理服务\
+   * 由canvas进行隔离\
+   */
+  private readonly eventService: WidgetEventService;
   /**
    * 小部件的元数据\
    * 
@@ -166,72 +170,8 @@ export class BasicWidgetComponent extends GenericComponent {
 
   constructor(injector: Injector) {
     super(injector)
-    this.eventBusService = injector.get(EventBusService);
-    /* 订阅事件总线 */
-    const eventObser = this.eventBusService.filter(this.eventFilter.bind(this)).subscribe(this.eventHandle.bind(this));
-    this.managedSubscription(eventObser);
+    this.eventService = injector.get(WidgetEventService);
   }
-
-
-  private eventFilter(e: EventMessage): boolean {
-    // 事件类型必须是事件
-    if (e.type != MessageTypes.Event) return false;
-    // 接收者为空 或 自己就是接收者
-    if (e.receiver && e.receiver != this.configure.id) return false;
-    // 发给自己的条件 接收者必须是自己
-    if (e.sender == this && e.receiver != this.configure.id) return false;
-    return true;
-  }
-
-
-  /**
-   * 事件处理（并入 部件事件总线服务）
-   * @param message 
-   * @returns 
-   */
-  private eventHandle(message: EventMessage) {
-    if (message.type === MessageTypes.Event) {
-      const methodName = message.data.method as string;
-      const params = message.data.params;
-      const method = this.metaData.interface[methodName];
-      if (method) {
-        const args: AnyObject = [];
-        for (let i = 0; i < method.args.length; i++) {
-          const arg = method.args[i];
-          const value = params[arg.argName];
-          if (method.strict && value === undefined) {
-            // 严格模式，跳出
-            return;
-          }
-          args[i] = value;
-        }
-        const methodFunc = this[methodName];
-        if (methodFunc) {
-          methodFunc.apply(this, args);
-        }
-      }
-    }
-  }
-
-
-
-
-
-  /**
-   * 派遣一个指定事件到事件总线
-   * @param type 事件类型
-   * @param target 目标对象
-   * @param data 数据
-   */
-  protected dispatch(type: MessageTypes, target?: string, data?: EventMessageData) {
-    this.eventBusService.dispatch({
-      sender: this,
-      receiver: target,
-      type: type,
-      data: data
-    });
-  }
-
 
 
   /**
@@ -254,15 +194,9 @@ export class BasicWidgetComponent extends GenericComponent {
     const eventCfg = this.configure.events[event];
     if (eventCfg == null || eventCfg.length === 0) return;
     for (const cfg of eventCfg) {
-      this.dispatch(MessageTypes.Event, cfg.target, {
-        method: cfg.method,
-        params: Object.assign({}, params, cfg.params)
-      });
+      this.eventService.dispatch(this, cfg.target, cfg.method, Object.assign({}, params, cfg.params));
     }
   }
-
-
-
 
   /**
    * 内部函数，禁止重载该方法
@@ -272,8 +206,6 @@ export class BasicWidgetComponent extends GenericComponent {
   public $initialization(_config: WidgetConfigure): void {
     if (this._config) throw 'This method is only available on first run ';
     this._config = _config;
-
-    // console.log(this.defineEvent);
   }
 
 
@@ -302,8 +234,6 @@ export class BasicWidgetComponent extends GenericComponent {
    * @param ex 
    */
   protected onError(location: string, ex: AnyObject) {
-
-
     console.error(`异常出现在 => ${location}：${ex}`);
   }
 

@@ -19,7 +19,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
 import { HmiViewerComponent } from './hmi.viewer.component';
-import { EventBusService } from '@hmi/services/event.bus.service';
+import { AngularSplitModule } from 'angular-split';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -27,7 +27,7 @@ export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
  * services
  */
 const PROVIDERS: Provider[] = [
-  EventBusService
+
 ];
 
 
@@ -71,7 +71,8 @@ const EXPORT_COMPONENTS = [
     FormsModule,
     ReactiveFormsModule,
     CoreModule,
-    NzDropDownModule
+    NzDropDownModule,
+    AngularSplitModule
   ],
   exports: [
     EXPORT_COMPONENTS,
