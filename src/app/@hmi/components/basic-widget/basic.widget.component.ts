@@ -66,6 +66,11 @@ export class BasicWidgetComponent extends GenericComponent {
   }
 
 
+  public get groupId(): number {
+    return this.configure.group;
+  }
+
+
   /**
    * host的绑定数据，不可修改。
    */

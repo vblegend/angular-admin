@@ -1,6 +1,7 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
+import { Vector2 } from '@hmi/core/common';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 @Directive({
@@ -25,10 +26,31 @@ export class ZoomControlDirective extends BaseDirective {
 
     @HostListener('mousewheel', ['$event'])
     public onMouseWheel(ev: MouseEvent): void {
+        const srcollRect = this.canvas.scrollViewer.nativeElement.getBoundingClientRect();
+        const scale = this.canvas.zoomScale;
+        const pointOnScrollView: Vector2 = {
+            x: ev.clientX - srcollRect.left,
+            y: ev.clientY - srcollRect.top
+        };
+        const pointOnCanvas: Vector2 = {
+            x: (pointOnScrollView.x / scale + this.canvas.scrollViewer.nativeElement.scrollLeft / scale),
+            y: (pointOnScrollView.y / scale + this.canvas.scrollViewer.nativeElement.scrollTop / scale)
+        };
+        console.log(`${pointOnScrollView.x}，${pointOnScrollView.y}            ${pointOnCanvas.x}，${pointOnCanvas.y}`);
+
         const delta = ev['wheelDelta'] / 120;
         this.index = Math.max(0, Math.min(this.index + delta, this.scales.length - 1));
         this.canvas.zoomScale = this.scales[this.index];
         this.element.scrollTo();
+
+
+
+        const offsetX = (pointOnCanvas.x / scale);
+        const offsetY = (pointOnCanvas.y / scale);
+        // this.canvas.scrollViewer.nativeElement.scrollLeft = offsetX;
+        // this.canvas.scrollViewer.nativeElement.scrollTop = offsetY;
+        console.log(`${offsetX}            ${offsetY}`)
+
         ev.preventDefault();
         ev.stopPropagation();
     }

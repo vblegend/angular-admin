@@ -9,6 +9,7 @@ import { WidgetSchemaService } from './services/widget.schema.service';
 import { WidgetConfigure } from './configuration/widget.configure';
 import { AnyObject } from '@core/common/types';
 import { SplitComponent, SplitAreaDirective, IOutputData } from 'angular-split'
+import { ObjectAttributeCommand } from './commands/object.attribute.command';
 
 @Component({
   selector: 'ngx-hmi-editor',
@@ -64,8 +65,33 @@ export class HmiEditorComponent extends GenericComponent {
 
 
   public gutterDblClick(vv: IOutputData) {
-    if (vv.gutterNum == 1) this.leftAreaVisible = !this.leftAreaVisible;
-    if (vv.gutterNum == 2) this.leftAreaVisible = !this.leftAreaVisible;
+
+    if (vv.gutterNum == 1) {
+      // this.areasEl.first.minSize = 0;
+      if (this.leftAreaVisible) {
+        this.areasEl.first.collapse(0);
+        // this.areasEl.first.visible = false;
+        this.leftAreaVisible = false;
+      } else {
+        this.leftAreaVisible = true;
+        this.areasEl.first.expand();
+        // this.areasEl.first.visible = true;
+      }
+    }
+
+    if (vv.gutterNum == 2) {
+      // this.areasEl.last.minSize = 0;
+      if (this.rightAreaVisible) {
+        this.areasEl.last.collapse(0, 'left')
+        // this.areasEl.last.visible = false;
+        this.rightAreaVisible = false;
+      } else {
+        this.rightAreaVisible = true;
+        this.areasEl.last.expand();
+        // this.areasEl.last.visible = true;
+      }
+    }
+
   }
 
   protected onInit(): void {
@@ -83,6 +109,7 @@ export class HmiEditorComponent extends GenericComponent {
           width: widgetType.default.rect.width,
           height: widgetType.default.rect.height
         },
+        // group: Math.floor(Math.random() * 3),
         style: widgetType.default.style,
         data: widgetType.default.data,
         events: widgetType.default.events
@@ -94,20 +121,69 @@ export class HmiEditorComponent extends GenericComponent {
 
   }
 
+  /**
+   * 执行一条命令
+   * @param cmd 
+   */
   public execute(cmd: BasicCommand): void {
     this.history.execute(cmd);
     this.selection.update();
   }
 
+  /**
+   * 撤销操作
+   */
   public undo(): void {
     this.history.undo();
     this.selection.update();
   }
 
+  /**
+   * 重做操作
+   */
   public redo(): void {
     this.history.redo();
     this.selection.update();
   }
+
+
+  /**
+   * 组合选中对象
+   * @returns 
+   */
+  public groupingObjects(): void {
+    const hasGroupObjects = this.canvas.children.filter(e => e.instance.groupId != null);
+    const groupIds = hasGroupObjects.map(e => e.instance.groupId);
+    groupIds.push(0);
+    const maxGroupId = Math.max(...groupIds);
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/group', [maxGroupId + 1]));
+  }
+
+  /**
+   * 拆分选中对象
+   * @returns 
+   */
+  public unGroupingObjects(): void {
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/group', [null]));
+  }
+
+
+  /**
+   * 锁定对象移动
+   */
+  public lockObjects(): void {
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/locked', [true]));
+  }
+
+
+  /**
+   * 解锁对象
+   */
+  public unlockObjects(): void {
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/locked', [null]));
+  }
+
+
 
 
 

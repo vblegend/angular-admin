@@ -153,21 +153,25 @@ export class RubberBandDirective extends BaseDirective {
             const selected = children.find(comp => {
                 return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
             });
-            selecteds.push(selected);
+            if (selected) selecteds.push(selected);
         } else {
             const hitObjects = children.filter(comp => {
                 return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
             });
-            selecteds.push(...hitObjects);
+            if (hitObjects.length > 0) selecteds.push(...hitObjects);
         }
-        // if (selecteds.length > 0) {
+        // 分组过滤选中
+        const groupIds = Array.from(new Set(selecteds.filter(e => e.instance.configure.group != null).map(e => e.instance.groupId)));
+        if (groupIds.length > 0) {
+            const result = this.editor.canvas.children.filter(e => e.instance.groupId != null && selecteds.indexOf(e) == -1 && groupIds.indexOf(e.instance.groupId) > -1);
+            if (result.length > 0) selecteds.push(...result);
+        }
         if (ctrlKey) {
             command = new SelectionToggleCommand(this.editor, selecteds);
         } else {
             command = new SelectionFillCommand(this.editor, selecteds);
         }
         this.editor.execute(command);
-        // }
     }
 
 

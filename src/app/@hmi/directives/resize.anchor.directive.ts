@@ -124,7 +124,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 }
             }
 
-            if (this.position.indexOf(AnchorPosition.Right) > -1) { 
+            if (this.position.indexOf(AnchorPosition.Right) > -1) {
                 this.rectRealTime.width = this.rectOrigin.width + xLen;
                 const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {

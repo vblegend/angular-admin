@@ -129,7 +129,7 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
     /**
      * 组件所属分组
      */
-    group?: string;
+    group?: number;
     /**
      * 组件层级索引
      */

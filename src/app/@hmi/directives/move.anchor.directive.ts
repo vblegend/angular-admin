@@ -19,7 +19,7 @@ export class MoveAnchorDirective extends BaseDirective {
     private batchNo: number;
     private offsetX: number;
     private offsetY: number;
-
+    private allowMoved: boolean;
 
     constructor(protected injector: Injector) {
         super(injector);
@@ -32,9 +32,11 @@ export class MoveAnchorDirective extends BaseDirective {
     @HostListener('mousedown', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
         if (ev.buttons === 1) {
+            // 选中对象中是否包含了锁定的不可移动的对象
+            this.allowMoved = !this.editor.selection.hasLocking;
             this.buttonDown = true;
             this.batchNo = Math.floor(Math.random() * Number.MAX_VALUE);
-            this.element.style.cursor = 'move';
+            this.element.style.cursor = this.allowMoved ? 'move' : 'no-drop';
             const scale = this.editor.canvas.zoomScale;
             this.editor.adsorb.captureAnchors();
             this.offsetX = (ev.clientX / scale - this.editor.selection.bounds.left);
@@ -43,7 +45,7 @@ export class MoveAnchorDirective extends BaseDirective {
             ev.stopPropagation();
         }
         // hook 右键事件
-        if(ev.buttons === 2){
+        if (ev.buttons === 2) {
             ev.preventDefault();
             ev.stopPropagation();
         }
@@ -52,17 +54,19 @@ export class MoveAnchorDirective extends BaseDirective {
     @HostListener('document:mousemove', ['$event'])
     public onMouseMove(ev: MouseEvent): void {
         if (this.buttonDown) {
-            const scale = this.editor.canvas.zoomScale;
-            const ox = Math.floor(Math.max((ev.clientX / scale - this.offsetX), 0));
-            const oy = Math.floor(Math.max((ev.clientY / scale - this.offsetY), 0));
-            if (Number.isNaN(oy) || Number.isNaN(ox) ||
-                (this.editor.selection.bounds.left === ox && this.editor.selection.bounds.top === oy)) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                return;
+            if (this.allowMoved) {
+                const scale = this.editor.canvas.zoomScale;
+                const ox = Math.floor(Math.max((ev.clientX / scale - this.offsetX), 0));
+                const oy = Math.floor(Math.max((ev.clientY / scale - this.offsetY), 0));
+                if (Number.isNaN(oy) || Number.isNaN(ox) ||
+                    (this.editor.selection.bounds.left === ox && this.editor.selection.bounds.top === oy)) {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    return;
+                }
+                const loc = this.locationFix({ x: ox, y: oy });
+                this.objectsMoveToCommand(loc);
             }
-            const loc = this.locationFix({ x: ox, y: oy });
-            this.objectsMoveToCommand(loc);
             ev.preventDefault();
             ev.stopPropagation();
         }
@@ -161,47 +165,6 @@ export class MoveAnchorDirective extends BaseDirective {
             propertys,
             this.batchNo
         ));
-
-
-
-
-
-
-        // this.editor.canvas.hSnapLines[0] = {
-        //     x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft,
-        //     y: (this.editor.selection.bounds.top + this.editor.selection.bounds.height / 2) * this.editor.canvas.zoomScale
-        // };
-        // this.editor.canvas.hSnapLines[1] = {
-        //     x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft,
-        //     y: this.editor.selection.bounds.top * this.editor.canvas.zoomScale
-        // };
-        // this.editor.canvas.hSnapLines[2] = {
-        //     x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft,
-        //     y: (this.editor.selection.bounds.top + this.editor.selection.bounds.height) * this.editor.canvas.zoomScale
-        // };
-
-
-        // console.log(`left:${l}，center:${c}，left:${r}，`);
-
-
-        // this.editor.canvas.vSnapLines[0] = {
-        //     x: (this.editor.selection.bounds.left + this.editor.selection.bounds.width / 2) * this.editor.canvas.zoomScale,
-        //     y: this.editor.canvas.scrollViewer.nativeElement.scrollTop
-        // };
-        // this.editor.canvas.vSnapLines[1] = {
-        //     x: this.editor.selection.bounds.left * this.editor.canvas.zoomScale,
-        //     y: this.editor.canvas.scrollViewer.nativeElement.scrollTop
-        // };
-        // this.editor.canvas.vSnapLines[2] = {
-        //     x: (this.editor.selection.bounds.left + this.editor.selection.bounds.width) * this.editor.canvas.zoomScale,
-        //     y: this.editor.canvas.scrollViewer.nativeElement.scrollTop
-        // };
-
-
-
-
-
-
     }
 
 

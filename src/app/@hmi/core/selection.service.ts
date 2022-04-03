@@ -151,6 +151,34 @@ export class SelectionService {
 
 
     /**
+     * 当前选中对象是否包含组合的
+     */
+    public get hasGrouping(): boolean {
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i].instance.configure.group != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 当前选中对象是否包含锁定的
+     */
+    public get hasLocking(): boolean {
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i].instance.configure.locked != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+    /**
      * 获取所有选中的范围
      * @returns 
      */

@@ -25,9 +25,12 @@ export class ObjectAttributeCommand extends BasicCommand {
             const target = this.getTarget(object);
             this.oldValues.push(target[this.attributeName]);
         }
-        this.newValues = newValues;
-        if (this.newValues.length == 1 && this.oldValues.length > 1) {
-            this.newValues.fill(newValues[0], 0, this.oldValues.length);
+        if (newValues.length == 1 && this.oldValues.length > 1) {
+            this.newValues = Array(this.oldValues.length).fill(newValues[0]);
+        } else if (this.oldValues.length == newValues.length) {
+            this.newValues = newValues;
+        }else{
+            throw 'error';
         }
     }
 
