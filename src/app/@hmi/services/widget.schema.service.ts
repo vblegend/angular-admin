@@ -1,22 +1,49 @@
 import { ComponentFactoryResolver, Injectable, Injector } from "@angular/core";
 import { WidgetSchema } from "@hmi/configuration/widget.schema";
 
+class WidgetSchemaCategory {
+    public name: string;
+    public children: WidgetSchema[];
+
+    /**
+     *
+     */
+    constructor(category: string) {
+        this.children = [];
+        this.name = category;
+    }
+
+
+
+
+}
+
+
+
 @Injectable({
     providedIn: 'root'
 })
 export class WidgetSchemaService {
 
     private _widgetsMap: Record<string, WidgetSchema>;
-    private _widgetsArray: WidgetSchema[];
     private componentFactoryResolver: ComponentFactoryResolver;
+    private _categorys: WidgetSchemaCategory[];
+    private renderer: HTMLCanvasElement;
+
+
+    public get categorys(): WidgetSchemaCategory[] {
+        return this._categorys.slice();
+    }
+
 
     /**
      *
      */
     constructor(protected injector: Injector) {
         this._widgetsMap = {};
-        this._widgetsArray = [];
+        this._categorys = [];
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
+        this.renderer = document.createElement('canvas');
     }
 
     public load(data: WidgetSchema[]) {
@@ -27,7 +54,12 @@ export class WidgetSchemaService {
                 Object.freeze(widget);
                 if (this._widgetsMap[widget.type] == null) {
                     this._widgetsMap[widget.type] = widget;
-                    this._widgetsArray.push(widget);
+                    let category = this.findWidgetCategory(widget.classify);
+                    if (category == null) {
+                        category = new WidgetSchemaCategory(widget.classify);
+                        this._categorys.push(category);
+                    }
+                    category.children.push(widget);
                 } else {
                     console.warn(`关键字${widget.type}已被注册，跳过当前组件：${widget.component}`);
                 }
@@ -38,6 +70,14 @@ export class WidgetSchemaService {
         }
     }
 
+
+
+    public findWidgetCategory(category: string): WidgetSchemaCategory {
+        return this._categorys.find(e => e.name === category);
+    }
+
+
+
     public getType(type: string): WidgetSchema {
         return this._widgetsMap[type];
     }
@@ -47,12 +87,16 @@ export class WidgetSchemaService {
     }
 
 
-    public get length(): number {
-        return this._widgetsArray.length;
-    }
 
-    public getIndex(index: number): WidgetSchema {
-        return this._widgetsArray[index];
+    public random(): WidgetSchema {
+        if (this._categorys.length == 0) return null;
+        while (true) {
+            const categoryIndex = Math.floor(Math.random() * this._categorys.length);
+            const category = this._categorys[categoryIndex];
+            if (category && category.children.length > 0) {
+                const index = Math.floor(Math.random() * category.children.length);
+                return category.children[index];
+            }
+        }
     }
-
 }

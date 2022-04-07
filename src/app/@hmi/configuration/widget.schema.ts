@@ -1,5 +1,6 @@
 import { Type } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { WidgetCategory } from "./widget.category";
 import { WidgetDefaultConfigure } from "./widget.configure";
 
 
@@ -20,13 +21,17 @@ export interface WidgetSchema {
      * 组件的分类
      * 用于在对象列表中分类显示
      */
-    classify: string;
+    classify: WidgetCategory;
 
+    /**
+     * 预览图片
+     */
+    previewImage?: string;
     /**
      * 组件的名称
      * 默认名称，对象列表中显示
      */
-    name: String;
+    name: string;
 
     /**
      * 组建的实例

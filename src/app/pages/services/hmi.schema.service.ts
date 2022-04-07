@@ -5,15 +5,18 @@ import { ImgWidgetComponent } from "../widgets/img.widget/img.widget.component";
 import { SvgWidgetComponent } from "../widgets/svg.widget/svg.widget.component";
 import { TaskWidgetComponent } from "../tasks/task-widget/task.widget.component";
 import { SubmitButtonWidgetComponent } from "../widgets/submit.button.widget/submit.button.widget.component";
+import { WidgetCategory } from "@hmi/configuration/widget.category";
 
 
 
-
-export const CustomWidgets: WidgetSchema[] = [
+/**
+ * 图片类小部件
+ */
+export const CustomImageWidgets: WidgetSchema[] = [
     {
-        icon: '',
+        icon: 'grace-tupian1',
         name: "图片部件",
-        classify: '',
+        classify: WidgetCategory.Images,
         component: ImgWidgetComponent,
         default: {
             rect: {
@@ -28,9 +31,9 @@ export const CustomWidgets: WidgetSchema[] = [
         }
     },
     {
-        icon: '',
+        icon: 'grace-BIMfuneng',
         name: "SVG部件",
-        classify: '',
+        classify: WidgetCategory.Images,
         component: SvgWidgetComponent,
         default: {
             rect: {
@@ -43,11 +46,18 @@ export const CustomWidgets: WidgetSchema[] = [
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }
-    },
+    }
+];
+
+
+/**
+ * 其他类小部件
+ */
+export const CustomOtherWidgets: WidgetSchema[] = [
     {
-        icon: '',
+        icon: 'grace-sheshiguanli',
         name: "任务部件",
-        classify: '',
+        classify: WidgetCategory.Text,
         component: TaskWidgetComponent,
         default: {
             rect: {
@@ -62,9 +72,9 @@ export const CustomWidgets: WidgetSchema[] = [
         }
     },
     {
-        icon: '',
+        icon: 'grace-zhiwendenglu',
         name: "提交按钮",
-        classify: '',
+        classify: WidgetCategory.Buttons,
         component: SubmitButtonWidgetComponent,
         default: {
             rect: {
@@ -86,13 +96,15 @@ export const CustomWidgets: WidgetSchema[] = [
 ];
 
 
+
 @Injectable({
     providedIn: 'root',
 })
 export class HmiSchemaService extends WidgetSchemaService {
     constructor(protected injector: Injector) {
         super(injector);
-        this.load(CustomWidgets)
+        this.load(CustomImageWidgets);
+        this.load(CustomOtherWidgets);
     }
 }
 

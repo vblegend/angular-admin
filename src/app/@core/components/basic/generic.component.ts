@@ -58,6 +58,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     public readonly viewContainerRef: ViewContainerRef;
     protected readonly eventBusService: EventBusService;
 
+
     /**
      * get current route request parameters \
      * do not cache the variable 
@@ -173,7 +174,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param ctor  
      * @returns 
      */
-    protected generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
+    public generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
         this.ifDisposeThrowException();
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ctor);
         const componentRef = this.viewContainerRef.createComponent<T>(componentFactory, null, this.injector);

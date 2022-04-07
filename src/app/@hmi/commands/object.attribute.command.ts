@@ -1,3 +1,4 @@
+import { ComponentRef } from '@angular/core';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { BasicCommand } from './basic.command';
@@ -12,7 +13,7 @@ export class ObjectAttributeCommand extends BasicCommand {
      * @param path  属性路径 如‘configure/rect’
      * @param newValues
      */
-    public constructor(editor: HmiEditorComponent, objects: BasicWidgetComponent[], path: string, newValues: Object[], batchNo?: number) {
+    public constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[], path: string, newValues: Object[], batchNo?: number) {
         super(editor);
         this.name = '修改属性';
         this.objects = objects;
@@ -34,8 +35,8 @@ export class ObjectAttributeCommand extends BasicCommand {
         }
     }
 
-    public getTarget(object: BasicWidgetComponent): Object {
-        let root = object;
+    public getTarget(object: ComponentRef<BasicWidgetComponent>): Object {
+        let root = object.instance;
         for (let i = 0; i < this.attributePaths.length; i++) {
             const key = this.attributePaths[i];
             root = root[key];

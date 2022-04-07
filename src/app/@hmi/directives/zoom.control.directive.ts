@@ -36,14 +36,12 @@ export class ZoomControlDirective extends BaseDirective {
             x: (pointOnScrollView.x / scale + this.canvas.scrollViewer.nativeElement.scrollLeft / scale),
             y: (pointOnScrollView.y / scale + this.canvas.scrollViewer.nativeElement.scrollTop / scale)
         };
-        console.log(`${pointOnScrollView.x}，${pointOnScrollView.y}            ${pointOnCanvas.x}，${pointOnCanvas.y}`);
+        // console.log(`${pointOnScrollView.x}，${pointOnScrollView.y}            ${pointOnCanvas.x}，${pointOnCanvas.y}`);
 
         const delta = ev['wheelDelta'] / 120;
         this.index = Math.max(0, Math.min(this.index + delta, this.scales.length - 1));
         this.canvas.zoomScale = this.scales[this.index];
         this.element.scrollTo();
-
-
 
         const offsetX = (pointOnCanvas.x / scale);
         const offsetY = (pointOnCanvas.y / scale);

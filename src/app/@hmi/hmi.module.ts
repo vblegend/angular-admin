@@ -15,11 +15,21 @@ import { RouterModule } from '@angular/router';
 import { SelectionAreaComponent } from './components/selection-area/selection.area.component';
 import { RubberbandComponent } from './components/rubber-band/rubber.band.component';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { Component } from '@angular/core';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
 import { HmiViewerComponent } from './hmi.viewer.component';
 import { AngularSplitModule } from 'angular-split';
+import { ObjectListComponent } from './editor/components/object-list/object.list.component';
+import { WidgetListComponent } from './editor/components/widget-list/widget.list.component';
+import { WidgetDragDirective } from './directives/widget.drag.directive';
+import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -41,7 +51,8 @@ const EXPORT_DIRECTIVES: Provider[] = [
   MoveAnchorDirective,
   ZoomControlDirective,
   RubberBandDirective,
-  DisignerHotkeysDirective
+  DisignerHotkeysDirective,
+  WidgetDragDirective
 ];
 
 
@@ -58,7 +69,10 @@ const EXPORT_COMPONENTS = [
   SelectionAreaComponent,
   RubberbandComponent,
   SnapLineComponent,
-  PanControlComponent
+  PanControlComponent,
+  ObjectListComponent,
+  WidgetListComponent,
+  DragPreviewComponent
 ];
 
 /**
@@ -72,7 +86,12 @@ const EXPORT_COMPONENTS = [
     ReactiveFormsModule,
     CoreModule,
     NzDropDownModule,
-    AngularSplitModule
+    AngularSplitModule,
+    NzTabsModule,
+    NzInputModule,
+    NzButtonModule,
+    NzIconModule,
+    NzToolTipModule
   ],
   exports: [
     EXPORT_COMPONENTS,

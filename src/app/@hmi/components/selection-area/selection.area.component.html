@@ -1,5 +1,10 @@
 <div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button"
   (contextmenu)="contextMenu($event, menu)" moveAnchor [host]="this" [editor]="editor"> </div>
+
+
+
+
+  
 <div class="anchor left-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
   position="l"> </div>
 <div class="anchor right-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
@@ -26,9 +31,9 @@
     <li nz-menu-item>移至上一层</li>
     <li nz-menu-item>移至下一层</li>
     <li nz-menu-item *ngIf="!editor.selection.hasGrouping && editor.selection.objects.length > 1"
-      (click)="editor.groupingObjects()">组合</li>
+      (click)="editor.groupObjects()">组合</li>
     <li nz-menu-item *ngIf="editor.selection.hasGrouping  && editor.selection.objects.length > 1"
-      (click)="editor.unGroupingObjects()">拆分</li>
+      (click)="editor.unGroupObjects()">拆分</li>
 
     <li nz-menu-item *ngIf="!editor.selection.hasLocking && editor.selection.objects.length > 0"
       (click)="editor.lockObjects()">锁定</li>

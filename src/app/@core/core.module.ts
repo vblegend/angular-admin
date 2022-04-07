@@ -50,6 +50,7 @@ import { SessionService } from './services/session.service';
 import { CacheService } from './services/cache.service';
 import { EventBusService } from './services/event.bus.service';
 import { AngularSplitModule } from 'angular-split';
+import { CollapseComponent } from './components/ngx-collapse/ngx.collapse.component';
 
 
 const EXPORT_PIPES: Provider[] = [
@@ -73,7 +74,8 @@ const EXPORT_COMPONENTS = [
   NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
-  ErrorComponent
+  ErrorComponent,
+  CollapseComponent
 ];
 
 

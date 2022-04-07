@@ -5,7 +5,7 @@ import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.comp
 
 
 @Component({
-  selector: 'ngx-snap-line',
+  selector: 'hmi-snap-line',
   templateUrl: './snap.line.component.html',
   styleUrls: ['./snap.line.component.less']
 })

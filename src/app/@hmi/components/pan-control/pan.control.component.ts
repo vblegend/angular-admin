@@ -5,7 +5,7 @@ import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.comp
 
 
 @Component({
-  selector: 'ngx-pan-control',
+  selector: 'hmi-pan-control',
   templateUrl: './pan.control.component.html',
   styleUrls: ['./pan.control.component.less']
 })

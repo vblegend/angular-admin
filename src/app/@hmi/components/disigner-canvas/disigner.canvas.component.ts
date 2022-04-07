@@ -10,7 +10,7 @@ import { SelectionAreaComponent } from '../selection-area/selection.area.compone
 import { WidgetEventService } from '@hmi/services/widget.event.service';
 
 @Component({
-  selector: 'ngx-disigner-canvas',
+  selector: 'hmi-disigner-canvas',
   templateUrl: './disigner.canvas.component.html',
   styleUrls: ['./disigner.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,10 +82,13 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
 
 
   private initSelectionAreaComponent() {
-    this.selectionArea = this.generateComponent(SelectionAreaComponent);
+    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<SelectionAreaComponent>(SelectionAreaComponent);
+    this.selectionArea = this.container.createComponent<SelectionAreaComponent>(componentFactory, null, this.injector);
+
+    // this.selectionArea = this.generateComponent(SelectionAreaComponent);
     this.selectionArea.instance.init(this);
-    this.selectionArea.hostView.detach();
-    this.container.insert(this.selectionArea.hostView);
+    // this.selectionArea.hostView.detach();
+    // this.container.insert(this.selectionArea.hostView);
   }
 
 

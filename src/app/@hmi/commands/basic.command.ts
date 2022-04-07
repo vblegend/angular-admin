@@ -1,3 +1,4 @@
+import { ComponentRef } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
 import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
@@ -11,7 +12,7 @@ export class BasicCommand {
     public attributeName: string;
     public attributePaths: string[];
 
-    protected objects: BasicWidgetComponent[];
+    protected objects: ComponentRef<BasicWidgetComponent>[];
     protected oldValues: Object[];
     protected newValues: Object[];
     protected editor: HmiEditorComponent;

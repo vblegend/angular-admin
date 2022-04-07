@@ -12,7 +12,7 @@ import { SplitComponent, SplitAreaDirective, IOutputData } from 'angular-split'
 import { ObjectAttributeCommand } from './commands/object.attribute.command';
 
 @Component({
-  selector: 'ngx-hmi-editor',
+  selector: 'hmi-editor',
   templateUrl: './hmi.editor.component.html',
   styleUrls: ['./hmi.editor.component.less']
 })
@@ -23,7 +23,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 仅吸附该范围内坐标点
    */
   public readonly DEFAULT_ADSORB_THRESHOLD: number = 7;
-  @ViewChildren(SplitAreaDirective) areasEl: QueryList<SplitAreaDirective>
+  // @ViewChildren(SplitAreaDirective) areasEl: QueryList<SplitAreaDirective>
 
   @ViewChild('canvas', { static: true }) canvas: DisignerCanvasComponent;
 
@@ -65,40 +65,22 @@ export class HmiEditorComponent extends GenericComponent {
 
 
   public gutterDblClick(vv: IOutputData) {
-
-    if (vv.gutterNum == 1) {
-      // this.areasEl.first.minSize = 0;
-      if (this.leftAreaVisible) {
-        this.areasEl.first.collapse(0);
-        // this.areasEl.first.visible = false;
-        this.leftAreaVisible = false;
-      } else {
-        this.leftAreaVisible = true;
-        this.areasEl.first.expand();
-        // this.areasEl.first.visible = true;
+    if (vv.sizes == null) {
+      if (vv.gutterNum == 1) this.leftAreaVisible = !this.leftAreaVisible;
+      if (vv.gutterNum == 2) this.rightAreaVisible = !this.rightAreaVisible;
+    } else {
+      if (vv.gutterNum == 2 || (vv.sizes[0].valueOf() === '*' && vv.gutterNum == 1)) {
+        this.rightAreaVisible = !this.rightAreaVisible;
+      } else if (vv.gutterNum == 1) {
+        this.leftAreaVisible = !this.leftAreaVisible;
       }
     }
-
-    if (vv.gutterNum == 2) {
-      // this.areasEl.last.minSize = 0;
-      if (this.rightAreaVisible) {
-        this.areasEl.last.collapse(0, 'left')
-        // this.areasEl.last.visible = false;
-        this.rightAreaVisible = false;
-      } else {
-        this.rightAreaVisible = true;
-        this.areasEl.last.expand();
-        // this.areasEl.last.visible = true;
-      }
-    }
-
   }
 
   protected onInit(): void {
     this.canvas.editor = this;
-    for (let i = 0; i < 10; i++) {
-      const randomWidget = Math.floor(Math.random() * (this.provider.length));
-      const widgetType = this.provider.getIndex(randomWidget);
+    for (let i = 0; i < 20; i++) {
+      const widgetType = this.provider.random();
       const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
@@ -128,6 +110,7 @@ export class HmiEditorComponent extends GenericComponent {
   public execute(cmd: BasicCommand): void {
     this.history.execute(cmd);
     this.selection.update();
+    this.canvas.selectionArea.changeDetectorRef.detectChanges();
   }
 
   /**
@@ -151,20 +134,20 @@ export class HmiEditorComponent extends GenericComponent {
    * 组合选中对象
    * @returns 
    */
-  public groupingObjects(): void {
+  public groupObjects(): void {
     const hasGroupObjects = this.canvas.children.filter(e => e.instance.groupId != null);
     const groupIds = hasGroupObjects.map(e => e.instance.groupId);
     groupIds.push(0);
     const maxGroupId = Math.max(...groupIds);
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/group', [maxGroupId + 1]));
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/group', [maxGroupId + 1]));
   }
 
   /**
    * 拆分选中对象
    * @returns 
    */
-  public unGroupingObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/group', [null]));
+  public unGroupObjects(): void {
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/group', [null]));
   }
 
 
@@ -172,7 +155,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 锁定对象移动
    */
   public lockObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/locked', [true]));
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/locked', [true]));
   }
 
 
@@ -180,7 +163,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 解锁对象
    */
   public unlockObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects.map(e => e.instance), 'configure/locked', [null]));
+    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/locked', [null]));
   }
 
 

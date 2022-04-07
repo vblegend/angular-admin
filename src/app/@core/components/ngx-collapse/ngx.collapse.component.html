@@ -1,0 +1,12 @@
+<div class="collapse-wrapper" [class.collapsed]="!expanded">
+  <div class="collapse-header" (click)="header_click()">
+    <div class="header-text">{{header}}</div>
+    <i nz-icon nzIconfont="grace-arrows_c" *ngIf="!expanded"></i>
+    <i nz-icon nzIconfont="grace-arrows_d" *ngIf="expanded"></i>
+  </div>
+  <div class="collapse-body">
+    <div class="collapse-body-content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

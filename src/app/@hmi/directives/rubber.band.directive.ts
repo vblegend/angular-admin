@@ -30,6 +30,8 @@ export class RubberBandDirective extends BaseDirective {
     private selectionArea: Rectangle;
 
 
+    private widgets : ComponentRef<BasicWidgetComponent>[];
+
     private buttonDown = false;
     private startX: number;
     private startY: number;
@@ -53,14 +55,17 @@ export class RubberBandDirective extends BaseDirective {
     public onMouseDown(ev: MouseEvent): void {
         if (ev.buttons === 1 || ev.buttons == 2) {
             // 过滤滚动条上的点击事件
-            if (ev.clientX - this.element.offsetLeft > this.element.clientWidth ||
-                ev.clientY - this.element.offsetTop > this.element.clientHeight) return;
-            this.buttonDown = true;
             const rect = this.element.getBoundingClientRect();
+            if (ev.clientX - rect.left > this.element.clientWidth ||
+                ev.clientY - rect.top > this.element.clientHeight) return;
+            this.buttonDown = true;
             // 仅限左键更改指针,右键为菜单项 不修改指针样式
             if (ev.buttons == 1) this.element.style.cursor = 'crosshair';
             this.endX = this.startX = (ev.clientX - rect.left);
             this.endY = this.startY = (ev.clientY - rect.top);
+            // 更新画布上所有的小部件
+            this.widgets  = this.canvas.children;
+            this.widgets.sort((a, b) =>  a.instance.zIndex - b.instance.zIndex );
             this.updatePosition();
             this.viewContainerRef.insert(this.rectComponent.hostView);
             ev.preventDefault();
@@ -148,22 +153,24 @@ export class RubberBandDirective extends BaseDirective {
     private updateSelectionArea(isClick: boolean, ctrlKey: boolean) {
         const selecteds: ComponentRef<BasicWidgetComponent>[] = [];
         let command: BasicCommand = null;
-        const children = this.editor.canvas.children;
         if (isClick) {
-            const selected = children.find(comp => {
-                return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
-            });
-            if (selected) selecteds.push(selected);
+            for (let i = this.widgets.length - 1; i >= 0; i--) {
+                if (this.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                    selecteds.push(this.widgets[i]);
+                    break;
+                }
+            }
         } else {
-            const hitObjects = children.filter(comp => {
-                return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
-            });
-            if (hitObjects.length > 0) selecteds.push(...hitObjects);
+            for (let i = this.widgets.length - 1; i >= 0; i--) {
+                if (this.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                    selecteds.push(this.widgets[i]);
+                }
+            }
         }
         // 分组过滤选中
         const groupIds = Array.from(new Set(selecteds.filter(e => e.instance.configure.group != null).map(e => e.instance.groupId)));
         if (groupIds.length > 0) {
-            const result = this.editor.canvas.children.filter(e => e.instance.groupId != null && selecteds.indexOf(e) == -1 && groupIds.indexOf(e.instance.groupId) > -1);
+            const result = this.widgets.filter(e => e.instance.groupId != null && selecteds.indexOf(e) == -1 && groupIds.indexOf(e.instance.groupId) > -1);
             if (result.length > 0) selecteds.push(...result);
         }
         if (ctrlKey) {

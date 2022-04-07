@@ -1,5 +1,6 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { BaseDirective } from "@core/directives/base.directive";
+import { ObjecrRemoveCommand } from "@hmi/commands/object.remove.command";
 import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
 
@@ -19,29 +20,36 @@ export class DisignerHotkeysDirective extends BaseDirective {
 
     @HostListener('document:keydown', ['$event'])
     public onKeyDown(event: KeyboardEvent): void {
-        switch (event.key.toLowerCase()) {
-            case 'c':
+        switch (event.code.toLowerCase()) {
+            case 'delete':
+                if (this.editor.selection.length > 0) {
+                    this.editor.execute(new ObjecrRemoveCommand(this.editor, this.editor.selection.objects));
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                break;
+            case 'keyc':
                 if (event.ctrlKey) {
                     // this.editor.executeCopy();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'v':
+            case 'keyv':
                 if (event.ctrlKey) {
                     // this.editor.executePaste();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'z':
+            case 'keyz':
                 if (event.ctrlKey) {
                     this.editor.undo();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'y':
+            case 'keyy':
                 if (event.ctrlKey) {
                     this.editor.redo();
                     event.preventDefault();

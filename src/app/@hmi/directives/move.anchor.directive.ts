@@ -144,7 +144,6 @@ export class MoveAnchorDirective extends BaseDirective {
      * @param pos 
      */
     private objectsMoveToCommand(pos: Vector2): void {
-        const objects: BasicWidgetComponent[] = [];
         const propertys: Rectangle[] = [];
         const bounds = this.editor.selection.bounds;
         for (const component of this.editor.selection.objects) {
@@ -155,12 +154,11 @@ export class MoveAnchorDirective extends BaseDirective {
                 width: selfRect.width,
                 height: selfRect.height
             };
-            objects.push(component.instance);
             propertys.push(newRect);
         }
 
         this.editor.execute(new ObjectAttributeCommand(this.editor,
-            objects,
+            this.editor.selection.objects,
             'configure/rect',
             propertys,
             this.batchNo

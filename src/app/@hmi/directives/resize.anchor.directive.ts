@@ -189,7 +189,6 @@ export class ReSizeAnchorDirective extends BaseDirective {
      * @returns 
      */
     private executeResizeCommand() {
-        const comps: BasicWidgetComponent[] = [];
         const attrs: Rectangle[] = [];
         for (let i = 0; i < this.editor.selection.objects.length; i++) {
             const rect: Rectangle = {
@@ -198,11 +197,10 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 width: this.rectRealTime.width * this.snapshots[i].width,
                 height: this.rectRealTime.height * this.snapshots[i].height
             };
-            comps.push(this.editor.selection.objects[i].instance);
             attrs.push(rect);
         }
         this.editor.execute(new ObjectAttributeCommand(this.editor,
-            comps,
+            this.editor.selection.objects,
             'configure/rect',
             attrs,
             this.batchNo

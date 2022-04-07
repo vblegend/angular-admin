@@ -8,7 +8,7 @@ import { Rectangle } from '@hmi/core/common';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
 
 @Component({
-  selector: 'ngx-view-canvas',
+  selector: 'hmi-view-canvas',
   templateUrl: './view.canvas.component.html',
   styleUrls: ['./view.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,14 +53,16 @@ export class ViewCanvasComponent extends GenericComponent {
    * @param index 
    * @returns 
    */
-  public add(ref: ComponentRef<BasicWidgetComponent>, index?: number): ComponentRef<BasicWidgetComponent> {
+  public add(ref: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
     const ofIndex = this._children.indexOf(ref);
     if (ofIndex === -1) {
-      this.container.insert(ref.hostView, index);
+      this.container.insert(ref.hostView, ref.instance.zIndex);
       this._children.push(ref);
+      ref.hostView.reattach();
       if (ref.instance.zIndex == null) {
         ref.instance.configure.zIndex = this._children.length;
       }
+      ref.changeDetectorRef.detectChanges();
     }
     return ref;
   }
@@ -76,6 +78,7 @@ export class ViewCanvasComponent extends GenericComponent {
       this._children.splice(ofIndex, 1);
       const v = this.container.indexOf(ref.hostView);
       this.container.detach(v);
+      ref.hostView.detach();
     }
     return ref;
   }
@@ -113,6 +116,8 @@ export class ViewCanvasComponent extends GenericComponent {
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
       componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
       if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
+        const v = this.container.indexOf(componentRef.hostView);
+        this.container.detach(v);
         componentRef.hostView.detach();
         componentRef.instance.$initialization(configure);
       }
@@ -120,6 +125,16 @@ export class ViewCanvasComponent extends GenericComponent {
     if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
     return componentRef;
   }
+
+
+  public findWidgetByName(name: string): ComponentRef<BasicWidgetComponent> {
+    return this.children.find(e => e.instance.configure && e.instance.configure.name === name);
+  }
+
+  public findWidgetById(id: string): ComponentRef<BasicWidgetComponent> {
+    return this.children.find(e => e.instance.configure && e.instance.configure.id === id);
+  }
+
 
   protected onInit(): void {
 

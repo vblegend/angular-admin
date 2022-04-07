@@ -10,7 +10,7 @@ import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
 
 @Component({
-  selector: 'ngx-selection-area',
+  selector: 'hmi-selection-area',
   templateUrl: './selection.area.component.html',
   styleUrls: ['./selection.area.component.less']
 })

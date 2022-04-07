@@ -5,7 +5,7 @@ import { ViewCanvasComponent } from './components/view-canvas/view.canvas.compon
 import { WidgetConfigure } from './configuration/widget.configure';
 
 @Component({
-  selector: 'ngx-hmi-viewer',
+  selector: 'hmi-viewer',
   templateUrl: './hmi.viewer.component.html',
   styleUrls: ['./hmi.viewer.component.less']
 })
@@ -26,8 +26,7 @@ export class HmiViewerComponent extends GenericComponent {
 
   protected onInit(): void {
     for (let i = 0; i < 10; i++) {
-      const randomWidget = Math.floor(Math.random() * (this.provider.length));
-      const widgetType = this.provider.getIndex(randomWidget);
+      const widgetType = this.provider.random();
       const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
