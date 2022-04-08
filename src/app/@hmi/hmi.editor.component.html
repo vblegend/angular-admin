@@ -36,16 +36,9 @@
         </as-split-area>
         <!-- 右侧属性栏   -->
         <as-split-area [size]="200" [minSize]="190"  [visible]="rightAreaVisible" [order]="3">
-            <nz-tabset class="objects-tabset">
-                <nz-tab nzTitle="属性">
+            <hmi-property-grid  [editor]="this">
 
-                    
-                </nz-tab>
-                <nz-tab nzTitle="样式">
-                </nz-tab>
-                <nz-tab nzTitle="其他">
-                </nz-tab>
-            </nz-tabset>
+            </hmi-property-grid>
         </as-split-area>
     </as-split>
 </div>

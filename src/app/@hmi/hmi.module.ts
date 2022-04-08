@@ -21,6 +21,8 @@ import { NzTabsModule } from 'ng-zorro-antd/tabs';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
@@ -30,6 +32,8 @@ import { ObjectListComponent } from './editor/components/object-list/object.list
 import { WidgetListComponent } from './editor/components/widget-list/widget.list.component';
 import { WidgetDragDirective } from './directives/widget.drag.directive';
 import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
+import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
+import { WidgetEventComponent } from './editor/properties/widget.event/widget.event.component';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -72,7 +76,12 @@ const EXPORT_COMPONENTS = [
   PanControlComponent,
   ObjectListComponent,
   WidgetListComponent,
-  DragPreviewComponent
+  DragPreviewComponent,
+  PropertyGridComponent,
+
+
+  // propertys
+  WidgetEventComponent
 ];
 
 /**
@@ -91,7 +100,8 @@ const EXPORT_COMPONENTS = [
     NzInputModule,
     NzButtonModule,
     NzIconModule,
-    NzToolTipModule
+    NzToolTipModule,
+    NzSelectModule
   ],
   exports: [
     EXPORT_COMPONENTS,

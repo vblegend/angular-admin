@@ -4,7 +4,6 @@ import { Location } from '@angular/common';
 import { Observable, Subject, Subscription } from "rxjs";
 import { Exception } from "@core/common/exception";
 import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
-import { TemplateService } from "@core/services/template.service";
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentType, Overlay } from '@angular/cdk/overlay';
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -49,7 +48,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected readonly location: Location;
     protected readonly zone: NgZone;
     protected readonly router: Router
-    protected readonly templateService: TemplateService;
     protected readonly changeDetector: ChangeDetectorRef;
     protected readonly modalService: NzModalService;
     protected readonly drawerService: NzDrawerService;
@@ -79,7 +77,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.zone = injector.get(NgZone);
         this.router = injector.get(Router);
         this.overlay = injector.get(Overlay);
-        this.templateService = injector.get(TemplateService);
         this.changeDetector = injector.get(ChangeDetectorRef);
         this.modalService = injector.get(NzModalService);
         this.drawerService = injector.get(NzDrawerService);

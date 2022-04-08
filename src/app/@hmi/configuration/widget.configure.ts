@@ -6,37 +6,56 @@ import { Rectangle } from "@hmi/core/common";
  */
 export interface WidgetDataConfigure {
 
+
+
+
 }
 
 /**
  * 2D组态元素样式
  */
 export interface WidgetStyle {
+
     /**
-     * 组件默认背景色
+     * 组件背景色
      */
     background?: string;
 
     /**
-     * 组件默认不透明度
+     * 前景颜色
+     */
+    color?: string;
+
+    /**
+     * 组件不透明度
      */
     opacity?: number;
 
     /**
-     * 边框
+     * 边框 solid 1px #ffffff
      */
     border?: string;
 
     /**
-     * 是否忽略鼠标事件 默认为 false
-     * 为true时鼠标事件穿透
+     * 边框圆角
      */
-    ignoreEvent?: boolean;
+    radius?: number;
 
     /**
-     * 部件的默认字体大小
+     * 字体
+     */
+    fontFamily?: string;
+
+    /**
+     * 字体大小
      */
     fontSize?: number;
+
+    /**
+     * 文本对齐方式
+     */
+    textAlign?: string;
+
 }
 
 export interface Position {
@@ -74,11 +93,15 @@ export interface WidgetDefaultConfigure {
     /**
      * 
      * 样式属性，主动更新。
+     * 所有为空的属性请置为null，不要使用undefined\
+     * 因为设置为undefined会触发组件的数据兼容从而恢复为默认值
      */
     style: WidgetStyle;
 
     /**
-     * 组态绑定数据，被动更新 需事件通知
+     * 组态绑定数据，被动更新 需事件通知\
+     * 所有为空的属性请置为null，不要使用undefined\
+     * 因为设置为undefined会触发组件的数据兼容从而恢复为默认值
      */
     data: WidgetDataConfigure;
 
@@ -126,6 +149,11 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 被锁定的
      */
     locked?: boolean;
+    /**
+     * 是否忽略鼠标事件 默认为 false
+     * 为true时鼠标事件穿透
+     */
+    ignoreEvent?: boolean;
     /**
      * 组件所属分组
      */

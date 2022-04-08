@@ -1,0 +1,44 @@
+<nz-tabset class="objects-tabset">
+    <nz-tab nzTitle="属性">
+        <ngx-collapse header="基础属性" expanded="true">
+            <div class="prioerty-continer">
+                <div class="prioerty-row" 单对象 多对象 显示条件>
+                    <div class="prioerty-name" nz-tooltip nzTooltipTitle="单击事件" nzTooltipPlacement="left">
+                        <span>单击事件</span>
+                    </div>
+                    <div class="prioerty-value">
+                        <input type="text">
+                    </div>
+                </div>
+
+                <div class="prioerty-row">
+                    <div class="prioerty-name">
+                        <span>双击事件</span>
+                    </div>
+                    <div class="prioerty-value">
+                        <input type="text">
+                    </div>
+                </div>
+            </div>
+        </ngx-collapse>
+        <ngx-collapse header="高级属性">
+
+        </ngx-collapse>
+
+    </nz-tab>
+    <nz-tab nzTitle="样式">
+        <ngx-collapse header="基础样式">
+
+        </ngx-collapse>
+        <ngx-collapse header="高级样式">
+
+        </ngx-collapse>
+    </nz-tab>
+    <nz-tab nzTitle="事件">
+        <!-- <ngx-collapse header="事件列表" expanded="true"> -->
+            <hmi-widget-event [editor]="editor">
+
+            </hmi-widget-event>
+        <!-- </ngx-collapse> -->
+    </nz-tab>
+</nz-tabset>

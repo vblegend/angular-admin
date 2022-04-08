@@ -30,7 +30,7 @@ export class ObjectUtil {
         if (typeof target === 'object') {
             if (target instanceof Array) {
                 for (let i = 0; i < target.length; i++) {
-                    if (typeof target[i] === 'object')  this.freeze(target[i]);
+                    if (typeof target[i] === 'object') this.freeze(target[i]);
                 }
             } else {
                 var keys = Object.keys(target);
@@ -94,4 +94,35 @@ export class ObjectUtil {
         }
         return result
     }
+
+
+    /**
+     * upgrade object\
+     * 当_target字段为undefined时，赋值为_default中的字段\
+     * @param _target 
+     * @param _default 
+     */
+    public static upgrade<T>(_target: T, _default: T): void {
+        if (typeof _target === 'undefined') return;
+        if (typeof _target === 'string') return;
+        if (typeof _target === 'number') return;
+        if (typeof _target === 'boolean') return;
+        if (typeof _target === 'function') return;
+        if (_target === null) return;
+        for (const key in _default) {
+            if (_default[key] === undefined) continue;
+            if (_target[key] === undefined) {
+                _target[key] = ObjectUtil.clone(_default[key]);
+            } else {
+                this.upgrade(_target[key], _default[key]);
+            }
+        }
+    }
+
+
+
+
+
+
+
 }

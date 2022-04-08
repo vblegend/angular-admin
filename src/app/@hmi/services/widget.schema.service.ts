@@ -28,7 +28,6 @@ export class WidgetSchemaService {
     private _widgetsMap: Record<string, WidgetSchema>;
     private componentFactoryResolver: ComponentFactoryResolver;
     private _categorys: WidgetSchemaCategory[];
-    private renderer: HTMLCanvasElement;
 
 
     public get categorys(): WidgetSchemaCategory[] {
@@ -43,10 +42,9 @@ export class WidgetSchemaService {
         this._widgetsMap = {};
         this._categorys = [];
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
-        this.renderer = document.createElement('canvas');
     }
 
-    public load(data: WidgetSchema[]) {
+    public register(data: WidgetSchema[]) {
         for (const widget of data) {
             const factory = this.componentFactoryResolver.resolveComponentFactory(widget.component);
             if (factory) {
@@ -70,23 +68,13 @@ export class WidgetSchemaService {
         }
     }
 
-
-
     public findWidgetCategory(category: string): WidgetSchemaCategory {
         return this._categorys.find(e => e.name === category);
     }
 
-
-
     public getType(type: string): WidgetSchema {
         return this._widgetsMap[type];
     }
-
-    public register(type: string, component: WidgetSchema) {
-        this._widgetsMap[type] = component;
-    }
-
-
 
     public random(): WidgetSchema {
         if (this._categorys.length == 0) return null;

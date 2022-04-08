@@ -26,7 +26,7 @@ export class SvgWidgetComponent extends BasicWidgetComponent {
 
   }
 
-  @WidgetInterface('刷新数据', '刷新部件数据')
+  @WidgetInterface('更新图片', '刷新部件数据')
   public updateSvg(@Params('stationId') stationId?: number,
     @Params('roomId') roomId?: number,
     @Params('deviceId') deviceId?: number) {

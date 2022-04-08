@@ -14,8 +14,8 @@ export interface Vector2 {
  * 表示一块矩形区域。
  */
 export interface Rectangle {
-    left: number;
-    top: number;
+    left?: number;
+    top?: number;
     width: number;
     height: number;
 }

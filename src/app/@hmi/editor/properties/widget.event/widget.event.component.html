@@ -1,0 +1,51 @@
+<div class="event-frame" *ngIf="objects.length == 1">
+
+
+    <ngx-collapse class="event-collapse" *ngFor="let key of eventKeys();" [header]="eventName(key)" expanded="true">
+
+        <div class="event-continer">
+            <div class="event-item" *ngFor="let event of configure.events[key]; let i = index;">
+                <div class="prioerty-row">
+                    <div class="prioerty-name">
+                        <span>目标对象</span>
+                    </div>
+                    <div class="prioerty-value">
+                        <nz-select class="select" [(ngModel)]="event.target" nzPlaceHolder="广播"  [nzOptions]="targetList">
+ 
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="prioerty-row">
+                    <div class="prioerty-name">
+                        <span>目标接口</span>
+                    </div>
+                    <div class="prioerty-value">
+                        <nz-select class="select" [(ngModel)]="event.method"  [nzOptions]="getTargetInterfaces(null)">
+                            <!--  [(ngModel)]="target"  -->
+                        </nz-select>
+                    </div>
+                </div>
+    
+                <div class="prioerty-row">
+                    <div class="prioerty-name">
+                        <span>默认参数</span>
+                    </div>
+                    <div class="prioerty-value">
+        
+                        
+    
+                    </div>
+                </div>
+    
+    
+    
+            </div>
+        </div>
+    </ngx-collapse>
+
+    <div class="event-bar">
+        <nz-select class="event-list" [(ngModel)]="selectedEvent" [nzOptions]="eventList">
+        </nz-select>
+        <button class="event-button" [disabled]="getAddButtonState()" (click)="addEvent(selectedEvent)" nz-button nzType="primary">添加事件</button>
+    </div>
+</div>

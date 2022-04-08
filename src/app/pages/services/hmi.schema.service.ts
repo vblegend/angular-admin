@@ -6,6 +6,7 @@ import { SvgWidgetComponent } from "../widgets/svg.widget/svg.widget.component";
 import { TaskWidgetComponent } from "../tasks/task-widget/task.widget.component";
 import { SubmitButtonWidgetComponent } from "../widgets/submit.button.widget/submit.button.widget.component";
 import { WidgetCategory } from "@hmi/configuration/widget.category";
+import { BasicPropertyComponent } from "@hmi/editor/components/basic-property/basic.property.component";
 
 
 
@@ -19,15 +20,15 @@ export const CustomImageWidgets: WidgetSchema[] = [
         classify: WidgetCategory.Images,
         component: ImgWidgetComponent,
         default: {
-            rect: {
-                left: 0,
-                top: 0,
-                width: 64,
-                height: 128
-            },
+            rect: { width: 64, height: 128 },
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
+        },
+        properties: {
+            // 'device': BasicPropertyComponent,
+            // 'standard': BasicPropertyComponent,
+            // 'datetime': BasicPropertyComponent,
         }
     },
     {
@@ -36,12 +37,7 @@ export const CustomImageWidgets: WidgetSchema[] = [
         classify: WidgetCategory.Images,
         component: SvgWidgetComponent,
         default: {
-            rect: {
-                left: 0,
-                top: 0,
-                width: 250,
-                height: 100
-            },
+            rect: { width: 250, height: 100 },
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
@@ -60,12 +56,7 @@ export const CustomOtherWidgets: WidgetSchema[] = [
         classify: WidgetCategory.Text,
         component: TaskWidgetComponent,
         default: {
-            rect: {
-                left: 0,
-                top: 0,
-                width: 300,
-                height: 150
-            },
+            rect: { width: 300, height: 150 },
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
@@ -77,12 +68,7 @@ export const CustomOtherWidgets: WidgetSchema[] = [
         classify: WidgetCategory.Buttons,
         component: SubmitButtonWidgetComponent,
         default: {
-            rect: {
-                left: 0,
-                top: 0,
-                width: 86,
-                height: 32
-            },
+            rect: { width: 86, height: 32 },
             style: {
             },
             data: {},
@@ -103,8 +89,8 @@ export const CustomOtherWidgets: WidgetSchema[] = [
 export class HmiSchemaService extends WidgetSchemaService {
     constructor(protected injector: Injector) {
         super(injector);
-        this.load(CustomImageWidgets);
-        this.load(CustomOtherWidgets);
+        this.register(CustomImageWidgets);
+        this.register(CustomOtherWidgets);
     }
 }
 

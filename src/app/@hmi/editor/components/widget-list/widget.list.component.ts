@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
+import { ObjectUtil } from '@core/util/object.util';
 import { BasicCommand } from '@hmi/commands/basic.command';
 import { ObjecrAddCommand } from '@hmi/commands/object.add.command';
 import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
@@ -86,9 +87,9 @@ export class WidgetListComponent extends GenericComponent {
       name: this.generateName(schema.name),
       type: schema.type,
       zIndex: this.editor.canvas.children.length,
-      style: JSON.parse(JSON.stringify(schema.default.style)),
-      data: JSON.parse(JSON.stringify(schema.default.data)),
-      rect: JSON.parse(JSON.stringify(schema.default.rect)),
+      style: ObjectUtil.clone(schema.default.style),
+      data: ObjectUtil.clone(schema.default.data),
+      rect: ObjectUtil.clone(schema.default.rect),
       events: {}
     };
 

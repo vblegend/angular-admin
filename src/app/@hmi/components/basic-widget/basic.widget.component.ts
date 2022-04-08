@@ -2,9 +2,10 @@ import { Component, HostBinding, Injector } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { EventBusService } from '@core/services/event.bus.service';
-import { WidgetConfigure, WidgetDataConfigure } from '../../configuration/widget.configure';
+import { WidgetConfigure, WidgetDataConfigure, WidgetDefaultConfigure } from '../../configuration/widget.configure';
 import { WidgetMetaObject } from '@hmi/core/widget.meta.data';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { ObjectUtil } from '@core/util/object.util';
 
 @Component({
   selector: 'app-basic-comp',
@@ -14,7 +15,7 @@ import { WidgetEventService } from '@hmi/services/widget.event.service';
 /**
  * 小部件基类，实现了小部件的一些基础服务
  */
-export class BasicWidgetComponent extends GenericComponent {
+export abstract class BasicWidgetComponent extends GenericComponent {
   private _config: WidgetConfigure;
 
   /**
@@ -208,9 +209,13 @@ export class BasicWidgetComponent extends GenericComponent {
    * 保证变量data不可修改
    * @param _data 
    */
-  public $initialization(_config: WidgetConfigure): void {
+  public $initialization(_config: WidgetConfigure, _default: WidgetDefaultConfigure): void {
     if (this._config) throw 'This method is only available on first run ';
-    this._config = _config;
+    this._config = ObjectUtil.clone(_config);
+    // 升级数据属性
+    ObjectUtil.upgrade(this._config.data, _default.data);
+    // 升级样式属性
+    ObjectUtil.upgrade(this._config.style, _default.style);
   }
 
 

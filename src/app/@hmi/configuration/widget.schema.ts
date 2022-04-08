@@ -1,5 +1,6 @@
 import { Type } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { BasicPropertyComponent } from "@hmi/editor/components/basic-property/basic.property.component";
 import { WidgetCategory } from "./widget.category";
 import { WidgetDefaultConfigure } from "./widget.configure";
 
@@ -42,5 +43,13 @@ export interface WidgetSchema {
      * 组件的默认配置
      */
     default: WidgetDefaultConfigure;
+
+
+    /**
+     * 定义data结构中所用到的属性选择器\
+     * 属性对话框中所显示的属性设置由此定义\
+     * 未定义的属性将无法设置属性
+     */
+    properties?: Record<string, Type<BasicPropertyComponent>>;
 }
 

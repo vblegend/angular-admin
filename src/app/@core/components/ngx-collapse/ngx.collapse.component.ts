@@ -1,5 +1,4 @@
 import { Component, Injector, Input, OnInit, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { TemplateService } from '@core/services/template.service';
 import { GenericComponent } from '../basic/generic.component';
 
 @Component({

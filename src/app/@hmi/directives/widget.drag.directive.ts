@@ -1,5 +1,6 @@
 import { ComponentRef, Directive, HostListener, Input } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
+import { ObjectUtil } from '@core/util/object.util';
 import { ObjecrAddCommand } from '@hmi/commands/object.add.command';
 import { DragPreviewComponent } from '@hmi/components/drag-preview/drag.preview.component';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
@@ -97,8 +98,8 @@ export class WidgetDragDirective extends BaseDirective {
             name: this.generateName(schema.name),
             type: schema.type,
             zIndex: this.editor.canvas.children.length,
-            style: JSON.parse(JSON.stringify(schema.default.style)),
-            data: JSON.parse(JSON.stringify(schema.default.data)),
+            style: ObjectUtil.clone(schema.default.style),
+            data: ObjectUtil.clone(schema.default.data),
             rect: {
                 left: Math.floor(x - schema.default.rect.width / 2),
                 top: Math.floor(y - schema.default.rect.height / 2),

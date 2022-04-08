@@ -119,7 +119,8 @@ export class ViewCanvasComponent extends GenericComponent {
         const v = this.container.indexOf(componentRef.hostView);
         this.container.detach(v);
         componentRef.hostView.detach();
-        componentRef.instance.$initialization(configure);
+        const widgetSchema = this.provider.getType(configure.type);
+        componentRef.instance.$initialization(configure, widgetSchema.default);
       }
     }
     if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
@@ -128,10 +129,12 @@ export class ViewCanvasComponent extends GenericComponent {
 
 
   public findWidgetByName(name: string): ComponentRef<BasicWidgetComponent> {
+    if (name == null) return null;
     return this.children.find(e => e.instance.configure && e.instance.configure.name === name);
   }
 
   public findWidgetById(id: string): ComponentRef<BasicWidgetComponent> {
+    if (id == null) return null;
     return this.children.find(e => e.instance.configure && e.instance.configure.id === id);
   }
 
@@ -167,6 +170,19 @@ export class ViewCanvasComponent extends GenericComponent {
     }
     return result;
   }
+
+
+
+
+
+  /**
+   * 获取所有小部件的配置项
+   * @returns 
+   */
+  public getConfigure(): WidgetConfigure[] {
+    return this.children.map(e => e.instance.configure);
+  }
+
 
 
 

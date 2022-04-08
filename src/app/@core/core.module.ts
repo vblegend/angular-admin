@@ -41,7 +41,6 @@ import { GlobalErrorHandler } from './private/GlobalErrorHandler';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { TemplateService } from './services/template.service';
 import { UnSelectedDirective } from './directives/unselected.directive';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -93,7 +92,6 @@ const PROVIDERS: Provider[] = [
   ThemeService,
   BootstrapService,
   MenuService,
-  TemplateService,
   NzDrawerService,
   CacheService,
   EventBusService
@@ -163,7 +161,7 @@ export class CoreModule {
         {
           provide: ErrorHandler,
           useClass: GlobalErrorHandler,
-          deps: [NzNotificationService, TemplateService]
+          deps: [NzNotificationService]
         },
         {
           provide: EVENT_MANAGER_PLUGINS,
