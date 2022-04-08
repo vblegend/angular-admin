@@ -1,6 +1,7 @@
 import { Component, ComponentRef, Injector } from '@angular/core';
 import { SelectItem } from '@core/common/types';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
+import { EventMeta } from '@hmi/core/widget.meta.data';
 import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/basic.property.component';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 
@@ -65,6 +66,14 @@ export class WidgetEventComponent extends BasicPropertyComponent {
   }
 
 
+
+  public trackByKey(index: number, value: string) {
+    return value;
+  }
+
+  public trackByEvent(index: number, value: EventMeta) {
+    return value.event;
+  }
 
   public get eventList(): SelectItem[] {
     const result = [];
