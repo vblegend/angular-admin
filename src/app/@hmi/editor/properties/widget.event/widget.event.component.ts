@@ -1,4 +1,5 @@
-import { Component, ComponentRef, Injector } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, DoCheck, Injector, OnChanges, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { SelectItem } from '@core/common/types';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { EventMeta } from '@hmi/core/widget.meta.data';
@@ -13,12 +14,13 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 @Component({
   selector: 'hmi-widget-event',
   templateUrl: './widget.event.component.html',
-  styleUrls: ['./widget.event.component.less']
+  styleUrls: ['./widget.event.component.less'],
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * 橡皮筋套选工具
  */
-export class WidgetEventComponent extends BasicPropertyComponent {
+export class WidgetEventComponent extends BasicPropertyComponent implements OnChanges {
   /**
    *
    */
@@ -64,6 +66,20 @@ export class WidgetEventComponent extends BasicPropertyComponent {
 
     return result;
   }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    // this.parentComponent.title = 'angular next!';
+    console.log(changes);
+  }
+  // public ngDoCheck(): void {
+  //   // this.parentComponent.title = 'angular next!';
+  //   console.log('child-----DoCheck');
+  // }
+
+  public dataChanged(ev){
+    console.log(ev);
+  }
+
 
 
 
@@ -116,7 +132,6 @@ export class WidgetEventComponent extends BasicPropertyComponent {
       this.configure.events[event] = [{ method: null, target: null, params: {} }];
     }
   }
-
 
 
 }

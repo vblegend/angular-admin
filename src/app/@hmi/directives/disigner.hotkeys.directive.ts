@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from "@angular/core";
 import { BaseDirective } from "@core/directives/base.directive";
-import { ObjecrRemoveCommand } from "@hmi/commands/object.remove.command";
+import { WidgetRemoveCommand } from "@hmi/commands/widget.remove.command";
 import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 
 
@@ -23,7 +23,7 @@ export class DisignerHotkeysDirective extends BaseDirective {
         switch (event.code.toLowerCase()) {
             case 'delete':
                 if (this.editor.selection.length > 0) {
-                    this.editor.execute(new ObjecrRemoveCommand(this.editor, this.editor.selection.objects));
+                    this.editor.execute(new WidgetRemoveCommand(this.editor, this.editor.selection.objects));
                     event.preventDefault();
                     event.stopPropagation();
                 }

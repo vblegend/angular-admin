@@ -4,7 +4,7 @@ import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 import { BasicCommand } from "./basic.command";
 
 
-export class ObjecrRemoveCommand extends BasicCommand {
+export class WidgetRemoveCommand extends BasicCommand {
     protected selecteds: boolean[];
 
 

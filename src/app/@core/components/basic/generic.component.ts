@@ -430,9 +430,10 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      */
     protected callMethodNoCatch(method: Action, ...params: AnyObject[]) {
         try {
-            if (method) method(...params);
+            if (method) method.apply(this, params);
         }
-        catch {
+        catch (e) {
+            console.warn(e);
         }
     }
 
@@ -442,7 +443,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      */
     @Sealed()
     public ngAfterViewInit(): void {
-        this.callMethodNoCatch(this.onAfterViewInit, 'onAfterViewInit');
+        this.callMethodNoCatch(this.onAfterViewInit);
     }
 
     /**

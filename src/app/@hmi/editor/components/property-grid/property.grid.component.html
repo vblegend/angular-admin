@@ -7,7 +7,7 @@
                         <span>单击事件</span>
                     </div>
                     <div class="prioerty-value">
-                        <input type="text">
+                        <input nz-input type="text">
                     </div>
                 </div>
 
@@ -16,29 +16,38 @@
                         <span>双击事件</span>
                     </div>
                     <div class="prioerty-value">
-                        <input type="text">
+                        <input nz-input type="text">
                     </div>
                 </div>
+
+
+                <hmi-text-property [editor]="editor" attributePath="name">
+
+                </hmi-text-property>
+
+
             </div>
         </ngx-collapse>
-        <ngx-collapse header="高级属性">
+        <ngx-collapse header="高级属性" expanded="true">
+            <some-selector>
 
+            </some-selector>
         </ngx-collapse>
 
     </nz-tab>
     <nz-tab nzTitle="样式">
-        <ngx-collapse header="基础样式">
+        <ngx-collapse header="基础样式" expanded="true">
 
         </ngx-collapse>
-        <ngx-collapse header="高级样式">
+        <ngx-collapse header="高级样式" expanded="true">
 
         </ngx-collapse>
     </nz-tab>
-    <nz-tab nzTitle="事件">
+    <nz-tab nzTitle="事件" expanded="true">
         <!-- <ngx-collapse header="事件列表" expanded="true"> -->
-            <hmi-widget-event [editor]="editor">
+        <!-- <hmi-widget-event [editor]="editor">
 
-            </hmi-widget-event>
+            </hmi-widget-event> -->
         <!-- </ngx-collapse> -->
     </nz-tab>
 </nz-tabset>

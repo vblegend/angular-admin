@@ -3,7 +3,7 @@ import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { BasicCommand } from './basic.command';
 
-export class ObjectAttributeCommand extends BasicCommand {
+export class WidgetAttributeCommand extends BasicCommand {
 
     /**
      * 设置对象属性值
@@ -73,7 +73,7 @@ export class ObjectAttributeCommand extends BasicCommand {
         }
     }
 
-    public update(command: ObjectAttributeCommand) {
+    public update(command: WidgetAttributeCommand) {
         this.newValues = command.newValues;
     }
 

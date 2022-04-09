@@ -1,7 +1,7 @@
 import { ComponentRef, Directive, HostListener, Input } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { ObjectUtil } from '@core/util/object.util';
-import { ObjecrAddCommand } from '@hmi/commands/object.add.command';
+import { WidgetAddCommand } from '@hmi/commands/widget.add.command';
 import { DragPreviewComponent } from '@hmi/components/drag-preview/drag.preview.component';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
 import { WidgetSchema } from '@hmi/configuration/widget.schema';
@@ -110,7 +110,7 @@ export class WidgetDragDirective extends BaseDirective {
         };
         const compRef = this.editor.canvas.parseComponent(configure);
         if (compRef) {
-            this.editor.execute(new ObjecrAddCommand(this.editor, [compRef], true));
+            this.editor.execute(new WidgetAddCommand(this.editor, [compRef], true));
         }
         ev.preventDefault();
         ev.stopPropagation();

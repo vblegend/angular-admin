@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
+import { WidgetAttributeCommand } from '@hmi/commands/widget.attribute.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Position } from '@hmi/configuration/widget.configure';
@@ -157,7 +157,7 @@ export class MoveAnchorDirective extends BaseDirective {
             propertys.push(newRect);
         }
 
-        this.editor.execute(new ObjectAttributeCommand(this.editor,
+        this.editor.execute(new WidgetAttributeCommand(this.editor,
             this.editor.selection.objects,
             'configure/rect',
             propertys,

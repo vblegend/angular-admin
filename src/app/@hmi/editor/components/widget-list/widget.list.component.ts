@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, In
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { ObjectUtil } from '@core/util/object.util';
 import { BasicCommand } from '@hmi/commands/basic.command';
-import { ObjecrAddCommand } from '@hmi/commands/object.add.command';
+import { WidgetAddCommand } from '@hmi/commands/widget.add.command';
 import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
 import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
@@ -98,7 +98,7 @@ export class WidgetListComponent extends GenericComponent {
     configure.rect.top = Math.floor(this.canvas.scrollViewer.nativeElement.scrollTop / this.canvas.zoomScale);
     const compRef = this.canvas.parseComponent(configure);
     if (compRef) {
-      this.editor.execute(new ObjecrAddCommand(this.editor, [compRef], true));
+      this.editor.execute(new WidgetAddCommand(this.editor, [compRef], true));
     }
   }
 

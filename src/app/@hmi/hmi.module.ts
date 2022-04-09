@@ -34,6 +34,9 @@ import { WidgetDragDirective } from './directives/widget.drag.directive';
 import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
 import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
 import { WidgetEventComponent } from './editor/properties/widget.event/widget.event.component';
+import { SomeComponent } from './editor/properties/rect.properties/some.component';
+import { TextPropertyComponent } from './editor/properties/text.property/text.property.component';
+// import { DataPropertyDirective } from './editor/directives/prop.directive';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -56,7 +59,8 @@ const EXPORT_DIRECTIVES: Provider[] = [
   ZoomControlDirective,
   RubberBandDirective,
   DisignerHotkeysDirective,
-  WidgetDragDirective
+  WidgetDragDirective,
+  // DataPropertyDirective
 ];
 
 
@@ -78,10 +82,15 @@ const EXPORT_COMPONENTS = [
   WidgetListComponent,
   DragPreviewComponent,
   PropertyGridComponent,
+  SomeComponent,
 
 
   // propertys
-  WidgetEventComponent
+  WidgetEventComponent,
+
+
+
+  TextPropertyComponent
 ];
 
 /**

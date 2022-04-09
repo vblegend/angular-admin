@@ -11,7 +11,7 @@
                         <span>目标对象</span>
                     </div>
                     <div class="prioerty-value">
-                        <nz-select class="select" [(ngModel)]="event.target" nzPlaceHolder="广播"
+                        <nz-select class="select" [(ngModel)]="event.target" (ngModelChange)="dataChanged($event)" nzPlaceHolder="广播"
                             [nzOptions]="targetList">
                         </nz-select>
                     </div>
@@ -21,7 +21,7 @@
                         <span>目标接口</span>
                     </div>
                     <div class="prioerty-value">
-                        <nz-select class="select" [(ngModel)]="event.method" [nzOptions]="getTargetInterfaces(null)">
+                        <nz-select class="select" (ngModelChange)="dataChanged($event)" [(ngModel)]="event.method" [nzOptions]="getTargetInterfaces(null)">
                             <!--  [(ngModel)]="target"  -->
                         </nz-select>
                     </div>

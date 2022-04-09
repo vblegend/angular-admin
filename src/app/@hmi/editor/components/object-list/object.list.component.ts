@@ -28,10 +28,6 @@ export class ObjectListComponent extends GenericComponent {
     super(injector);
   }
 
-  protected onInit(): void {
-    console.log(this.canvas);
-    console.log(this.editor);
-  }
 
 
   public getItemStyle(widget: ComponentRef<BasicWidgetComponent>): Record<string, any> {

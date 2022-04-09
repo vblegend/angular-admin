@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { ObjectAttributeCommand } from '@hmi/commands/object.attribute.command';
+import { WidgetAttributeCommand } from '@hmi/commands/widget.attribute.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Position } from '@hmi/configuration/widget.configure';
@@ -199,7 +199,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
             };
             attrs.push(rect);
         }
-        this.editor.execute(new ObjectAttributeCommand(this.editor,
+        this.editor.execute(new WidgetAttributeCommand(this.editor,
             this.editor.selection.objects,
             'configure/rect',
             attrs,

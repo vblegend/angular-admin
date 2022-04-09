@@ -4,7 +4,7 @@ import { HmiEditorComponent } from "@hmi/hmi.editor.component";
 import { BasicCommand } from "./basic.command";
 
 
-export class ObjecrAddCommand extends BasicCommand {
+export class WidgetAddCommand extends BasicCommand {
     protected unselObjects: ComponentRef<BasicWidgetComponent>[];
 
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[], private selected: boolean) {

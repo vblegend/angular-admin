@@ -9,7 +9,7 @@ import { WidgetSchemaService } from './services/widget.schema.service';
 import { WidgetConfigure } from './configuration/widget.configure';
 import { AnyObject } from '@core/common/types';
 import { SplitComponent, SplitAreaDirective, IOutputData } from 'angular-split'
-import { ObjectAttributeCommand } from './commands/object.attribute.command';
+import { WidgetAttributeCommand } from './commands/widget.attribute.command';
 
 @Component({
   selector: 'hmi-editor',
@@ -139,7 +139,7 @@ export class HmiEditorComponent extends GenericComponent {
     const groupIds = hasGroupObjects.map(e => e.instance.groupId);
     groupIds.push(0);
     const maxGroupId = Math.max(...groupIds);
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/group', [maxGroupId + 1]));
+    this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/group', [maxGroupId + 1]));
   }
 
   /**
@@ -147,7 +147,7 @@ export class HmiEditorComponent extends GenericComponent {
    * @returns 
    */
   public unGroupObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/group', [null]));
+    this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/group', [null]));
   }
 
 
@@ -155,7 +155,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 锁定对象移动
    */
   public lockObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/locked', [true]));
+    this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/locked', [true]));
   }
 
 
@@ -163,7 +163,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 解锁对象
    */
   public unlockObjects(): void {
-    this.execute(new ObjectAttributeCommand(this, this.selection.objects, 'configure/locked', [null]));
+    this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/locked', [null]));
   }
 
 
