@@ -1,5 +1,6 @@
 import { Component, ComponentRef, HostBinding, Injector, Input, QueryList, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { Sealed } from '@core/decorators/sealed';
 import { GenericAttributeCommand } from '@hmi/commands/generic.attribute.command';
@@ -53,8 +54,8 @@ export abstract class BasicPropertyComponent extends GenericComponent {
     }
   }
 
-  private modelChanges(value: any): void {
-    this.saveAndUpdate();
+  private modelChanges(value: AnyObject): void {
+    this.saveAndUpdate(value);
   }
 
 
@@ -62,11 +63,13 @@ export abstract class BasicPropertyComponent extends GenericComponent {
   /**
    * 保存变更并更新
    */
-  public saveAndUpdate(): void {
+  public saveAndUpdate(value: AnyObject): void {
     console.log('数据被变更:' + this.attributePath);
 
     const obejcts = this.editor.selection.objects.map(e => e.instance.configure);
-    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [],);
+    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [value],);
+    this.editor.execute(command);
+    this.detectChanges();
   }
 
   public get objects(): ComponentRef<BasicWidgetComponent>[] {
@@ -84,8 +87,12 @@ export abstract class BasicPropertyComponent extends GenericComponent {
     return <any>{};
   }
 
-
-
+  public get defaultProperty(): AnyObject {
+    return this.configure[this.attributePath];
+  }
+  public set defaultProperty(value: AnyObject) {
+    console.log('log=>');
+  }
 
 }
 

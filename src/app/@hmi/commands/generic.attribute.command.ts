@@ -31,7 +31,7 @@ export class GenericAttributeCommand extends BasicCommand {
         } else if (this.oldValues.length == newValues.length) {
             this.newValues = newValues;
         } else {
-            throw 'error';
+            throw '错误：命令参数不一致。';
         }
     }
 
