@@ -48,10 +48,12 @@ export class WidgetSchemaService {
         for (const widget of data) {
             const factory = this.componentFactoryResolver.resolveComponentFactory(widget.component);
             if (factory) {
-                widget.type = factory.selector;
-                Object.freeze(widget);
-                if (this._widgetsMap[widget.type] == null) {
-                    this._widgetsMap[widget.type] = widget;
+                const type = factory.selector;
+                console.log(type);
+                if (this._widgetsMap[type] == null) {
+                    if (widget.type == null) widget.type = type;
+                    this._widgetsMap[type] = widget;
+                    Object.freeze(widget);
                     let category = this.findWidgetCategory(widget.classify);
                     if (category == null) {
                         category = new WidgetSchemaCategory(widget.classify);
@@ -59,7 +61,7 @@ export class WidgetSchemaService {
                     }
                     category.children.push(widget);
                 } else {
-                    console.warn(`关键字${widget.type}已被注册，跳过当前组件：${widget.component}`);
+                    console.warn(`关键字${type}已被注册，跳过当前组件：${widget.component}`);
                 }
             }
             else {

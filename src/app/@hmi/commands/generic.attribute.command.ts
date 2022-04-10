@@ -1,8 +1,6 @@
-import { ComponentRef } from '@angular/core';
+import { AnyObject } from '@core/common/types';
 import { ObjectUtil } from '@core/util/object.util';
-import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
-import { AnyObject } from 'chart.js/types/basic';
 import { BasicCommand } from './basic.command';
 
 export class GenericAttributeCommand extends BasicCommand {
