@@ -69,8 +69,7 @@ export const CustomOtherWidgets: WidgetSchema[] = [
         component: SubmitButtonWidgetComponent,
         default: {
             rect: { width: 86, height: 32 },
-            style: {
-            },
+            style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         }

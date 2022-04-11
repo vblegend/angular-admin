@@ -22,11 +22,9 @@ export class DisignerHotkeysDirective extends BaseDirective {
     public onKeyDown(event: KeyboardEvent): void {
         switch (event.code.toLowerCase()) {
             case 'delete':
-                if (this.editor.selection.length > 0) {
-                    this.editor.execute(new WidgetRemoveCommand(this.editor, this.editor.selection.objects));
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
+                this.editor.executeDeleteCommand();
+                event.preventDefault();
+                event.stopPropagation();
                 break;
             case 'keyc':
                 if (event.ctrlKey) {
@@ -44,14 +42,14 @@ export class DisignerHotkeysDirective extends BaseDirective {
                 break;
             case 'keyz':
                 if (event.ctrlKey) {
-                    this.editor.undo();
+                    this.editor.executeUndo();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
             case 'keyy':
                 if (event.ctrlKey) {
-                    this.editor.redo();
+                    this.editor.executeRedo();
                     event.preventDefault();
                     event.stopPropagation();
                 }

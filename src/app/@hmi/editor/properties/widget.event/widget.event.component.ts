@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ComponentRef, DoCheck, Injector, OnChanges, SimpleChanges } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { SelectItem } from '@core/common/types';
+import { nzSelectItem } from '@core/common/types';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { EventMeta } from '@hmi/core/widget.meta.data';
 import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/basic.property.component';
@@ -31,8 +31,8 @@ export class WidgetEventComponent extends BasicPropertyComponent implements OnCh
 
   public selectedEvent: string;
 
-  public get targetList(): SelectItem[] {
-    const result: SelectItem[] = [{ label: "广播", value: null }];
+  public get targetList(): nzSelectItem[] {
+    const result: nzSelectItem[] = [{ label: "广播", value: null }];
     for (const widget of this.editor.canvas.children) {
       result.push({
         label: widget.instance.configure.name,
@@ -42,7 +42,7 @@ export class WidgetEventComponent extends BasicPropertyComponent implements OnCh
     return result;
   }
 
-  public getTargetInterfaces(id: string): SelectItem[] {
+  public getTargetInterfaces(id: string): nzSelectItem[] {
     const result = [];
     const widgets: ComponentRef<BasicWidgetComponent>[] = [];
     if (id) {
@@ -91,7 +91,7 @@ export class WidgetEventComponent extends BasicPropertyComponent implements OnCh
     return value.event;
   }
 
-  public get eventList(): SelectItem[] {
+  public get eventList(): nzSelectItem[] {
     const result = [];
     for (const key in this.object.instance.metaData.events) {
       result.push({

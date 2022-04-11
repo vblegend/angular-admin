@@ -2,14 +2,14 @@ import { Component, Injector, Input } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/basic.property.component';
 @Component({
-  selector: 'hmi-number-property',
-  templateUrl: './number.property.component.html',
-  styleUrls: ['./number.property.component.less'],
+  selector: 'hmi-slider-property',
+  templateUrl: './slider.property.component.html',
+  styleUrls: ['./slider.property.component.less'],
 })
 /**
  * 字符串属性绑定
  */
-export class NumberPropertyComponent extends BasicPropertyComponent {
+export class SliderPropertyComponent extends BasicPropertyComponent {
 
   @Input()
   public readonly max: number = Number.MAX_VALUE;
@@ -23,13 +23,14 @@ export class NumberPropertyComponent extends BasicPropertyComponent {
   @Input()
   public readonly unit: string = '';
 
-  @Input()
-  public readonly precision: number = 2;
+
   /**
    * 当绑定的数据为null时 使用当前值
    */
   @Input()
   public readonly nullValue: number = 0;
+
+
 
   public formatter: (value: number) => string;
   /**

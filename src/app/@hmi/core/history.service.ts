@@ -47,9 +47,10 @@ export class HistoryService {
         let newCommand = true;
         if (this.undos.length > 0) {
             const lastCmd = this.undos[this.undos.length - 1];
-            const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();
-            if (lastCmd.type === cmd.type && lastCmd.attributeName === cmd.attributeName) {
-                if (lastCmd.batchNo === cmd.batchNo) {
+            if (this.commandsIsRepeated(cmd, lastCmd)) {
+                const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();
+                // 两次操作间隔小于300毫秒  或属于同一批次的 合并
+                if (lastCmd.batchNo === cmd.batchNo || timeDifference < 300) {
                     lastCmd.update(cmd);
                     cmd = lastCmd;
                     newCommand = false;
@@ -64,6 +65,26 @@ export class HistoryService {
         cmd.executeTime = new Date();
         this.redos = [];
     }
+
+    /**
+     * 判断两个命令是否为重复的。
+     * @param cmd1 
+     * @param cmd2 
+     * @returns 
+     */
+    public commandsIsRepeated(cmd1: BasicCommand, cmd2: BasicCommand): boolean {
+        if (cmd1.type != cmd2.type) return false;
+        if (cmd1.attributeName != cmd2.attributeName) return false;
+        if (cmd1.objects.length != cmd2.objects.length) return false;
+        for (let i = 0; i < cmd1.objects.length; i++) {
+            if (cmd1.objects[i] != cmd2.objects[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 
     /**
      * 执行撤销操作  并返回撤销的指令

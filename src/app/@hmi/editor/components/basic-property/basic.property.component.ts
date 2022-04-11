@@ -1,4 +1,4 @@
-import { Component, ComponentRef, HostBinding, Injector, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, ComponentRef, Host, HostBinding, Injector, Input, QueryList, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
@@ -7,6 +7,7 @@ import { GenericAttributeCommand } from '@hmi/commands/generic.attribute.command
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { PropertyElementComponent } from '../property-element/property.element.component';
 @Component({
   selector: 'app-basic-comp',
   template: '<div></div>',
@@ -18,8 +19,8 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
  */
 export abstract class BasicPropertyComponent extends GenericComponent {
   @Input()
-  public readonly editor: HmiEditorComponent;
-
+  public editor: HmiEditorComponent;
+  protected batchNo?: number;
   private _attributePath: string = 'data';
   private _attrPaths: string[] = [];
 
@@ -43,12 +44,25 @@ export abstract class BasicPropertyComponent extends GenericComponent {
   }
 
 
+  @Host()
+  private parent: PropertyElementComponent;
+
   /**
-   *
+   *,, @Host() private parent: PropertyElementComponent
    */
   constructor(protected injector: Injector) {
     super(injector);
+    this.parent = this.injector.get(PropertyElementComponent);
+    this.batchNo = null;
   }
+
+
+  protected onInit(): void {
+    this.editor = this.parent.editor;
+    this.attributePath = this.parent.attributePath;
+  }
+
+
 
   /**
    * 
@@ -94,7 +108,7 @@ export abstract class BasicPropertyComponent extends GenericComponent {
     const fixValue = this.dataModify_fix(value);
     console.log(`数据被变更 ${this.attributePath} => ${value}`);
     const obejcts = this.editor.selection.objects.map(e => e.instance.configure);
-    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [fixValue],);
+    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [fixValue], this.batchNo);
     this.editor.execute(command);
     this.detectChanges();
   }
@@ -111,16 +125,27 @@ export abstract class BasicPropertyComponent extends GenericComponent {
     if (this.editor.selection.objects && this.editor.selection.objects.length > 0) {
       return this.editor.selection.objects[0].instance.configure;
     }
-    return <any>{};
+    return null;
   }
+
+
+
+
 
   public get defaultProperty(): AnyObject {
     let value = this.configure;
+    if (value == null) return value;
     for (let i = 0; i < this._attrPaths.length; i++) {
       value = value[this._attrPaths[i]];
     }
     return this.dataBinding_fix(value);
   }
+
+
+
+
+
+
 
 
 }

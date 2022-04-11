@@ -4,7 +4,7 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { BasicCommand } from './basic.command';
 
 export class GenericAttributeCommand extends BasicCommand {
-    protected _objects: AnyObject[];
+
     /**
      * 设置对象属性值
      * 如果_objects 对象含有 setXXX() 方法时会调用该方法更新
@@ -16,7 +16,7 @@ export class GenericAttributeCommand extends BasicCommand {
     public constructor(editor: HmiEditorComponent, _objects: AnyObject[], path: string, newValues: Object[], batchNo?: number) {
         super(editor);
         this.name = '修改属性';
-        this._objects = _objects;
+        this.objects = _objects;
         this.oldValues = [];
         const paths = path.split('/');
         this.attributeName = paths.pop();
@@ -48,16 +48,16 @@ export class GenericAttributeCommand extends BasicCommand {
 
 
     public execute(): void {
-        for (let i = 0; i < this._objects.length; i++) {
-            const rootObject = this._objects[i];
+        for (let i = 0; i < this.objects.length; i++) {
+            const rootObject = this.objects[i];
             const object = this.getTarget(rootObject);
             object[this.attributeName] = this.newValues[i];
         }
     }
 
     public undo(): void {
-        for (let i = 0; i < this._objects.length; i++) {
-            const rootObject = this._objects[i];
+        for (let i = 0; i < this.objects.length; i++) {
+            const rootObject = this.objects[i];
             const object = this.getTarget(rootObject);
             object[this.attributeName] = this.oldValues[i];
         }

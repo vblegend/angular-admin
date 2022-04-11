@@ -9,16 +9,15 @@ import { BasicCommand } from "./basic.command";
  */
 export class SelectionFillCommand extends BasicCommand {
     protected oldObjects: ComponentRef<BasicWidgetComponent>[];
-    protected newObjects: ComponentRef<BasicWidgetComponent>[];
-
+    public objects: ComponentRef<BasicWidgetComponent>[];
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {
         super(editor);
         this.oldObjects = editor.selection.objects;
-        this.newObjects = objects;
+        this.objects = objects;
     }
 
     public execute(): void {
-        this.editor.selection.fill(this.newObjects);
+        this.editor.selection.fill(this.objects);
     }
 
     public undo(): void {

@@ -4,7 +4,7 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { BasicCommand } from './basic.command';
 
 export class WidgetAttributeCommand extends BasicCommand {
-
+   public objects: ComponentRef<BasicWidgetComponent>[];
     /**
      * 设置对象属性值
      * 如果objects 对象含有 setXXX() 方法时会调用该方法更新

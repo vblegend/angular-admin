@@ -6,7 +6,7 @@ import { BasicCommand } from "./basic.command";
 
 export class WidgetRemoveCommand extends BasicCommand {
     protected selecteds: boolean[];
-
+    public objects: ComponentRef<BasicWidgetComponent>[];
 
 
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {

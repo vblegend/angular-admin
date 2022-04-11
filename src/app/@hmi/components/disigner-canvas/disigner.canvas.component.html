@@ -10,7 +10,7 @@
   <!-- scrollViewer 平移组件 用于鼠标控制区域平移 -->
   <hmi-pan-control *ngIf="spaceKeyDown" pan-control [canvas]="this">
     <!-- 编辑器工作区域平移面板 -->
-  </hmi-pan-control> 
+  </hmi-pan-control>
 
   <!-- 拖动对齐线 -->
   <hmi-snap-line *ngIf="hSnapLines[0]" [canvas]="this" [position]="hSnapLines[0]" class="snap-line-h">
@@ -26,13 +26,13 @@
   <hmi-snap-line *ngIf="vSnapLines[2]" [canvas]="this" [position]="vSnapLines[2]" class="snap-line-v">
   </hmi-snap-line>
 </div>
- 
+
 
 
 <nz-dropdown-menu #menu="nzDropdownMenu">
   <ul nz-menu>
-    <li nz-menu-item>撤销</li>
-    <li nz-menu-item>重做</li>
+    <li nz-menu-item (click)="editor.executeUndo()">撤销</li>
+    <li nz-menu-item (click)="editor.executeRedo()">重做</li>
     <hr>
     <!-- <li nz-menu-item>剪切</li> -->
     <li nz-menu-item>刷新</li>

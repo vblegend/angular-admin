@@ -130,6 +130,15 @@ export abstract class BasicWidgetComponent extends GenericComponent {
   }
 
   /**
+   * get component background
+   * binding host position
+   */
+   @HostBinding('style.color')
+   public get color(): string {
+     return this.configure.style.color;
+   }
+ 
+  /**
    * get component opacity
    * binding host position
    */

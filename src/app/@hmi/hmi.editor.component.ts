@@ -10,6 +10,7 @@ import { WidgetConfigure } from './configuration/widget.configure';
 import { AnyObject } from '@core/common/types';
 import { SplitComponent, SplitAreaDirective, IOutputData } from 'angular-split'
 import { WidgetAttributeCommand } from './commands/widget.attribute.command';
+import { WidgetRemoveCommand } from './commands/widget.remove.command';
 
 @Component({
   selector: 'hmi-editor',
@@ -91,7 +92,7 @@ export class HmiEditorComponent extends GenericComponent {
           width: widgetType.default.rect.width,
           height: widgetType.default.rect.height
         },
-        locked: false,
+        // locked: false,
         // group: Math.floor(Math.random() * 3),
         style: widgetType.default.style,
         data: widgetType.default.data,
@@ -117,7 +118,7 @@ export class HmiEditorComponent extends GenericComponent {
   /**
    * 撤销操作
    */
-  public undo(): void {
+  public executeUndo(): void {
     this.history.undo();
     this.selection.update();
   }
@@ -125,7 +126,7 @@ export class HmiEditorComponent extends GenericComponent {
   /**
    * 重做操作
    */
-  public redo(): void {
+  public executeRedo(): void {
     this.history.redo();
     this.selection.update();
   }
@@ -135,7 +136,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 组合选中对象
    * @returns 
    */
-  public groupObjects(): void {
+  public executeGroupCommand(): void {
     const hasGroupObjects = this.canvas.children.filter(e => e.instance.groupId != null);
     const groupIds = hasGroupObjects.map(e => e.instance.groupId);
     groupIds.push(0);
@@ -147,7 +148,7 @@ export class HmiEditorComponent extends GenericComponent {
    * 拆分选中对象
    * @returns 
    */
-  public unGroupObjects(): void {
+  public executeUnGroupCommand(): void {
     this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/group', [null]));
   }
 
@@ -155,7 +156,7 @@ export class HmiEditorComponent extends GenericComponent {
   /**
    * 锁定对象移动
    */
-  public lockObjects(): void {
+  public executeLockCommand(): void {
     this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/locked', [true]));
   }
 
@@ -163,11 +164,15 @@ export class HmiEditorComponent extends GenericComponent {
   /**
    * 解锁对象
    */
-  public unlockObjects(): void {
+  public executeUnlockCommand(): void {
     this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/locked', [null]));
   }
 
-
+  public executeDeleteCommand(): void {
+    if (this.selection.length > 0) {
+      this.execute(new WidgetRemoveCommand(this, this.selection.objects));
+    }
+  }
 
 
 

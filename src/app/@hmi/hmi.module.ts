@@ -23,7 +23,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
-
+import { NzSliderModule } from 'ng-zorro-antd/slider';
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
@@ -39,6 +39,8 @@ import { TextPropertyComponent } from './editor/properties/text.property/text.pr
 import { NumberPropertyComponent } from './editor/properties/number.property/number.property.component';
 import { SelectPropertyComponent } from './editor/properties/select.property/select.property.component';
 import { PropertyElementComponent } from './editor/components/property-element/property.element.component';
+import { ColorPropertyComponent } from './editor/properties/color.property/color.property.component';
+import { SliderPropertyComponent } from './editor/properties/slider.property/slider.property.component';
 // import { DataPropertyDirective } from './editor/directives/prop.directive';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
@@ -94,7 +96,9 @@ const EXPORT_COMPONENTS = [
 
   TextPropertyComponent,
   NumberPropertyComponent,
-  SelectPropertyComponent
+  SelectPropertyComponent,
+  ColorPropertyComponent,
+  SliderPropertyComponent
 ];
 
 /**
@@ -115,7 +119,8 @@ const EXPORT_COMPONENTS = [
     NzIconModule,
     NzToolTipModule,
     NzSelectModule,
-    NzInputNumberModule
+    NzInputNumberModule,
+    NzSliderModule
   ],
   exports: [
     EXPORT_COMPONENTS,

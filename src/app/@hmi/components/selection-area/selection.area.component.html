@@ -27,19 +27,19 @@
     <li nz-menu-item>移至上一层</li>
     <li nz-menu-item>移至下一层</li>
     <li nz-menu-item *ngIf="!editor.selection.hasGrouping && editor.selection.objects.length > 1"
-      (click)="editor.groupObjects()">组合</li>
+      (click)="editor.executeGroupCommand()">组合</li>
     <li nz-menu-item *ngIf="editor.selection.hasGrouping  && editor.selection.objects.length > 1"
-      (click)="editor.unGroupObjects()">拆分</li>
+      (click)="editor.executeUnGroupCommand()">拆分</li>
 
     <li nz-menu-item *ngIf="!editor.selection.hasLocking && editor.selection.objects.length > 0"
-      (click)="editor.lockObjects()">锁定</li>
+      (click)="editor.executeLockCommand()">锁定</li>
     <li nz-menu-item *ngIf="editor.selection.hasLocking && editor.selection.objects.length > 0"
-      (click)="editor.unlockObjects()">解除锁定</li>
+      (click)="editor.executeUnlockCommand()">解除锁定</li>
     <li nz-menu-item>拷贝样式</li>
     <hr>
     <li nz-menu-item>剪切(ctrl + x)</li>
     <li nz-menu-item>拷贝(ctrl + c)</li>
     <li nz-menu-item>粘贴(ctrl + v)</li>
-    <li nz-menu-item>删除(delete)</li>
+    <li nz-menu-item (click)="editor.executeDeleteCommand()">删除(delete)</li>
   </ul>
 </nz-dropdown-menu>

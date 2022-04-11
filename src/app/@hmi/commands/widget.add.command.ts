@@ -6,6 +6,7 @@ import { BasicCommand } from "./basic.command";
 
 export class WidgetAddCommand extends BasicCommand {
     protected unselObjects: ComponentRef<BasicWidgetComponent>[];
+    public objects: ComponentRef<BasicWidgetComponent>[];
 
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[], private selected: boolean) {
         super(editor);
