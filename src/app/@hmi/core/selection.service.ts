@@ -167,7 +167,7 @@ export class SelectionService {
      */
     public get hasLocking(): boolean {
         for (let i = 0; i < this.components.length; i++) {
-            if (this.components[i].instance.configure.locked != null) {
+            if (this.components[i].instance.configure.locked == true) {
                 return true;
             }
         }

@@ -78,8 +78,12 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   protected onInit(): void {
     super.onInit();
     this.initSelectionAreaComponent();
+    this.scrollViewer.nativeElement.setAttribute('tabindex', '0');
   }
 
+  public focus():void{
+    this.scrollViewer.nativeElement.focus();
+  }
 
   private initSelectionAreaComponent() {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory<SelectionAreaComponent>(SelectionAreaComponent);

@@ -1,10 +1,6 @@
 <div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button"
   (contextmenu)="contextMenu($event, menu)" moveAnchor [host]="this" [editor]="editor"> </div>
 
-
-
-
-  
 <div class="anchor left-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
   position="l"> </div>
 <div class="anchor right-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"

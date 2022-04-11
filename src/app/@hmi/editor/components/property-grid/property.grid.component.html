@@ -2,36 +2,25 @@
     <nz-tab nzTitle="属性">
         <ngx-collapse header="基础属性" expanded="true">
             <div class="prioerty-continer">
-                <div class="prioerty-row" 单对象 多对象 显示条件>
-                    <div class="prioerty-name" nz-tooltip nzTooltipTitle="单击事件" nzTooltipPlacement="left">
-                        <span>单击事件</span>
-                    </div>
-                    <div class="prioerty-value">
-                        <input nz-input type="text">
-                    </div>
-                </div>
+                <hmi-property-element title="层级索引" tooltip="决定小部件之间的层级，谁压住了谁">
+                    <hmi-number-property [editor]="editor" max="10000" min="0" precision="0" unit="单位"
+                        attributePath="zIndex">
+                    </hmi-number-property>
+                </hmi-property-element>
 
-                <div class="prioerty-row">
-                    <div class="prioerty-name">
-                        <span>双击事件</span>
-                    </div>
-                    <div class="prioerty-value">
-                        <input nz-input type="text">
-                    </div>
-                </div>
+                <hmi-property-element title="部件名称" tooltip="小部件的名称，用于识别">
+                    <hmi-text-property [editor]="editor" attributePath="name">
+                    </hmi-text-property>
+                </hmi-property-element>
 
-
-                <hmi-text-property [editor]="editor" attributePath="name">
-
-                </hmi-text-property>
-
+                <hmi-property-element title="锁定移动" tooltip="被锁定的小部件将不能移动它">
+                    <hmi-select-property [editor]="editor" attributePath="locked" [options]="{'是':true,'否':false}">
+                    </hmi-select-property>
+                </hmi-property-element>
 
             </div>
         </ngx-collapse>
         <ngx-collapse header="高级属性" expanded="true">
-            <some-selector>
-
-            </some-selector>
         </ngx-collapse>
 
     </nz-tab>

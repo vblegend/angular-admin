@@ -22,6 +22,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
@@ -34,8 +35,10 @@ import { WidgetDragDirective } from './directives/widget.drag.directive';
 import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
 import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
 import { WidgetEventComponent } from './editor/properties/widget.event/widget.event.component';
-import { SomeComponent } from './editor/properties/rect.properties/some.component';
 import { TextPropertyComponent } from './editor/properties/text.property/text.property.component';
+import { NumberPropertyComponent } from './editor/properties/number.property/number.property.component';
+import { SelectPropertyComponent } from './editor/properties/select.property/select.property.component';
+import { PropertyElementComponent } from './editor/components/property-element/property.element.component';
 // import { DataPropertyDirective } from './editor/directives/prop.directive';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
@@ -82,15 +85,16 @@ const EXPORT_COMPONENTS = [
   WidgetListComponent,
   DragPreviewComponent,
   PropertyGridComponent,
-  SomeComponent,
-
+  PropertyElementComponent,
 
   // propertys
   WidgetEventComponent,
 
 
 
-  TextPropertyComponent
+  TextPropertyComponent,
+  NumberPropertyComponent,
+  SelectPropertyComponent
 ];
 
 /**
@@ -110,7 +114,8 @@ const EXPORT_COMPONENTS = [
     NzButtonModule,
     NzIconModule,
     NzToolTipModule,
-    NzSelectModule
+    NzSelectModule,
+    NzInputNumberModule
   ],
   exports: [
     EXPORT_COMPONENTS,

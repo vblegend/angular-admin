@@ -105,13 +105,12 @@ export class SelectionAreaComponent extends GenericComponent {
 
 
   protected onInit(): void {
+
   }
 
 
   protected onDestroy(): void {
   }
-
-
 
   /**
    * host的绑定数据，不可修改。

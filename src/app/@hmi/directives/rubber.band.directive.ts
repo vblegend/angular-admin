@@ -96,7 +96,7 @@ export class RubberBandDirective extends BaseDirective {
         if (this.buttonDown) {
             this.element.style.cursor = '';
             this.buttonDown = false;
-            const rect = this.element.getBoundingClientRect();
+            // const rect = this.element.getBoundingClientRect();
             this.element.style.cursor = '';
             this.updateSelectionArea(this.startX === this.endX && this.startY === this.endY, ev.ctrlKey);
             const index = this.viewContainerRef.indexOf(this.rectComponent.hostView);
@@ -106,7 +106,9 @@ export class RubberBandDirective extends BaseDirective {
             this.rectComponent.instance.updateRectangle({ left: 0, top: 0, width: 0, height: 0 });
             ev.preventDefault();
             ev.stopPropagation();
+            this.canvas.focus();
         }
+        
     }
 
 
