@@ -9,7 +9,7 @@
     "declaration": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "es2015",
+    "target": "es2018",
     // 允许编译javascript文件
     "allowJs": true,
     // 报告.js文件中的错误。与allowJs一起使用
