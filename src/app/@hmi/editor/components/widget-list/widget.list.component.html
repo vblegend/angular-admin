@@ -1,5 +1,5 @@
 <div class="flex">
-    <ngx-collapse [header]="category.name" expanded="true" *ngFor="let category of provider.categorys;">
+    <ngx-collapse [header]="category.name" [expanded]="true" *ngFor="let category of provider.categorys;">
         <div class="widget-continer">
             <div class="widget-item" nz-tooltip [nzTooltipTitle]="widget.name" draggable="true"
                 (dragstart)="widget_dragstart(widget,$event)" 

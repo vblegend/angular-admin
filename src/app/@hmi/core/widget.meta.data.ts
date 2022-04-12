@@ -16,28 +16,28 @@ export interface MethodMeta {
     /**
      * 接口方法名称
      */
-    methodName: string;
+    methodName: string | undefined;
     /**
      * 接口名
      */
-    name: string;
+    name: string | undefined;
     /**
      * 是否为严格模式（默认为false）
      * 严格模式下需所有参数都被匹配才会触发
      */
-    strict: boolean;
+    strict: boolean | undefined;
     /**
      * 接口说明
      */
-    description: string;
+    description: string | undefined;
     /**
      * 接口方法对象
      */
-    descriptor: PropertyDescriptor;
+    descriptor: PropertyDescriptor | undefined;
     /**
     * 接口参数
     */
-    args: MethodArgument[];
+    args: MethodArgument[] | undefined;
 
 }
 
@@ -65,7 +65,7 @@ export class WidgetMetaObject {
     private _events: Record<string, EventMeta>;
     public get interface(): Record<string, MethodMeta> { return this._interface; }
     public get events(): Record<string, EventMeta> { return this._events }
-    public prototype: AnyObject;
+    public prototype!: AnyObject;
     /**
      *
      */

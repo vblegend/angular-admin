@@ -28,19 +28,18 @@ export enum AnchorPosition {
  * 用于在编辑态调整组件大小
  */
 export class ReSizeAnchorDirective extends BaseDirective {
-    @Input() host: SelectionAreaComponent;
-    @Input() position: AnchorPosition;
-    @Input() editor: HmiEditorComponent;
-    private buttonDown: boolean;
-
+    @Input() host!: SelectionAreaComponent;
+    @Input() position!: AnchorPosition;
+    @Input() editor!: HmiEditorComponent;
+    private buttonDown!: boolean;
     /* 鼠标按下时的坐标 */
-    private pressedPoint: Vector2;
+    private pressedPoint!: Vector2;
     /** 被选中对象的实时的矩形位置 */
-    private rectRealTime: Rectangle;
+    private rectRealTime!: Rectangle;
     /** 当鼠标按下任意锚点时采集的当前选中区域矩形位置 */
-    private rectOrigin: Rectangle;
+    private rectOrigin!: Rectangle;
     /* resize 命令的批次号  每次鼠标按下后为一个新的批次 */
-    private batchNo: number;
+    private batchNo!: number;
     /* 选中对象的位置大小在选框内的位置快照 */
     private snapshots: Rectangle[] = [];
 
@@ -50,10 +49,10 @@ export class ReSizeAnchorDirective extends BaseDirective {
     private captureComponents(): void {
         this.snapshots = [];
         for (const comp of this.editor.selection.objects) {
-            const left = (comp.instance.left - this.editor.selection.bounds.left) / this.editor.selection.bounds.width;
-            const top = (comp.instance.top - this.editor.selection.bounds.top) / this.editor.selection.bounds.height;
-            const width = comp.instance.width / this.editor.selection.bounds.width;
-            const height = comp.instance.height / this.editor.selection.bounds.height;
+            const left = (comp.instance.left! - this.editor.selection.bounds.left!) / this.editor.selection.bounds.width;
+            const top = (comp.instance.top! - this.editor.selection.bounds.top!) / this.editor.selection.bounds.height;
+            const width = comp.instance.width! / this.editor.selection.bounds.width;
+            const height = comp.instance.height! / this.editor.selection.bounds.height;
             this.snapshots.push({ left, top, width, height });
         }
     }
@@ -102,43 +101,43 @@ export class ReSizeAnchorDirective extends BaseDirective {
             if (Number.isNaN(yLen)) return;
 
             if (this.position.indexOf(AnchorPosition.Left) > -1) {
-                xLen = -Math.min(this.rectRealTime.left, -xLen);
-                this.rectRealTime.left = this.rectOrigin.left + xLen;
+                xLen = -Math.min(this.rectRealTime.left!, -xLen);
+                this.rectRealTime.left = this.rectOrigin.left! + xLen;
                 this.rectRealTime.width = this.rectOrigin.width - xLen;
                 const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.left = result;
-                    this.rectRealTime.width = this.rectOrigin.left + this.rectOrigin.width - result;
+                    this.rectRealTime.width = this.rectOrigin.left! + this.rectOrigin.width - result;
                     this.editor.canvas.vSnapLines[2] = { x: this.rectRealTime.left * scale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
                 }
             }
             if (this.position.indexOf(AnchorPosition.Top) > -1) {
-                yLen = -Math.min(this.rectRealTime.top, -yLen);
-                this.rectRealTime.top = this.rectOrigin.top + yLen;
+                yLen = -Math.min(this.rectRealTime.top!, -yLen);
+                this.rectRealTime.top = this.rectOrigin.top! + yLen;
                 this.rectRealTime.height = this.rectOrigin.height - yLen;
                 const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.top = result;
-                    this.rectRealTime.height = this.rectOrigin.top + this.rectOrigin.height - result;
+                    this.rectRealTime.height = this.rectOrigin.top! + this.rectOrigin.height - result;
                     this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: this.rectRealTime.top * scale };
                 }
             }
 
             if (this.position.indexOf(AnchorPosition.Right) > -1) {
                 this.rectRealTime.width = this.rectOrigin.width + xLen;
-                const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left! + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
-                    this.rectRealTime.width = result - this.rectOrigin.left;
-                    this.editor.canvas.vSnapLines[2] = { x: (this.rectRealTime.left + this.rectRealTime.width) * scale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
+                    this.rectRealTime.width = result - this.rectOrigin.left!;
+                    this.editor.canvas.vSnapLines[2] = { x: (this.rectRealTime.left! + this.rectRealTime.width) * scale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
                 }
             }
 
             if (this.position.indexOf(AnchorPosition.Down) > -1) {
                 this.rectRealTime.height = this.rectOrigin.height + yLen;
-                const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top + this.rectRealTime.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top! + this.rectRealTime.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
-                    this.rectRealTime.height = result - this.rectOrigin.top;
-                    this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: (this.rectRealTime.top + this.rectRealTime.height) * scale };
+                    this.rectRealTime.height = result - this.rectOrigin.top!;
+                    this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: (this.rectRealTime.top! + this.rectRealTime.height) * scale };
                 }
             }
             this.executeResizeCommand();
@@ -192,8 +191,8 @@ export class ReSizeAnchorDirective extends BaseDirective {
         const attrs: Rectangle[] = [];
         for (let i = 0; i < this.editor.selection.objects.length; i++) {
             const rect: Rectangle = {
-                left: this.rectRealTime.left + this.rectRealTime.width * this.snapshots[i].left,
-                top: this.rectRealTime.top + this.rectRealTime.height * this.snapshots[i].top,
+                left: this.rectRealTime.left! + this.rectRealTime.width * this.snapshots[i].left!,
+                top: this.rectRealTime.top! + this.rectRealTime.height * this.snapshots[i].top!,
                 width: this.rectRealTime.width * this.snapshots[i].width,
                 height: this.rectRealTime.height * this.snapshots[i].height
             };

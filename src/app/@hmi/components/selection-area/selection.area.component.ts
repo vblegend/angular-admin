@@ -8,6 +8,7 @@ import { Rectangle } from '@hmi/core/common';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
 import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
+import { AnchorPosition } from '@hmi/directives/resize.anchor.directive';
 
 @Component({
   selector: 'hmi-selection-area',
@@ -15,11 +16,12 @@ import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
   styleUrls: ['./selection.area.component.less']
 })
 export class SelectionAreaComponent extends GenericComponent {
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  private _canvas: DisignerCanvasComponent;
-  private _editor: HmiEditorComponent;
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) 
+  public container!: ViewContainerRef;
+  private _canvas!: DisignerCanvasComponent;
+  private _editor!: HmiEditorComponent;
 
-
+  public AnchorPosition : any = AnchorPosition;
   /**
    * 获取当前代理对象所属canvas
    */

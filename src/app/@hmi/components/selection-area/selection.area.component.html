@@ -2,21 +2,21 @@
   (contextmenu)="contextMenu($event, menu)" moveAnchor [host]="this" [editor]="editor"> </div>
 
 <div class="anchor left-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="l"> </div>
+  [position]="AnchorPosition.Left"> </div>
 <div class="anchor right-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="r"> </div>
+  [position]="AnchorPosition.Right"> </div>
 <div class="anchor top-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="t"> </div>
+  [position]="AnchorPosition.Top"> </div>
 <div class="anchor down-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="d"> </div>
+  [position]="AnchorPosition.Down"> </div>
 <div class="anchor lTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="lt"> </div>
+  [position]="AnchorPosition.LeftTop"> </div>
 <div class="anchor rTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="rt"> </div>
+  [position]="AnchorPosition.RightTop"> </div>
 <div class="anchor lDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="ld"> </div>
+  [position]="AnchorPosition.LeftDown"> </div>
 <div class="anchor rDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  position="rd"> </div>
+  [position]="AnchorPosition.RightDown"> </div>
 
 
 

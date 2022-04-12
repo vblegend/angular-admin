@@ -12,7 +12,7 @@ import { HmiEditorComponent } from "@hmi/hmi.editor.component";
  * 用于在编辑器下快捷键的实现
  */
 export class DisignerHotkeysDirective extends BaseDirective {
-    @Input() editor: HmiEditorComponent;
+    @Input() editor!: HmiEditorComponent;
 
     protected onInit(): void {
 

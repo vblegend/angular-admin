@@ -1,10 +1,10 @@
 <div class="hmi-editor-area">
-    <as-split direction="horizontal" gutterSize="5" [useTransition]="true" gutterDblClickDuration="300" [unit]="'pixel'"
-        (gutterDblClick)="gutterDblClick($event)">
+    <as-split direction="horizontal" [gutterSize]="5" [useTransition]="true" [gutterDblClickDuration]="300"
+        [unit]="'pixel'" (gutterDblClick)="gutterDblClick($event)">
         <!-- 左侧小部件对象列表  和小部件组件列表 -->
         <as-split-area [size]="200" [minSize]="190" [visible]="leftAreaVisible" [order]="1">
-            <as-split direction="vertical" gutterSize="5" [useTransition]="true" [unit]="'pixel'">
-                <as-split-area class="object-list-area" size="420" minSize="320">
+            <as-split direction="vertical" [gutterSize]="5" [useTransition]="true" [unit]="'pixel'">
+                <as-split-area class="object-list-area" [size]="420" [minSize]="320">
                     <nz-tabset class="objects-tabset">
                         <nz-tab nzTitle="对象列表">
                             <hmi-object-list [editor]="this" [canvas]="canvas">
@@ -28,15 +28,16 @@
             <!-- widget-drag 小部件的拖放指令 -->
             <hmi-disigner-canvas #canvas hmi-disigner-hotkey widget-drag [editor]="this">
             </hmi-disigner-canvas>
-            <div *ngIf="!leftAreaVisible" class="sidebar-gutter left" (click)="gutterDblClick({gutterNum:1})">
+            <div *ngIf="!leftAreaVisible" class="sidebar-gutter left" (click)="gutterDblClick({gutterNum:1,sizes:[]})">
             </div>
             <!-- as-split-gutter -->
-            <div *ngIf="!rightAreaVisible" class="sidebar-gutter right" (click)="gutterDblClick({gutterNum:2})">
+            <div *ngIf="!rightAreaVisible" class="sidebar-gutter right"
+                (click)="gutterDblClick({gutterNum:2,sizes:[]})">
             </div>
         </as-split-area>
         <!-- 右侧属性栏   -->
-        <as-split-area [size]="220" [minSize]="190"  [visible]="rightAreaVisible" [order]="3">
-            <hmi-property-grid  [editor]="this">
+        <as-split-area [size]="220" [minSize]="190" [visible]="rightAreaVisible" [order]="3">
+            <hmi-property-grid [editor]="this">
 
             </hmi-property-grid>
         </as-split-area>

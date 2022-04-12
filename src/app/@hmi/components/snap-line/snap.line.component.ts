@@ -13,8 +13,8 @@ import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.comp
  * 橡皮筋套选工具
  */
 export class SnapLineComponent extends GenericComponent {
-  @Input() canvas: DisignerCanvasComponent;
-  @Input() position: Vector2;
+  @Input() canvas!: DisignerCanvasComponent;
+  @Input() position!: Vector2;
   /**
    *
    */

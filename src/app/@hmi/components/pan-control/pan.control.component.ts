@@ -13,12 +13,12 @@ import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.comp
  * 移动工具
  */
 export class PanControlComponent extends GenericComponent {
-  @Input() canvas: DisignerCanvasComponent;
+  @Input() canvas!: DisignerCanvasComponent;
 
-  private scrollViewer: HTMLDivElement;
-  private buttonDown: boolean;
-  private disX: number;
-  private disY: number;
+  private scrollViewer!: HTMLDivElement;
+  private buttonDown!: boolean;
+  private disX!: number;
+  private disY!: number;
 
 
   /**

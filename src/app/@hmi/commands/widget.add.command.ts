@@ -5,13 +5,13 @@ import { BasicCommand } from "./basic.command";
 
 
 export class WidgetAddCommand extends BasicCommand {
-    protected unselObjects: ComponentRef<BasicWidgetComponent>[];
+    protected unselObjects!: ComponentRef<BasicWidgetComponent>[];
     public objects: ComponentRef<BasicWidgetComponent>[];
 
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[], private selected: boolean) {
         super(editor);
         this.objects = objects;
-        if(this.selected){
+        if (this.selected) {
             this.unselObjects = this.editor.selection.objects;
         }
     }
@@ -20,7 +20,7 @@ export class WidgetAddCommand extends BasicCommand {
         for (let i = 0; i < this.objects.length; i++) {
             this.editor.canvas.add(this.objects[i]);
         }
-        if(this.selected){
+        if (this.selected) {
             this.editor.selection.fill(this.objects);
         }
     }
@@ -29,7 +29,7 @@ export class WidgetAddCommand extends BasicCommand {
         for (let i = 0; i < this.objects.length; i++) {
             this.editor.canvas.remove(this.objects[i]);
         }
-        if(this.selected){
+        if (this.selected) {
             this.editor.selection.fill(this.unselObjects);
         }
     }

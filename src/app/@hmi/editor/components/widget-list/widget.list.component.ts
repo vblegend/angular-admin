@@ -24,8 +24,8 @@ import { HmiMath } from '@hmi/utility/hmi.math';
  * 橡皮筋套选工具
  */
 export class WidgetListComponent extends GenericComponent {
-  @Input() canvas: DisignerCanvasComponent;
-  @Input() editor: HmiEditorComponent;
+  @Input() canvas!: DisignerCanvasComponent;
+  @Input() editor!: HmiEditorComponent;
 
   // @ViewChild('dragImage', { static: true }) dragImage: ElementRef<HTMLImageElement>;
   /**
@@ -45,8 +45,8 @@ export class WidgetListComponent extends GenericComponent {
 
 
   public widget_dragstart(schema: WidgetSchema, event: DragEvent) {
-    event.dataTransfer.setDragImage(new Image(), 0, 0);
-    event.dataTransfer.setData('json/widget', JSON.stringify(schema));
+    event.dataTransfer!.setDragImage(new Image(), 0, 0);
+    event.dataTransfer!.setData('json/widget', JSON.stringify(schema));
     // 设置所有widget不接受鼠标事件
     this.canvas.children.map(e => {
       const element = e.location.nativeElement as HTMLElement;
@@ -81,21 +81,21 @@ export class WidgetListComponent extends GenericComponent {
 
 
 
-  public widget_dblClick(schema: WidgetSchema, event: DragEvent) {
+  public widget_dblClick(schema: WidgetSchema, event: MouseEvent) {
     const configure: WidgetConfigure = {
       id: this.generateId(),
       name: this.generateName(schema.name),
-      type: schema.type,
+      type: schema.type!,
       zIndex: this.editor.canvas.children.length,
-      style: ObjectUtil.clone(schema.default.style),
-      data: ObjectUtil.clone(schema.default.data),
-      rect: ObjectUtil.clone(schema.default.rect),
+      style: ObjectUtil.clone(schema.default.style)!,
+      data: ObjectUtil.clone(schema.default.data)!,
+      rect: ObjectUtil.clone(schema.default.rect)!,
       events: {}
     };
 
 
-    configure.rect.left = Math.floor(this.canvas.scrollViewer.nativeElement.scrollLeft / this.canvas.zoomScale);
-    configure.rect.top = Math.floor(this.canvas.scrollViewer.nativeElement.scrollTop / this.canvas.zoomScale);
+    configure.rect!.left = Math.floor(this.canvas.scrollViewer.nativeElement.scrollLeft / this.canvas.zoomScale);
+    configure.rect!.top = Math.floor(this.canvas.scrollViewer.nativeElement.scrollTop / this.canvas.zoomScale);
     const compRef = this.canvas.parseComponent(configure);
     if (compRef) {
       this.editor.execute(new WidgetAddCommand(this.editor, [compRef], true));

@@ -30,11 +30,12 @@ import { EventBusService } from "@core/services/event.bus.service";
     template: '<ng-container #view></ng-container>'
 })
 export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewInit {
-    @ViewChild('view', { read: ViewContainerRef }) view: ViewContainerRef;
+    @ViewChild('view', { read: ViewContainerRef })
+    public view?: ViewContainerRef;
 
     private _times: FixedTimer[];
     private _isDispose: boolean;
-    private _queryParams: ParamMap;
+    private _queryParams?: ParamMap;
     private _subscriptions: Subscription[];
     /**
      * get common service
@@ -62,7 +63,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * do not cache the variable 
      */
     protected get queryParams(): ParamMap {
-        return this._queryParams;
+        return this._queryParams!;
     }
 
     /**
@@ -135,7 +136,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         const that = this as Object;
         this.ifDisposeThrowException();
         const subscription: Subscription = target.subscribe((value) => {
-            next.apply(that, [value]);
+            next!.apply(that, [value]);
             if (once) {
                 this.unsubscribe(subscription);
             }
@@ -174,7 +175,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     public generateComponent<T>(ctor: ComponentType<T>): ComponentRef<T> {
         this.ifDisposeThrowException();
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ctor);
-        const componentRef = this.viewContainerRef.createComponent<T>(componentFactory, null, this.injector);
+        const componentRef = this.viewContainerRef.createComponent<T>(componentFactory, undefined, this.injector);
         return componentRef;
     }
 
@@ -358,7 +359,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param location 发生位置
      * @param ex 异常问题
      */
-    protected onError(location: string, ex: AnyObject) {
+    protected onError(location: string, ex: any) {
         console.error(`${location}=> ${ex}`);
     }
 
@@ -428,7 +429,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * 安全调用一个方法，屏蔽掉方法内所有可能出现的catch
      * @param method 
      */
-    protected callMethodNoCatch(method: Action, ...params: AnyObject[]) {
+    protected callMethodNoCatch(method: Action, ...params: any[]) {
         try {
             if (method) method.apply(this, params);
         }

@@ -16,12 +16,12 @@ import { SchedulingTask, TaskMode } from '../task-model/tasks.model';
   styleUrls: ['./task-list.component.less']
 })
 export class TaskListComponent extends GenericComponent {
-  public searchValue: string;
-  public serviceFilters: NzTableFilterList;
+  public searchValue: string = '';
+  public serviceFilters: NzTableFilterList = [];
   public listOfRandomUser: SchedulingTask[] = [];
   public listOfDisplay: SchedulingTask[] = [];
-  public loading: boolean;
-  public visible: boolean;
+  public loading: boolean = false;
+  public visible: boolean = false;
 
 
 
@@ -87,7 +87,7 @@ export class TaskListComponent extends GenericComponent {
    */
   public search(): void {
     this.visible = false;
-    this.listOfDisplay = this.listOfRandomUser.filter((item: SchedulingTask) => item.taskName.indexOf(this.searchValue) !== -1);
+    this.listOfDisplay = this.listOfRandomUser.filter((item: SchedulingTask) => item.taskName.indexOf(this.searchValue!) !== -1);
   }
 
   public reset(): void {

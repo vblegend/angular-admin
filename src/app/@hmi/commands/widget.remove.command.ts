@@ -39,4 +39,5 @@ export class WidgetRemoveCommand extends BasicCommand {
     public update(cmd: BasicCommand): void {
 
     }
+
 }

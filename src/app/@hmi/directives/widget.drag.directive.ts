@@ -17,8 +17,8 @@ import { HmiMath } from '@hmi/utility/hmi.math';
  * 实现了鼠标滚轮的缩放功能。
  */
 export class WidgetDragDirective extends BaseDirective {
-    @Input() editor: HmiEditorComponent;
-    private dragPreview: ComponentRef<DragPreviewComponent>;
+    @Input() editor!: HmiEditorComponent;
+    private dragPreview!: ComponentRef<DragPreviewComponent> | null;
     public onInit(): void {
 
     }
@@ -54,7 +54,7 @@ export class WidgetDragDirective extends BaseDirective {
         if (target.className != 'scrollViewer') return;
         if (this.dragPreview == null) {
             const componentFactory = this.componentFactoryResolver.resolveComponentFactory<DragPreviewComponent>(DragPreviewComponent);
-            this.dragPreview = this.editor.canvas.container.createComponent<DragPreviewComponent>(componentFactory, null, this.injector);
+            this.dragPreview = this.editor.canvas.container.createComponent<DragPreviewComponent>(componentFactory, undefined, this.injector);
             this.dragPreview.instance.rect = { left: 0, top: 0, width: 100, height: 100 };
             this.dragPreview.instance.updateRectangle({ left: 0, top: 0, width: 100, height: 100 });
         }
@@ -91,20 +91,20 @@ export class WidgetDragDirective extends BaseDirective {
         const rect = this.element.getBoundingClientRect();
         const x = (ev.clientX - rect.x + this.editor.canvas.scrollViewer.nativeElement.scrollLeft) / this.editor.canvas.zoomScale;
         const y = (ev.clientY - rect.y + this.editor.canvas.scrollViewer.nativeElement.scrollTop) / this.editor.canvas.zoomScale;
-        const json = ev.dataTransfer.getData('json/widget');
+        const json = ev.dataTransfer!.getData('json/widget');
         const schema: WidgetSchema = JSON.parse(json) as WidgetSchema;
         const configure: WidgetConfigure = {
             id: this.generateId(),
             name: this.generateName(schema.name),
-            type: schema.type,
+            type: schema.type!,
             zIndex: this.editor.canvas.children.length,
-            style: ObjectUtil.clone(schema.default.style),
-            data: ObjectUtil.clone(schema.default.data),
+            style: ObjectUtil.clone(schema.default.style)!,
+            data: ObjectUtil.clone(schema.default.data)!,
             rect: {
-                left: Math.floor(x - schema.default.rect.width / 2),
-                top: Math.floor(y - schema.default.rect.height / 2),
-                width: schema.default.rect.width,
-                height: schema.default.rect.height
+                left: Math.floor(x - schema.default.rect!.width / 2),
+                top: Math.floor(y - schema.default.rect!.height / 2),
+                width: schema.default.rect!.width,
+                height: schema.default.rect!.height
             },
             events: {}
         };

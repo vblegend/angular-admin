@@ -3,28 +3,31 @@ import { ObjectUtil } from '@core/util/object.util';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 import { BasicCommand } from './basic.command';
 
-export class GenericAttributeCommand extends BasicCommand {
+export class GenericAttributeCommand<TObject, TValue> extends BasicCommand {
+    public objects: TObject[];
+    private oldValues!: TValue[];
+    private newValues!: TValue[];
 
     /**
      * 设置对象属性值
-     * 如果_objects 对象含有 setXXX() 方法时会调用该方法更新
      * @param editor 
      * @param _objects 
      * @param path  属性路径 如‘configure/rect’
      * @param newValues
      */
-    public constructor(editor: HmiEditorComponent, _objects: AnyObject[], path: string, newValues: Object[], batchNo?: number) {
+    public constructor(editor: HmiEditorComponent, _objects: TObject[], path: string, newValues: TValue[], batchNo?: number | undefined) {
         super(editor);
         this.name = '修改属性';
         this.objects = _objects;
         this.oldValues = [];
         const paths = path.split('/');
-        this.attributeName = paths.pop();
+        this.attributeName = paths.pop()!;
         this.attributePaths = paths;
         if (batchNo != null) this.batchNo = batchNo;
         for (const object of _objects) {
             const target = this.getTarget(object);
-            this.oldValues.push(ObjectUtil.clone(target[this.attributeName]));
+            const oldValue = ObjectUtil.clone(target[this.attributeName as keyof TObject]);
+            this.oldValues.push(<TValue><unknown>oldValue);
         }
         if (newValues.length == 1 && this.oldValues.length > 1) {
             this.newValues = Array(this.oldValues.length).fill(newValues[0]);
@@ -35,11 +38,11 @@ export class GenericAttributeCommand extends BasicCommand {
         }
     }
 
-    public getTarget(object: AnyObject): AnyObject {
+    public getTarget(object: TObject): TObject {
         let root = object;
         for (let i = 0; i < this.attributePaths.length; i++) {
             const key = this.attributePaths[i];
-            root = root[key];
+            root = <TObject><unknown>root[key as keyof TObject];
         }
         return root;
     }
@@ -51,7 +54,14 @@ export class GenericAttributeCommand extends BasicCommand {
         for (let i = 0; i < this.objects.length; i++) {
             const rootObject = this.objects[i];
             const object = this.getTarget(rootObject);
-            object[this.attributeName] = this.newValues[i];
+
+            const properties: Record<string, TValue> = {};
+            properties[this.attributeName] = this.newValues[i];
+            Object.assign(object, properties);
+
+
+            // object[this.attributeName] 
+            // object[this.attributeName] = this.newValues[i];
         }
     }
 
@@ -59,12 +69,19 @@ export class GenericAttributeCommand extends BasicCommand {
         for (let i = 0; i < this.objects.length; i++) {
             const rootObject = this.objects[i];
             const object = this.getTarget(rootObject);
-            object[this.attributeName] = this.oldValues[i];
+            // object[this.attributeName as keyof AnyObject] = this.oldValues[i];
+
+            const properties: Record<string, TValue> = {};
+            properties[this.attributeName] = this.oldValues[i];
+            Object.assign(object, properties);
+
         }
     }
 
-    public update(command: GenericAttributeCommand) {
+    public update(command: GenericAttributeCommand<TObject, TValue>) {
         this.newValues = command.newValues;
     }
+
+
 
 }

@@ -75,7 +75,7 @@ export class LocalCache<TObject, TKey> {
      * subscribe data change
      */
     public subscribe(callback: (arg: CacheChangeEvents<TObject>) => void, filter?: (value: TObject, index: number, array: TObject[]) => boolean): () => void {
-        const sub = new SubscriptionContext<TObject>(this, callback, filter);
+        const sub = new SubscriptionContext<TObject>(this, callback, filter!);
         this._subscribers.push(sub);
         return () => {
             const index = this._subscribers.indexOf(sub);
@@ -126,18 +126,19 @@ export class LocalCache<TObject, TKey> {
             const index = this._indexs.get(key);
             if (index == null) {
                 // append record
-                this._buffer.push(duplicate);
+                this._buffer.push(duplicate!);
                 this._indexs.set(key, this._buffer.length - 1);
-                inserts.push(duplicate);
+                inserts.push(duplicate!);
             } else {
                 // override record
-                this._buffer.splice(index, 1, duplicate);
+                this._buffer.splice(index, 1, duplicate!);
                 // this._buffer[index] = duplicate;
-                updates.push(duplicate);
+                updates.push(duplicate!);
             }
         }
         if (inserts.length > 0) this.emit(DataChangeTypes.Add, inserts);
         if (updates.length > 0) this.emit(DataChangeTypes.Update, updates);
+        return true;
     }
 
 
@@ -145,7 +146,7 @@ export class LocalCache<TObject, TKey> {
         return this.batchPut([entrie]);
     }
 
-    public remove(key: TKey): TObject {
+    public remove(key: TKey): TObject | null {
         const index = this._indexs.get(key);
         if (index == null) return null;
         const result = this._buffer[index];
@@ -166,7 +167,7 @@ export class LocalCache<TObject, TKey> {
     }
 
 
-    public find(key: TKey): TObject {
+    public find(key: TKey): TObject | null {
         const index = this._indexs.get(key);
         if (index == null) return null;
         return this._buffer[index];

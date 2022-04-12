@@ -9,6 +9,7 @@ import { RubberbandComponent } from '@hmi/components/rubber-band/rubber.band.com
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Rectangle } from '@hmi/core/common';
 import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiMath } from '@hmi/utility/hmi.math';
 import { Console } from 'console';
 
 @Directive({
@@ -16,8 +17,8 @@ import { Console } from 'console';
 })
 
 export class RubberBandDirective extends BaseDirective {
-    @Input() editor: HmiEditorComponent;
-    @Input() canvas: DisignerCanvasComponent;
+    @Input() editor!: HmiEditorComponent;
+    @Input() canvas!: DisignerCanvasComponent;
     private rectComponent: ComponentRef<RubberbandComponent>;
     /**
      * 橡皮筋所选区域窗口坐标
@@ -30,18 +31,18 @@ export class RubberBandDirective extends BaseDirective {
     private selectionArea: Rectangle;
 
 
-    private widgets : ComponentRef<BasicWidgetComponent>[];
+    private widgets: ComponentRef<BasicWidgetComponent>[] = [];
 
     private buttonDown = false;
-    private startX: number;
-    private startY: number;
-    private endX: number;
-    private endY: number;
+    private startX: number = 0;
+    private startY: number = 0;
+    private endX: number = 0;
+    private endY: number = 0;
 
     constructor(protected injector: Injector) {
         super(injector);
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory<RubberbandComponent>(RubberbandComponent);
-        this.rectComponent = this.viewContainerRef.createComponent<RubberbandComponent>(componentFactory, null, this.injector);
+        this.rectComponent = this.viewContainerRef.createComponent<RubberbandComponent>(componentFactory, undefined, this.injector);
         this.rectComponent.hostView.detach();
         this.rubberBandArea = { left: 0, top: 0, width: 0, height: 0 };
         this.selectionArea = { left: 0, top: 0, width: 0, height: 0 };
@@ -64,8 +65,8 @@ export class RubberBandDirective extends BaseDirective {
             this.endX = this.startX = (ev.clientX - rect.left);
             this.endY = this.startY = (ev.clientY - rect.top);
             // 更新画布上所有的小部件
-            this.widgets  = this.canvas.children;
-            this.widgets.sort((a, b) =>  a.instance.zIndex - b.instance.zIndex );
+            this.widgets = this.canvas.children;
+            this.widgets.sort((a, b) => a.instance.zIndex! - b.instance.zIndex!);
             this.updatePosition();
             this.viewContainerRef.insert(this.rectComponent.hostView);
             ev.preventDefault();
@@ -108,7 +109,7 @@ export class RubberBandDirective extends BaseDirective {
             ev.stopPropagation();
             this.canvas.focus();
         }
-        
+
     }
 
 
@@ -154,17 +155,17 @@ export class RubberBandDirective extends BaseDirective {
      */
     private updateSelectionArea(isClick: boolean, ctrlKey: boolean) {
         const selecteds: ComponentRef<BasicWidgetComponent>[] = [];
-        let command: BasicCommand = null;
+        let command: BasicCommand | null = null;
         if (isClick) {
             for (let i = this.widgets.length - 1; i >= 0; i--) {
-                if (this.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                if (HmiMath.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
                     selecteds.push(this.widgets[i]);
                     break;
                 }
             }
         } else {
             for (let i = this.widgets.length - 1; i >= 0; i--) {
-                if (this.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                if (HmiMath.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
                     selecteds.push(this.widgets[i]);
                 }
             }
@@ -186,21 +187,6 @@ export class RubberBandDirective extends BaseDirective {
 
 
 
-
-
-
-    /**
-     * 检测两个矩形是否碰撞
-     * @param rect1 
-     * @param rect2 
-     * @returns 
-     */
-    public checkRectangleCross(rect1: Rectangle, rect2: Rectangle): boolean {
-        return rect1.left + rect1.width >= rect2.left &&
-            rect1.left <= rect2.left + rect2.width &&
-            rect1.top + rect1.height >= rect2.top &&
-            rect1.top <= rect2.top + rect2.height;
-    }
 
 
 

@@ -12,14 +12,14 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 })
 
 export class MoveAnchorDirective extends BaseDirective {
-    @Input() host: SelectionAreaComponent;
-    @Input() editor: HmiEditorComponent;
+    @Input() host!: SelectionAreaComponent;
+    @Input() editor!: HmiEditorComponent;
 
     private buttonDown = false;
-    private batchNo: number;
-    private offsetX: number;
-    private offsetY: number;
-    private allowMoved: boolean;
+    private batchNo!: number;
+    private offsetX!: number;
+    private offsetY!: number;
+    private allowMoved!: boolean;
 
     constructor(protected injector: Injector) {
         super(injector);
@@ -39,8 +39,8 @@ export class MoveAnchorDirective extends BaseDirective {
             this.element.style.cursor = this.allowMoved ? 'move' : 'no-drop';
             const scale = this.editor.canvas.zoomScale;
             this.editor.adsorb.captureAnchors();
-            this.offsetX = (ev.clientX / scale - this.editor.selection.bounds.left);
-            this.offsetY = (ev.clientY / scale - this.editor.selection.bounds.top);
+            this.offsetX = (ev.clientX / scale - this.editor.selection.bounds.left!);
+            this.offsetY = (ev.clientY / scale - this.editor.selection.bounds.top!);
             ev.preventDefault();
             ev.stopPropagation();
         }
@@ -89,12 +89,12 @@ export class MoveAnchorDirective extends BaseDirective {
         const xOffset = bounds.width / 2;
         // 把左中右侧左边全部转换为左侧坐标
         const xRes = [l, c ? c - xOffset : null, r ? r - bounds.width : null];
-        const xIndex = this.getMinValueInArray([l, c, r]);
+        const xIndex = this.getMinValueInArray([l!, c!, r!]);
         for (let i = 0; i < xRes.length; i++) {
             // 循环左中右侧坐标点  如果索引相同  或者 坐标数值相同则显示坐标辅助线
             if (xRes[i] != null && (i == xIndex || (xRes[i] == xRes[xIndex]))) {
-                result.x = xRes[i];
-                const abspos = xRes[i] + xOffset * i;
+                result.x = xRes[i]!;
+                const abspos = xRes[i]! + xOffset * i;
                 this.editor.canvas.vSnapLines[i] = { x: abspos * this.editor.canvas.zoomScale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
             }
         }
@@ -104,11 +104,11 @@ export class MoveAnchorDirective extends BaseDirective {
         const b = this.editor.adsorb.matchYAxis(pos.y + bounds.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const yOffset = bounds.height / 2;
         const yRes = [t, m ? m - yOffset : null, b ? b - bounds.height : null];
-        const yIndex = this.getMinValueInArray([t, m, b]);
+        const yIndex = this.getMinValueInArray([t!, m!, b!]);
         for (let i = 0; i < yRes.length; i++) {
             if (yRes[i] != null && (i == yIndex || (yRes[i] == yRes[yIndex]))) {
-                result.y = yRes[i];
-                const abspos = yRes[i] + yOffset * i;
+                result.y = yRes[i]!;
+                const abspos = yRes[i]! + yOffset * i;
                 this.editor.canvas.hSnapLines[i] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: abspos * this.editor.canvas.zoomScale };
             }
         }
@@ -149,10 +149,10 @@ export class MoveAnchorDirective extends BaseDirective {
         for (const component of this.editor.selection.objects) {
             const selfRect = component.instance.configure.rect;
             const newRect = {
-                left: selfRect.left - bounds.left + pos.x,
-                top: selfRect.top - bounds.top + pos.y,
-                width: selfRect.width,
-                height: selfRect.height
+                left: selfRect!.left! - bounds.left! + pos.x,
+                top: selfRect!.top! - bounds.top! + pos.y,
+                width: selfRect!.width,
+                height: selfRect!.height
             };
             propertys.push(newRect);
         }

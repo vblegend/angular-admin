@@ -8,8 +8,12 @@ import { BasicCommand } from "./basic.command";
  * 将编辑器的选区内所有选中对象全部取消选中，选中当前对象数组
  */
 export class SelectionFillCommand extends BasicCommand {
+
     protected oldObjects: ComponentRef<BasicWidgetComponent>[];
-    public objects: ComponentRef<BasicWidgetComponent>[];
+    public objects!: ComponentRef<BasicWidgetComponent>[];
+
+
+
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {
         super(editor);
         this.oldObjects = editor.selection.objects;
@@ -27,4 +31,5 @@ export class SelectionFillCommand extends BasicCommand {
     public update(cmd: BasicCommand): void {
 
     }
+
 }

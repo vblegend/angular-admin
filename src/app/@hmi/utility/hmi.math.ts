@@ -10,12 +10,19 @@ export class HmiMath {
      * @param rect2 
      * @returns 
      */
-    public static extendsRectangle(rect1: Rectangle, rect2: Rectangle): Rectangle {
-        const left = Math.min(rect1.left, rect2.left);
-        const top = Math.min(rect1.top, rect2.top);
-        const width = Math.max(rect1.left + rect1.width, rect2.left + rect2.width) - left;
-        const height = Math.max(rect1.top + rect1.height, rect2.top + rect2.height) - top;
+    public static extendsRectangle(rect1: Rectangle | null, rect2: Rectangle | null): Rectangle {
+        const left = Math.min(rect1!.left!, rect2!.left!);
+        const top = Math.min(rect1!.top!, rect2!.top!);
+        const width = Math.max(rect1!.left! + rect1!.width, rect2!.left! + rect2!.width) - left;
+        const height = Math.max(rect1!.top! + rect1!.height, rect2!.top! + rect2!.height) - top;
         return { left, top, width, height };
+    }
+
+    public static checkRectangleCross(rect1: Rectangle | null, rect2: Rectangle | null): boolean {
+        return rect1!.left! + rect1!.width >= rect2!.left! &&
+            rect1!.left! <= rect2!.left! + rect2!.width &&
+            rect1!.top! + rect1!.height >= rect2!.top! &&
+            rect1!.top! <= rect2!.top! + rect2!.height;
     }
 
 

@@ -6,7 +6,6 @@ import { SvgWidgetComponent } from "../widgets/svg.widget/svg.widget.component";
 import { TaskWidgetComponent } from "../tasks/task-widget/task.widget.component";
 import { SubmitButtonWidgetComponent } from "../widgets/submit.button.widget/submit.button.widget.component";
 import { WidgetCategory } from "@hmi/configuration/widget.category";
-import { BasicPropertyComponent } from "@hmi/editor/components/basic-property/basic.property.component";
 
 
 
@@ -25,11 +24,11 @@ export const CustomImageWidgets: WidgetSchema[] = [
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
         },
-        properties: {
-            // 'device': BasicPropertyComponent,
-            // 'standard': BasicPropertyComponent,
-            // 'datetime': BasicPropertyComponent,
-        }
+        // properties: {
+        //     // 'device': BasicPropertyComponent,
+        //     // 'standard': BasicPropertyComponent,
+        //     // 'datetime': BasicPropertyComponent,
+        // }
     },
     {
         icon: 'grace-BIMfuneng',

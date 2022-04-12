@@ -7,7 +7,7 @@ import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnIni
 
 export class BaseDirective implements OnInit {
 
-    protected element: HTMLElement = null;
+    protected element: HTMLElement;
     protected elementRef: ElementRef;
     protected viewContainerRef: ViewContainerRef;
     protected componentFactoryResolver: ComponentFactoryResolver;

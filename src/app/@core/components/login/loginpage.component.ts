@@ -17,6 +17,7 @@ export class LoginPageComponent extends GenericComponent {
   constructor(injector: Injector) {
     super(injector);
     this.password = '';
+    this.loadingWait = false;
     this.background = 'url(/assets/images/team.png)';
   }
 

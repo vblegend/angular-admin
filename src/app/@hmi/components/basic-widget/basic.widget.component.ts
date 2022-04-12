@@ -16,7 +16,7 @@ import { ObjectUtil } from '@core/util/object.util';
  * 小部件基类，实现了小部件的一些基础服务
  */
 export abstract class BasicWidgetComponent extends GenericComponent {
-  private _config: WidgetConfigure;
+  private _config!: WidgetConfigure;
 
   /**
    * 小部件内部事件处理服务\
@@ -34,40 +34,51 @@ export abstract class BasicWidgetComponent extends GenericComponent {
     return this.constructor.prototype.METADATA;
   }
 
-  public get left(): number {
-    return this.configure.rect.left;
+
+  /**
+   * 获取成员函数
+   * @param funcName 
+   * @returns 
+   */
+  public getMemberFunction(funcName: string): Function {
+    return <Function><unknown>this[funcName as keyof this];
   }
 
-  public get top(): number {
-    return this.configure.rect.top;
+
+  public get left(): number | undefined {
+    return this.configure.rect!.left;
   }
 
-  public get width(): number {
-    return this.configure.rect.width;
+  public get top(): number | undefined {
+    return this.configure.rect!.top;
   }
 
-  public get height(): number {
-    return this.configure.rect.height;
+  public get width(): number | undefined {
+    return this.configure.rect!.width;
   }
 
-  public get right(): number {
-    return this.configure.rect.left + this.configure.rect.width;
+  public get height(): number | undefined {
+    return this.configure.rect!.height;
+  }
+
+  public get right(): number | undefined {
+    return this.configure.rect!.left! + this.configure.rect!.width;
   }
 
   public get bottom(): number {
-    return this.configure.rect.top + this.configure.rect.height;
+    return this.configure.rect!.top! + this.configure.rect!.height;
   }
 
   public get centerX(): number {
-    return this.configure.rect.left + this.configure.rect.width / 2;
+    return this.configure.rect!.left! + this.configure.rect!.width / 2;
   }
 
-  public get centerY(): number {
-    return this.configure.rect.top + this.configure.rect.height / 2;
+  public get centerY(): number | undefined {
+    return this.configure!.rect!.top! + this.configure!.rect!.height / 2;
   }
 
 
-  public get groupId(): number {
+  public get groupId(): number | undefined {
     return this.configure.group;
   }
 
@@ -89,8 +100,8 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.left')
-  public get left$(): string {
-    return `${this.configure.rect.left}px`;
+  public get left$(): string | undefined {
+    return `${this.configure.rect!.left}px`;
   }
 
   /**
@@ -98,8 +109,8 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.top')
-  public get top$(): string {
-    return `${this.configure.rect.top}px`;
+  public get top$(): string | undefined {
+    return `${this.configure.rect!.top}px`;
   }
 
   /**
@@ -107,8 +118,8 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.width')
-  public get width$(): string {
-    return `${this.configure.rect.width}px`;
+  public get width$(): string | undefined {
+    return `${this.configure.rect!.width}px`;
   }
 
   /**
@@ -116,8 +127,8 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.height')
-  public get height$(): string {
-    return `${this.configure.rect.height}px`;
+  public get height$(): string | undefined {
+    return `${this.configure.rect!.height}px`;
   }
 
   /**
@@ -125,7 +136,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.background')
-  public get background(): string {
+  public get background(): string | undefined {
     return this.configure.style.background;
   }
 
@@ -133,17 +144,17 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * get component background
    * binding host position
    */
-   @HostBinding('style.color')
-   public get color(): string {
-     return this.configure.style.color;
-   }
- 
+  @HostBinding('style.color')
+  public get color(): string | undefined {
+    return this.configure.style.color;
+  }
+
   /**
    * get component opacity
    * binding host position
    */
   @HostBinding('style.opacity')
-  public get opacity(): number {
+  public get opacity(): number | undefined {
     return this.configure.style.opacity;
   }
 
@@ -152,7 +163,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.zIndex')
-  public get zIndex(): number {
+  public get zIndex(): number | undefined {
     return this.configure.zIndex;
   }
 
@@ -161,7 +172,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * binding host position
    */
   @HostBinding('style.border')
-  public get border(): string {
+  public get border(): string | undefined {
     return this.configure.style.border;
   }
 
@@ -195,13 +206,13 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * @param event 要触发的事件，必须是使用在{@WidgetEvent}列表内的
    * @param params 事件的参数
    */
-  protected dispatchEvent<T>(event: string, params: T) {
+  protected dispatchEvent<T extends Record<string, any>>(event: string, params: T): void {
     const _eventMeta = this.metaData.events[event];
     if (_eventMeta == null) {
       throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${event}”的声明。`;
     }
     for (const key of _eventMeta.eventParams) {
-      if (params[key] === undefined) {
+      if (!params.hasOwnProperty(key)) {
         throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${event}”缺少参数“${key}”。`;
       }
     }
@@ -220,7 +231,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    */
   public $initialization(_config: WidgetConfigure, _default: WidgetDefaultConfigure): void {
     if (this._config) throw 'This method is only available on first run ';
-    this._config = ObjectUtil.clone(_config);
+    this._config = ObjectUtil.clone(_config)!;
     // 升级数据属性
     ObjectUtil.upgrade(this._config.data, _default.data);
     // 升级样式属性

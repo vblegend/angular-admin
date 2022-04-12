@@ -9,34 +9,27 @@ import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/ba
 /**
  * 字符串属性绑定
  */
-export class ColorPropertyComponent extends BasicPropertyComponent {
+export class ColorPropertyComponent extends BasicPropertyComponent<string> {
 
   /**
     * 当绑定的数据为null时 使用当前值
     */
   @Input()
-  public readonly nullValue: string = 'transparent';
+  public nullValue: string | undefined = 'transparent';
 
   /**
    * 默认颜色表
    */
-   @Input()
+  @Input()
   public defaultColors: string[] = [];
 
-  
+
   constructor(protected injector: Injector) {
     super(injector);
+    this.nullValue = 'transparent';
     this.defaultColors = ['transparent', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF'];
   }
 
-  /**
-   * 数据预处理，默认颜色
-   * @param value 
-   * @returns 
-   */
-  protected dataBinding_fix(value: AnyObject): AnyObject {
-    return value != null ? value : this.nullValue;
-  }
   /**
    * 预制默认颜色点击应用
    * @param value 

@@ -15,7 +15,8 @@ import { WidgetEventService } from '@hmi/services/widget.event.service';
   providers: [{ provide: WidgetEventService }]
 })
 export class ViewCanvasComponent extends GenericComponent {
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
+  public container!: ViewContainerRef;
   private _children: ComponentRef<BasicWidgetComponent>[];
   private _eventHub: WidgetEventService;
 
@@ -43,7 +44,7 @@ export class ViewCanvasComponent extends GenericComponent {
    * 数值越大越往前
    */
   public updatezIndexs() {
-    this._children.sort((a, b) => b.instance.zIndex - a.instance.zIndex);
+    this._children.sort((a, b) => b.instance.zIndex! - a.instance.zIndex!);
   }
 
 
@@ -109,18 +110,18 @@ export class ViewCanvasComponent extends GenericComponent {
    * @param configure 
    * @returns 
    */
-  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> {
-    let componentRef: ComponentRef<BasicWidgetComponent> = null;
+  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> | null {
+    let componentRef: ComponentRef<BasicWidgetComponent> | null = null;
     const comRef = this.provider.getType(configure.type);
     if (comRef) {
       const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
-      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, undefined, this.injector);
       if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
         const v = this.container.indexOf(componentRef.hostView);
         this.container.detach(v);
         componentRef.hostView.detach();
         const widgetSchema = this.provider.getType(configure.type);
-        componentRef.instance.$initialization(configure, widgetSchema.default);
+        componentRef.instance.$initialization(configure, widgetSchema!.default);
       }
     }
     if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
@@ -128,14 +129,14 @@ export class ViewCanvasComponent extends GenericComponent {
   }
 
 
-  public findWidgetByName(name: string): ComponentRef<BasicWidgetComponent> {
+  public findWidgetByName(name: string): ComponentRef<BasicWidgetComponent> | null {
     if (name == null) return null;
-    return this.children.find(e => e.instance.configure && e.instance.configure.name === name);
+    return this.children.find(e => e.instance.configure && e.instance.configure.name === name)!;
   }
 
-  public findWidgetById(id: string): ComponentRef<BasicWidgetComponent> {
+  public findWidgetById(id: string): ComponentRef<BasicWidgetComponent> | null {
     if (id == null) return null;
-    return this.children.find(e => e.instance.configure && e.instance.configure.id === id);
+    return this.children.find(e => e.instance.configure && e.instance.configure.id === id)!;
   }
 
 
@@ -154,15 +155,15 @@ export class ViewCanvasComponent extends GenericComponent {
    * 获取所有容器的总大小。
    * @returns 
    */
-  public getComponentsBound(): Rectangle {
-    let result: Rectangle = null;
+  public getComponentsBound(): Rectangle | null {
+    let result: Rectangle | null = null;
     for (const comp of this.children) {
       if (result == null) {
         result = {
-          left: comp.instance.configure.rect.left,
-          top: comp.instance.configure.rect.top,
-          width: comp.instance.configure.rect.width,
-          height: comp.instance.configure.rect.height
+          left: comp.instance.configure.rect!.left,
+          top: comp.instance.configure.rect!.top,
+          width: comp.instance.configure.rect!.width,
+          height: comp.instance.configure.rect!.height
         };
       } else {
         result = HmiMath.extendsRectangle(result, comp.instance.configure.rect);

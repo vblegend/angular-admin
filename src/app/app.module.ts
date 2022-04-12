@@ -128,20 +128,20 @@ export class AppModule {
     // t1();
     // t2();
 
-    console.time('clone.test');
-    this.cacheService.get("tasks").load(tasks);
+    // console.time('clone.test');
+    // this.cacheService.get("tasks").load(tasks);
 
-    for (let v = 0; v < 20; v++) {
-      tasks[v].taskName = '李四' + v;
-    }
-    this.cacheService.get("tasks").batchPut(tasks.slice(0, 20));
-    this.cacheService.get("tasks").batchPut(tasks);
-    // for (let i = 0; i < 1000; i++) {
-    //   this.cacheService.tasks.remove(100000 + i);
+    // for (let v = 0; v < 20; v++) {
+    //   tasks[v].taskName = '李四' + v;
     // }
-    console.timeEnd('clone.test');
-    const lst = this.cacheService.get("tasks").getAll();
-    console.log(lst.length);
+    // this.cacheService.get("tasks").batchPut(tasks.slice(0, 20));
+    // this.cacheService.get("tasks").batchPut(tasks);
+    // // for (let i = 0; i < 1000; i++) {
+    // //   this.cacheService.tasks.remove(100000 + i);
+    // // }
+    // console.timeEnd('clone.test');
+    // const lst = this.cacheService.get("tasks").getAll();
+    // console.log(lst.length);
   }
 
 

@@ -13,10 +13,10 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
  */
 export class ZoomControlDirective extends BaseDirective {
     // @Input() editor: EditorComponent;
-    @Input() canvas: DisignerCanvasComponent;
+    @Input() canvas!: DisignerCanvasComponent;
     @Output() mouseEnter = new EventEmitter<boolean>();
     private readonly scales: number[] = [0.1, 0.2, 0.5, 0.8, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    private index: number;
+    private index!: number;
 
 
     public onInit(): void {
@@ -25,7 +25,7 @@ export class ZoomControlDirective extends BaseDirective {
 
 
     @HostListener('mousewheel', ['$event'])
-    public onMouseWheel(ev: MouseEvent): void {
+    public onMouseWheel(ev: WheelEvent): void {
         const srcollRect = this.canvas.scrollViewer.nativeElement.getBoundingClientRect();
         const scale = this.canvas.zoomScale;
         const pointOnScrollView: Vector2 = {
@@ -38,7 +38,7 @@ export class ZoomControlDirective extends BaseDirective {
         };
         // console.log(`${pointOnScrollView.x}，${pointOnScrollView.y}            ${pointOnCanvas.x}，${pointOnCanvas.y}`);
 
-        const delta = ev['wheelDelta'] / 120;
+        const delta = (<any>ev).wheelDelta / 120;  /* wheelDelta */
         this.index = Math.max(0, Math.min(this.index + delta, this.scales.length - 1));
         this.canvas.zoomScale = this.scales[this.index];
         this.element.scrollTo();

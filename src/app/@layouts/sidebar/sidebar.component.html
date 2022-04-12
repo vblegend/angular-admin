@@ -9,7 +9,7 @@
         <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
         <span>{{ menu.title }}</span>
       </li>
-      <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="data.level * 24" [nzMatchRouter]="true" [nzOpen]="menu.open"
+      <li *ngIf="menu.children" nz-submenu [nzPaddingLeft]="data.level * 24" nzMatchRouter="true" [nzOpen]="menu.open"
         [nzDisabled]="menu.disabled">
         <span title>
           <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>

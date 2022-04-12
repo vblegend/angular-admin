@@ -15,9 +15,10 @@ import { AttachAddon } from 'xterm-addon-attach';
   templateUrl: './terminal.component.html'
 })
 export class TerminalComponent extends GenericComponent {
-  @ViewChild('TerminalParent', { static: true }) public terminalDiv: ElementRef;
-  public term: Terminal;
-  private command: string;
+  @ViewChild('TerminalParent', { static: true }) 
+  public terminalDiv?: ElementRef;
+  public term?: Terminal;
+  private command?: string;
   constructor(injector: Injector, private modal: NzModalRef) {
     super(injector)
 
@@ -60,7 +61,7 @@ export class TerminalComponent extends GenericComponent {
       }
     });
     this.command = '';
-    this.term.open(this.terminalDiv.nativeElement);
+    this.term.open(this.terminalDiv!.nativeElement);
 
     this.term.writeln('\x1b[35;1mPowered By \x1b[33;1mHanks.');
     this.term.writeln([
@@ -96,26 +97,26 @@ export class TerminalComponent extends GenericComponent {
   private onTermData(e: string): void {
     switch (e) {
       case '\u0003': // Ctrl+C
-        this.term.write('^C');
-        this.prompt(this.term);
+        this.term!.write('^C');
+        this.prompt(this.term!);
         break;
       case '\r': // Enter
-        this.runCommand(this.term, this.command);
+        this.runCommand(this.term!, this.command!);
         this.command = '';
         break;
       case '\u007F': // Backspace (DEL)
         // Do not delete the prompt
-        if (this.term.buffer.active.cursorX > 2) {
-          this.term.write('\b \b');
-          if (this.command.length > 0) {
-            this.command = this.command.substr(0, this.command.length - 1);
+        if (this.term!.buffer.active.cursorX > 2) {
+          this.term!.write('\b \b');
+          if (this.command!.length > 0) {
+            this.command = this.command!.substr(0, this.command!.length - 1);
           }
         }
         break;
       default: // Print all other characters for demo
         if (e >= String.fromCharCode(0x20) && e <= String.fromCharCode(0x7B) || e >= '\u00a0') {
           this.command += e;
-          this.term.write(e);
+          this.term!.write(e);
         }
     }
   }

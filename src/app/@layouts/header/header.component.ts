@@ -14,9 +14,9 @@ import { ThemeService } from '@core/services/theme.service';
 })
 export class HeaderComponent extends GenericComponent {
 
-  public currentTheme: string;
+  public currentTheme: string = '';
   public today: Date;
-  public themes: KeyValue<string, string>[];
+  public themes: KeyValue<string, string>[] = [];
   constructor(injector: Injector, public menuService: MenuService, public themeService: ThemeService, private dialogService: DialogService) {
     super(injector);
     this.today = new Date();

@@ -70,16 +70,20 @@ export class WidgetSchemaService {
         }
     }
 
-    public findWidgetCategory(category: string): WidgetSchemaCategory {
+    public findWidgetCategory(category: string): WidgetSchemaCategory | undefined {
         return this._categorys.find(e => e.name === category);
     }
 
-    public getType(type: string): WidgetSchema {
-        return this._widgetsMap[type];
+    public getType(type: string | null): WidgetSchema | null {
+        if (type == null) {
+            return null;
+        } else {
+            return this._widgetsMap[type];
+        }
     }
 
-    public random(): WidgetSchema {
-        if (this._categorys.length == 0) return null;
+    public random(): WidgetSchema | undefined {
+        if (this._categorys.length == 0) return undefined;
         while (true) {
             const categoryIndex = Math.floor(Math.random() * this._categorys.length);
             const category = this._categorys[categoryIndex];

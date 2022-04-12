@@ -14,13 +14,13 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 export class PropertyElementComponent extends GenericComponent {
   
   @Input()
-  public readonly title: string = '标题';
+  public title: string = '标题';
 
   @Input()
-  public readonly tooltip: string = '标题';
+  public tooltip: string = '标题';
 
   @Input()
-  public readonly editor: HmiEditorComponent;
+  public editor!: HmiEditorComponent;
 
   /**
    * 属性的路径\
@@ -31,7 +31,7 @@ export class PropertyElementComponent extends GenericComponent {
    * “data/deviceId”
    */
   @Input()
-  public readonly attributePath: string = 'data';
+  public attributePath: string = 'data';
 
   /**
    *

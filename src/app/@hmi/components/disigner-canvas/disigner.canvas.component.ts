@@ -17,42 +17,42 @@ import { WidgetEventService } from '@hmi/services/widget.event.service';
   providers: [{ provide: WidgetEventService }]
 })
 export class DisignerCanvasComponent extends ViewCanvasComponent {
-  @Input() editor: HmiEditorComponent;
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  @ViewChild('scrollViewer', { static: true }) scrollViewer: ElementRef<HTMLDivElement>;
+  @Input() editor!: HmiEditorComponent;
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container!: ViewContainerRef;
+  @ViewChild('scrollViewer', { static: true }) scrollViewer!: ElementRef<HTMLDivElement>;
   // @ViewChild('snapLineAxisV', { static: true }) snapLineAxisV: DisignerCanvasComponent;
 
   public ignoreContextMenu?: boolean;
 
-  public selectionArea: ComponentRef<SelectionAreaComponent>;
+  public selectionArea!: ComponentRef<SelectionAreaComponent>;
   /**
    * 设置/获取 视图的缩放倍率
    */
   public zoomScale: number;
-  private _ctrlPressed: boolean;
-  public spaceKeyDown: boolean;
+  private _ctrlPressed!: boolean;
+  public spaceKeyDown!: boolean;
 
   /**
    * 水平对齐线的位置
    */
-  public readonly hSnapLines: Vector2[] = [null, null, null];
+  public readonly hSnapLines: Vector2[] | undefined[] = [undefined, undefined, undefined];
 
   /**
    * 垂直对齐线位置
    */
-  public readonly vSnapLines: Vector2[] = [null, null, null];
+  public readonly vSnapLines: Vector2[] | undefined[] = [undefined, undefined, undefined];
 
 
   /**
    * 隐藏/重置 所有对齐辅助线
    */
   public hideSnapLines(): void {
-    this.hSnapLines[0] = null;
-    this.vSnapLines[0] = null;
-    this.hSnapLines[1] = null;
-    this.vSnapLines[1] = null;
-    this.hSnapLines[2] = null;
-    this.vSnapLines[2] = null;
+    this.hSnapLines[0] = undefined;
+    this.vSnapLines[0] = undefined;
+    this.hSnapLines[1] = undefined;
+    this.vSnapLines[1] = undefined;
+    this.hSnapLines[2] = undefined;
+    this.vSnapLines[2] = undefined;
   }
 
 
@@ -81,13 +81,13 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
     this.scrollViewer.nativeElement.setAttribute('tabindex', '0');
   }
 
-  public focus():void{
+  public focus(): void {
     this.scrollViewer.nativeElement.focus();
   }
 
   private initSelectionAreaComponent() {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory<SelectionAreaComponent>(SelectionAreaComponent);
-    this.selectionArea = this.container.createComponent<SelectionAreaComponent>(componentFactory, null, this.injector);
+    this.selectionArea = this.container.createComponent<SelectionAreaComponent>(componentFactory, undefined, this.injector);
 
     // this.selectionArea = this.generateComponent(SelectionAreaComponent);
     this.selectionArea.instance.init(this);

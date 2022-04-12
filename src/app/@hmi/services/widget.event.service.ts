@@ -13,7 +13,7 @@ import { MethodMeta } from "../core/widget.meta.data";
   providedIn: 'root'
 })
 export class WidgetEventService {
-  private canvas: ViewCanvasComponent;
+  private canvas!: ViewCanvasComponent;
 
   /**
    * 初始化 事件服务所属canvas
@@ -30,7 +30,7 @@ export class WidgetEventService {
    * @param method 事件数据
    * @param params 事件参数
    */
-  public dispatch(sender: BasicWidgetComponent, receiver: string, method: string, params: AnyObject) {
+  public dispatch(sender: BasicWidgetComponent, receiver: string | undefined, method: string, params: AnyObject) {
     const targets = this.getEventTargets(receiver, sender);
     for (let i = 0; i < targets.length; i++) {
       const comp = targets[i].instance;
@@ -49,7 +49,7 @@ export class WidgetEventService {
    * @param sender 
    * @returns 
    */
-  private getEventTargets(receiver: string, sender: BasicWidgetComponent) {
+  private getEventTargets(receiver: string | undefined, sender: BasicWidgetComponent) {
     if (receiver == null) return this.canvas.children.filter(e => e.instance != sender);
     const children = this.canvas.children;
     const comp = children.find(e => e.instance.configure.id === receiver);
@@ -65,9 +65,9 @@ export class WidgetEventService {
    * @param method 事件方法名
    * @param params 事件参数
    */
-  private eventHandle(receiver: BasicWidgetComponent, method: string, params: AnyObject) {
+  private eventHandle(receiver: BasicWidgetComponent, method: string, params: AnyObject): void {
     const methodMeta = receiver.metaData.interface[method];
-    const methodFunc = receiver[method];
+    const methodFunc = receiver.getMemberFunction(method);
     if (method && methodFunc) {
       const args = this.getEventParams(methodMeta, params);
       if (args != null) methodFunc.apply(this, args);
@@ -81,13 +81,13 @@ export class WidgetEventService {
    * @param params 调用参数 
    * @returns 
    */
-  private getEventParams(method: MethodMeta, params: AnyObject): AnyObject[] {
+  private getEventParams(method: MethodMeta, params: AnyObject): AnyObject[] | undefined {
     const args: AnyObject[] = [];
-    for (let i = 0; i < method.args.length; i++) {
-      const arg = method.args[i];
+    for (let i = 0; i < method!.args!.length; i++) {
+      const arg = method.args![i];
       const value = params[arg.argName];
       // 严格模式下，参数不匹配则跳出
-      if (method.strict && value === undefined) return;
+      if (method.strict && value === undefined) return undefined;
       args[i] = value;
     }
     return args;

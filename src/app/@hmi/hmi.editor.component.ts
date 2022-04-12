@@ -26,7 +26,7 @@ export class HmiEditorComponent extends GenericComponent {
   public readonly DEFAULT_ADSORB_THRESHOLD: number = 7;
   // @ViewChildren(SplitAreaDirective) areasEl: QueryList<SplitAreaDirective>
 
-  @ViewChild('canvas', { static: true }) canvas: DisignerCanvasComponent;
+  @ViewChild('canvas', { static: true }) canvas!: DisignerCanvasComponent;
 
 
   public leftAreaVisible: boolean = true;
@@ -85,18 +85,18 @@ export class HmiEditorComponent extends GenericComponent {
       const defaultConfigure: WidgetConfigure = {
         id: `id:${i}`,
         name: `name:${i}`,
-        type: widgetType.type,
+        type: widgetType!.type!,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),
-          width: widgetType.default.rect.width,
-          height: widgetType.default.rect.height
+          width: widgetType!.default.rect!.width,
+          height: widgetType!.default.rect!.height
         },
         // locked: false,
         // group: Math.floor(Math.random() * 3),
-        style: widgetType.default.style,
-        data: widgetType.default.data,
-        events: widgetType.default.events
+        style: widgetType!.default.style,
+        data: widgetType!.default.data,
+        events: widgetType!.default.events
       };
       const compRef = this.canvas.parseComponent(defaultConfigure);
       if (compRef) this.canvas.add(compRef);
@@ -109,8 +109,10 @@ export class HmiEditorComponent extends GenericComponent {
    * 执行一条命令
    * @param cmd 
    */
-  public execute(cmd: BasicCommand): void {
-    this.history.execute(cmd);
+  public execute(cmd: BasicCommand | null): void {
+    if (cmd) {
+      this.history.execute(cmd);
+    }
     this.selection.update();
     this.canvas.selectionArea.changeDetectorRef.detectChanges();
   }
@@ -138,7 +140,7 @@ export class HmiEditorComponent extends GenericComponent {
    */
   public executeGroupCommand(): void {
     const hasGroupObjects = this.canvas.children.filter(e => e.instance.groupId != null);
-    const groupIds = hasGroupObjects.map(e => e.instance.groupId);
+    const groupIds = hasGroupObjects.map(e => e.instance.groupId!);
     groupIds.push(0);
     const maxGroupId = Math.max(...groupIds);
     this.execute(new WidgetAttributeCommand(this, this.selection.objects, 'configure/group', [maxGroupId + 1]));

@@ -34,13 +34,13 @@ import { WidgetListComponent } from './editor/components/widget-list/widget.list
 import { WidgetDragDirective } from './directives/widget.drag.directive';
 import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
 import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
-import { WidgetEventComponent } from './editor/properties/widget.event/widget.event.component';
 import { TextPropertyComponent } from './editor/properties/text.property/text.property.component';
 import { NumberPropertyComponent } from './editor/properties/number.property/number.property.component';
 import { SelectPropertyComponent } from './editor/properties/select.property/select.property.component';
 import { PropertyElementComponent } from './editor/components/property-element/property.element.component';
 import { ColorPropertyComponent } from './editor/properties/color.property/color.property.component';
 import { SliderPropertyComponent } from './editor/properties/slider.property/slider.property.component';
+import { BooleanSelectPropertyComponent } from './editor/properties/boolean.select.property/boolean.select.property.component';
 // import { DataPropertyDirective } from './editor/directives/prop.directive';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
@@ -90,7 +90,6 @@ const EXPORT_COMPONENTS = [
   PropertyElementComponent,
 
   // propertys
-  WidgetEventComponent,
 
 
 
@@ -98,7 +97,8 @@ const EXPORT_COMPONENTS = [
   NumberPropertyComponent,
   SelectPropertyComponent,
   ColorPropertyComponent,
-  SliderPropertyComponent
+  SliderPropertyComponent,
+  BooleanSelectPropertyComponent
 ];
 
 /**

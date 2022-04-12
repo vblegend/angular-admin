@@ -19,7 +19,7 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
  * 橡皮筋套选工具
  */
 export class PropertyGridComponent extends GenericComponent {
-  @Input() editor: HmiEditorComponent;
+  @Input() editor!: HmiEditorComponent;
   /**
    *
    */

@@ -57,7 +57,7 @@ export function WidgetInterface(name: string, description: string, strict?: bool
         const metaData = prototype.metaData as WidgetMetaObject;
         metaData.prototype = prototype;
         if (metaData.interface[methodName] == null) {
-            metaData.interface[methodName] = { methodName, name, description, descriptor, args: [], strict };
+            metaData.interface[methodName] = { methodName, name, description, descriptor, args: [], strict: strict ? true : false };
         }
         const method = metaData.interface[methodName];
         method.name = name;
@@ -78,9 +78,9 @@ export function Params(argName: string): (target: Function, methodName: string, 
     return function (target: any, methodName: string, paramIndex: number) {
         const metaData = target.metaData as WidgetMetaObject;
         if (metaData.interface[methodName] == null) {
-            metaData.interface[methodName] = { methodName: null, name: null, description: null, descriptor: null, args: [], strict: false };
+            metaData.interface[methodName] = { methodName:  undefined, name: undefined, description: undefined, descriptor: undefined, args: [], strict: false };
         }
         const method = metaData.interface[methodName];
-        method.args[paramIndex] = { argName, paramIndex };
+        method.args![paramIndex] = { argName, paramIndex };
     }
 }

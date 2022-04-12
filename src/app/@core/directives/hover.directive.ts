@@ -6,11 +6,11 @@ import { BaseDirective } from './base.directive';
 })
 export class HoverDirective extends BaseDirective {
     @Input('hitHover') color: string = '#007ACC';
-    @Input() cursor: string = null;
+    @Input() cursor?: string;
 
-    private isHover: boolean;
-    private _oldColor: string;
-    private _oldCursor: string;
+    private isHover?: boolean;
+    private _oldColor?: string;
+    private _oldCursor?: string;
 
     protected onInit(): void {
         this.isHover = false;
@@ -32,9 +32,9 @@ export class HoverDirective extends BaseDirective {
     public onMouseLeave(): void {
         if (this.isHover) {
             this.isHover = false;
-            this.element.style.color = this._oldColor;
-            if (this.cursor) this.element.style.cursor = this._oldCursor;
-            this._oldColor = null;
+            this.element.style.color = this._oldColor!;
+            if (this.cursor) this.element.style.cursor = this._oldCursor!;
+            this._oldColor = undefined;
         }
     }
 

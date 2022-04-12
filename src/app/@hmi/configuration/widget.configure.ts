@@ -1,3 +1,4 @@
+import { AnyObject } from "@core/common/types";
 import { Rectangle } from "@hmi/core/common";
 
 
@@ -89,7 +90,7 @@ export interface WidgetDefaultConfigure {
     /**
      * 位置与大小
      */
-    rect?: Rectangle;
+    rect: Rectangle | null;
     /**
      * 
      * 样式属性，主动更新。
@@ -133,6 +134,7 @@ export interface WidgetEventConfigure {
  * 2D组态元素配置
  */
 export interface WidgetConfigure extends WidgetDefaultConfigure {
+
     /**
      * 对象唯一ID
      */
@@ -144,7 +146,7 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
     /**
      * 对象类型
      */
-    type: string;
+    type: string | null;
     /**
      * 被锁定的
      */

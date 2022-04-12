@@ -65,7 +65,7 @@ export class SelectionService {
      * 添加一个对象至选区。
      * @param component 
      */
-    public add(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public add(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const comp = this.addItem(component);
         if (comp) this.update();
         return comp;
@@ -84,7 +84,7 @@ export class SelectionService {
      * 从选区删除一个对象，取消对象的选中状态
      * @param component 
      */
-    public remove(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public remove(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const comp = this.removeItem(component);
         if (comp) this.update();
         return comp;
@@ -97,7 +97,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    public addItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public addItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         if (component) {
             const index = this.components.indexOf(component);
             if (index === -1) {
@@ -115,7 +115,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    private removeItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    private removeItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const index = this.components.indexOf(component);
         if (index > -1) {
             this.components.splice(index, 1);
@@ -183,7 +183,7 @@ export class SelectionService {
      * @returns 
      */
     public update(): void {
-        let bounds: Rectangle = null;
+        let bounds: Rectangle | null = null;
         for (let i = 0; i < this.components.length; i++) {
             if (bounds == null) {
                 bounds = this.components[i].instance.configure.rect;

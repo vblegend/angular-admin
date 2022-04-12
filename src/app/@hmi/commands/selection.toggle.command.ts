@@ -8,7 +8,7 @@ import { BasicCommand } from "./basic.command";
  * 在编辑器选取内 切换当前数组的选中状态
  */
 export class SelectionToggleCommand extends BasicCommand {
-    public objects: ComponentRef<BasicWidgetComponent>[];
+    public objects!: ComponentRef<BasicWidgetComponent>[];
 
     constructor(editor: HmiEditorComponent, objects: ComponentRef<BasicWidgetComponent>[]) {
         super(editor);
@@ -26,4 +26,5 @@ export class SelectionToggleCommand extends BasicCommand {
     public update(cmd: BasicCommand): void {
 
     }
+    
 }

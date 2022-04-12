@@ -10,7 +10,7 @@ export interface WidgetSchema {
      * 组件类型
      * schema文件中不需要定义，当service load时会自动填充
      */
-    type?: string;
+    type?: string | null;
 
     /**
      * 组件的图标
@@ -50,6 +50,6 @@ export interface WidgetSchema {
      * 属性对话框中所显示的属性设置由此定义\
      * 未定义的属性将无法设置属性
      */
-    properties?: Record<string, Type<BasicPropertyComponent>>;
+    // properties?: Record<string, Type<BasicPropertyComponent>>;
 }
 

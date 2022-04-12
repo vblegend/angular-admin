@@ -17,10 +17,10 @@ import { PropertyElementComponent } from '../property-element/property.element.c
 /**
  * 
  */
-export abstract class BasicPropertyComponent extends GenericComponent {
+export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComponent {
   @Input()
-  public editor: HmiEditorComponent;
-  protected batchNo?: number;
+  public editor!: HmiEditorComponent;
+  protected batchNo?: number | undefined;
   private _attributePath: string = 'data';
   private _attrPaths: string[] = [];
 
@@ -47,13 +47,21 @@ export abstract class BasicPropertyComponent extends GenericComponent {
   @Host()
   private parent: PropertyElementComponent;
 
+
+  /**
+   * 当绑定的数据为null时 使用当前值
+   */
+  @Input()
+  public nullValue: TPropertyVlaue | undefined;
+
+
   /**
    *,, @Host() private parent: PropertyElementComponent
    */
   constructor(protected injector: Injector) {
     super(injector);
     this.parent = this.injector.get(PropertyElementComponent);
-    this.batchNo = null;
+    this.batchNo = undefined;
   }
 
 
@@ -68,15 +76,33 @@ export abstract class BasicPropertyComponent extends GenericComponent {
    * 
    */
   @ViewChildren(NgModel)
-  protected modelDirectives?: QueryList<NgModel> = new QueryList();
+  protected modelDirectives: QueryList<NgModel> = new QueryList();
 
   @Sealed()
   protected onAfterViewInit(): void {
     for (let i = 0; i < this.modelDirectives.length; i++) {
       const ngModel = this.modelDirectives.get(i);
-      const subscription = ngModel.update.subscribe(e => { this.saveAndUpdate(e); });
+      const subscription = ngModel!.update.subscribe(e => { this.saveAndUpdate(e); });
       this.managedSubscription(subscription);
     }
+  }
+
+
+
+
+
+
+
+  /**
+   * 保存变更并更新
+   */
+  public saveAndUpdate(value: TPropertyVlaue): void {
+    const fixValue = this.dataModify_fix(value);
+    console.log(`数据被变更 ${this.attributePath} => ${value}`);
+    const obejcts = this.editor.selection.objects.map(e => e.instance.configure);
+    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [fixValue], this.batchNo);
+    this.editor.execute(command);
+    this.detectChanges();
   }
 
 
@@ -86,57 +112,28 @@ export abstract class BasicPropertyComponent extends GenericComponent {
    * @param value 用户实际输入的数值
    * @returns 返回被修复的数值
    */
-  protected dataModify_fix(value: AnyObject): AnyObject {
+  protected dataModify_fix(value: TPropertyVlaue): TPropertyVlaue {
     return value;
   }
 
-
   /**
+   * 
    * 数据绑定修复扩展\
    * 此事件发生在组件绑定模型数据之前\
    * @param value 绑定模型的实际数据
    * @returns 组件中显示的数据
    */
-  protected dataBinding_fix(value: AnyObject): AnyObject {
-    return value;
+  protected dataBinding_fix(value: TPropertyVlaue | undefined): TPropertyVlaue | undefined {
+    return value != null ? value : this.nullValue;
   }
 
-  /**
-   * 保存变更并更新
-   */
-  public saveAndUpdate(value: AnyObject): void {
-    const fixValue = this.dataModify_fix(value);
-    console.log(`数据被变更 ${this.attributePath} => ${value}`);
-    const obejcts = this.editor.selection.objects.map(e => e.instance.configure);
-    const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [fixValue], this.batchNo);
-    this.editor.execute(command);
-    this.detectChanges();
-  }
-
-  public get objects(): ComponentRef<BasicWidgetComponent>[] {
-    return this.editor.selection.objects;
-  }
-
-  public get object(): ComponentRef<BasicWidgetComponent> {
-    return this.editor.selection.objects[0];
-  }
-
-  public get configure(): WidgetConfigure {
-    if (this.editor.selection.objects && this.editor.selection.objects.length > 0) {
-      return this.editor.selection.objects[0].instance.configure;
-    }
-    return null;
-  }
-
-
-
-
-
-  public get defaultProperty(): AnyObject {
-    let value = this.configure;
-    if (value == null) return value;
+  public get defaultProperty(): TPropertyVlaue | undefined {
+    let value = <TPropertyVlaue><unknown>this.configure;
+    if (value == null) return undefined;
     for (let i = 0; i < this._attrPaths.length; i++) {
-      value = value[this._attrPaths[i]];
+      if (value != null) {
+        value = <TPropertyVlaue><unknown>value[this._attrPaths[i] as keyof TPropertyVlaue];
+      }
     }
     return this.dataBinding_fix(value);
   }
@@ -146,6 +143,20 @@ export abstract class BasicPropertyComponent extends GenericComponent {
 
 
 
+  public get objects(): ComponentRef<BasicWidgetComponent>[] {
+    return this.editor.selection.objects;
+  }
+
+  public get object(): ComponentRef<BasicWidgetComponent> {
+    return this.editor.selection.objects[0];
+  }
+
+  public get configure(): WidgetConfigure | null {
+    if (this.editor.selection.objects && this.editor.selection.objects.length > 0) {
+      return this.editor.selection.objects[0].instance.configure;
+    }
+    return null;
+  }
 
 
 }
