@@ -100,6 +100,7 @@ export class WidgetDragDirective extends BaseDirective {
             zIndex: this.editor.canvas.children.length,
             style: ObjectUtil.clone(schema.default.style)!,
             data: ObjectUtil.clone(schema.default.data)!,
+            interval : 10000,
             rect: {
                 left: Math.floor(x - schema.default.rect!.width / 2),
                 top: Math.floor(y - schema.default.rect!.height / 2),

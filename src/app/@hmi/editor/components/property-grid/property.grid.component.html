@@ -3,7 +3,12 @@
         <ngx-collapse header="基础属性" [expanded]="true">
             <div class="prioerty-continer">
                 <hmi-property-element [editor]="editor" attributePath="zIndex" title="层级索引" tooltip="决定小部件之间的层级，谁压住了谁">
-                    <hmi-number-property [max]="10000" [min]="0" [precision]="0" unit="单位" [nullValue]="0">
+                    <hmi-number-property [max]="10000" [min]="0" [precision]="0" [step]="1" [nullValue]="0">
+                    </hmi-number-property>
+                </hmi-property-element>
+
+                <hmi-property-element [editor]="editor" attributePath="interval" title="刷新间隔" tooltip="数据刷新间隔">
+                    <hmi-number-property [max]="10000" [min]="0" [precision]="0" [step]="1" unit="秒" [nullValue]="0">
                     </hmi-number-property>
                 </hmi-property-element>
 

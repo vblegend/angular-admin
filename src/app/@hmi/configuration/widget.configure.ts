@@ -107,6 +107,11 @@ export interface WidgetDefaultConfigure {
     data: WidgetDataConfigure;
 
     /**
+     * 刷新间隔(秒)
+     */
+    interval: number;
+
+    /**
      * 部件的事件触发
      * 一个事件可以触发多个接口方法
      */
@@ -168,5 +173,7 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 是否可见
      */
     visible?: boolean;
+
+
 
 }

@@ -20,6 +20,7 @@ export const CustomImageWidgets: WidgetSchema[] = [
         component: ImgWidgetComponent,
         default: {
             rect: { width: 64, height: 128 },
+            interval:100,
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
@@ -37,6 +38,7 @@ export const CustomImageWidgets: WidgetSchema[] = [
         component: SvgWidgetComponent,
         default: {
             rect: { width: 250, height: 100 },
+            interval:100,
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
@@ -56,6 +58,7 @@ export const CustomOtherWidgets: WidgetSchema[] = [
         component: TaskWidgetComponent,
         default: {
             rect: { width: 300, height: 150 },
+            interval:100,
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }
@@ -68,6 +71,7 @@ export const CustomOtherWidgets: WidgetSchema[] = [
         component: SubmitButtonWidgetComponent,
         default: {
             rect: { width: 86, height: 32 },
+            interval:100,
             style: {},
             data: {},
             events: { 'click': [{ method: 'updateImg', params: { standardId: 33333 } }, { method: 'updateSvg', params: { roomId: 44444 } }] }

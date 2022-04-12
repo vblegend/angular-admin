@@ -32,6 +32,7 @@ export class HmiViewerComponent extends GenericComponent {
         id: `id:${i}`,
         name: `name:${i}`,
         type: widgetType!.type!,
+        interval: 100,
         rect: {
           left: Math.floor(Math.random() * 2560),
           top: Math.floor(Math.random() * 1280),

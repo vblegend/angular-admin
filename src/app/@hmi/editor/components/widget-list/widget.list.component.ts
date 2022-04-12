@@ -86,6 +86,7 @@ export class WidgetListComponent extends GenericComponent {
       id: this.generateId(),
       name: this.generateName(schema.name),
       type: schema.type!,
+      interval: schema.default.interval,
       zIndex: this.editor.canvas.children.length,
       style: ObjectUtil.clone(schema.default.style)!,
       data: ObjectUtil.clone(schema.default.data)!,

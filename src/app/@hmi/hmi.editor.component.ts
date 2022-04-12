@@ -92,6 +92,7 @@ export class HmiEditorComponent extends GenericComponent {
           width: widgetType!.default.rect!.width,
           height: widgetType!.default.rect!.height
         },
+        interval: 10000,
         // locked: false,
         // group: Math.floor(Math.random() * 3),
         style: widgetType!.default.style,
