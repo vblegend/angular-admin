@@ -30,7 +30,6 @@
 
                 <hmi-property-element [editor]="editor" attributePath="style/opacity" title="透明度" tooltip="字体颜色值">
                     <hmi-slider-property [max]="1" [min]="0" [step]="0.1" unit="单位" [nullValue]="1">
-
                     </hmi-slider-property>
                 </hmi-property-element>
 
@@ -40,23 +39,13 @@
                     <hmi-color-property>
                     </hmi-color-property>
                 </hmi-property-element>
-
-
-
-
-
             </div>
         </ngx-collapse>
-        <ngx-collapse header="高级属性" [expanded]="true">
-        </ngx-collapse>
-
     </nz-tab>
     <nz-tab nzTitle="样式">
         <ngx-collapse header="基础样式" [expanded]="true">
-
         </ngx-collapse>
         <ngx-collapse header="高级样式" [expanded]="true">
-
         </ngx-collapse>
     </nz-tab>
     <nz-tab nzTitle="事件" expanded="true">

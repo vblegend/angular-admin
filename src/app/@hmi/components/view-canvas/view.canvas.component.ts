@@ -6,19 +6,30 @@ import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
 import { Rectangle } from '@hmi/core/common';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { TimerPoolService } from '@hmi/services/timer.pool.service';
 
 @Component({
   selector: 'hmi-view-canvas',
   templateUrl: './view.canvas.component.html',
   styleUrls: ['./view.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: WidgetEventService }]
+  providers: [
+    WidgetEventService,
+    TimerPoolService
+  ]
 })
 export class ViewCanvasComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
   public container!: ViewContainerRef;
   private _children: ComponentRef<BasicWidgetComponent>[];
   private _eventHub: WidgetEventService;
+  /**
+ * 获取定时器池
+ */
+  public readonly timerPool: TimerPoolService;
+
+
+
 
   /**
    *
@@ -26,6 +37,7 @@ export class ViewCanvasComponent extends GenericComponent {
   constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._children = [];
+    this.timerPool = injector.get(TimerPoolService);
     this._eventHub = injector.get(WidgetEventService);
     this._eventHub.initCanvas$(this);
   }
@@ -121,7 +133,7 @@ export class ViewCanvasComponent extends GenericComponent {
         this.container.detach(v);
         componentRef.hostView.detach();
         const widgetSchema = this.provider.getType(configure.type);
-        componentRef.instance.$initialization(configure, widgetSchema!.default);
+        componentRef.instance.$initialization(this, configure, widgetSchema!.default);
       }
     }
     if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);

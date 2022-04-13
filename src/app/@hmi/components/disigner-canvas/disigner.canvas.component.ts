@@ -8,13 +8,17 @@ import { HmiEditorComponent } from '../../hmi.editor.component';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { TimerPoolService } from '@hmi/services/timer.pool.service';
 
 @Component({
   selector: 'hmi-disigner-canvas',
   templateUrl: './disigner.canvas.component.html',
   styleUrls: ['./disigner.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{ provide: WidgetEventService }]
+  providers: [
+    WidgetEventService,
+    TimerPoolService
+  ]
 })
 export class DisignerCanvasComponent extends ViewCanvasComponent {
   @Input() editor!: HmiEditorComponent;
