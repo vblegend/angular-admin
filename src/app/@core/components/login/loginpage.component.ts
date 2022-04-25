@@ -48,9 +48,11 @@ export class LoginPageComponent extends GenericComponent {
     // this.accountService.login(this.password).then(e => {
     //   console.log(e);
     // });
-    this.createTimer(() => {
-      this.loadingWait = false;
-    }).start(3000);
+    this.timeout(3000, () => { this.loadingWait = false; });
+
+
+
+
 
   }
 }

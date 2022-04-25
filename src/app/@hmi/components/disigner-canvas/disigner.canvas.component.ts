@@ -1,14 +1,20 @@
 
-import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, Host, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Vector2 } from '@hmi/core/common';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { WidgetConfigure } from '../../configuration/widget.configure';
-import { HmiEditorComponent } from '../../hmi.editor.component';
+import { HmiEditorComponent } from '../../editor/hmi.editor.component';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
-import { TimerPoolService } from '@hmi/services/timer.pool.service';
+import { TimerPoolService } from '@core/services/timer.pool.service';
+import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
+import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
+import { BatchCommand } from '@hmi/editor/commands/batch.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { WidgetRemoveCommand } from '@hmi/editor/commands/widget.remove.command';
+import { WidgetAddCommand } from '@hmi/editor/commands/widget.add.command';
+
 
 @Component({
   selector: 'hmi-disigner-canvas',
@@ -16,19 +22,23 @@ import { TimerPoolService } from '@hmi/services/timer.pool.service';
   styleUrls: ['./disigner.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    /* 为每个canvas 生成单独的管理服务 */
     WidgetEventService,
     TimerPoolService
   ]
 })
 export class DisignerCanvasComponent extends ViewCanvasComponent {
-  @Input() editor!: HmiEditorComponent;
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container!: ViewContainerRef;
-  @ViewChild('scrollViewer', { static: true }) scrollViewer!: ElementRef<HTMLDivElement>;
-  // @ViewChild('snapLineAxisV', { static: true }) snapLineAxisV: DisignerCanvasComponent;
+
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
+  public container!: ViewContainerRef;
+
+  @ViewChild('scrollViewer', { static: true })
+  public scrollViewer!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('selectionArea', { static: true })
+  public selectionArea!: SelectionAreaComponent;
 
   public ignoreContextMenu?: boolean;
-
-  public selectionArea!: ComponentRef<SelectionAreaComponent>;
   /**
    * 设置/获取 视图的缩放倍率
    */
@@ -72,16 +82,17 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService, public editor: HmiEditorComponent) {
     super(injector, provider);
     this.zoomScale = 1;
+    this.editor = editor;
   }
 
 
 
   protected onInit(): void {
     super.onInit();
-    this.initSelectionAreaComponent();
+    // this.selectionArea = this.container.createComponent(SelectionAreaComponent);
     this.scrollViewer.nativeElement.setAttribute('tabindex', '0');
   }
 
@@ -89,22 +100,9 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
     this.scrollViewer.nativeElement.focus();
   }
 
-  private initSelectionAreaComponent() {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory<SelectionAreaComponent>(SelectionAreaComponent);
-    this.selectionArea = this.container.createComponent<SelectionAreaComponent>(componentFactory, undefined, this.injector);
-
-    // this.selectionArea = this.generateComponent(SelectionAreaComponent);
-    this.selectionArea.instance.init(this);
-    // this.selectionArea.hostView.detach();
-    // this.container.insert(this.selectionArea.hostView);
-  }
-
-
-
-
-
   @HostListener('document:keydown', ['$event'])
   public onKeybordDown(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLDivElement)) return;
     if (event.code == 'Control') {
       this._ctrlPressed = true;
     }
@@ -120,6 +118,7 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
 
   @HostListener('document:keyup', ['$event'])
   public onKeybordUp(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLDivElement)) return;
     if (event.code == 'Control') {
       this._ctrlPressed = false;
     }
@@ -146,5 +145,4 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   public closeMenu(): void {
     this.contextMenuService.close();
   }
-
 }

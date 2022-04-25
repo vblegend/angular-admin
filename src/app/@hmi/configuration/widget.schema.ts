@@ -40,12 +40,6 @@ export interface WidgetSchema {
     component: Type<BasicWidgetComponent>;
 
     /**
-     * 组件的默认配置
-     */
-    default: WidgetDefaultConfigure;
-
-
-    /**
      * 定义data结构中所用到的属性选择器\
      * 属性对话框中所显示的属性设置由此定义\
      * 未定义的属性将无法设置属性

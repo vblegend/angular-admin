@@ -72,6 +72,7 @@
             "vendorChunk": true,
             "extractLicenses": false,
             "buildOptimizer": false,
+            "aot": true,
             "sourceMap": true,
             "optimization": false,
             "namedChunks": true
@@ -117,14 +118,16 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "defaultConfiguration": "development",
           "options": {
-            "browserTarget": "ngx-admin-demo:build:development"
+            "browserTarget": "ngx-admin-demo:build:development",
+            "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
             "production": {
               "browserTarget": "ngx-admin-demo:build:production"
             },
             "development": {
-              "browserTarget": "ngx-admin-demo:build:development"
+              "browserTarget": "ngx-admin-demo:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           }
         },

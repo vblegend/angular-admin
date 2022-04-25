@@ -1,12 +1,9 @@
-import { Component, ComponentRef, Host, HostBinding, Injector, Input, QueryList, ViewChildren } from '@angular/core';
+import { Component, Injector, Input, QueryList, ViewChildren } from '@angular/core';
 import { NgModel } from '@angular/forms';
-import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { Sealed } from '@core/decorators/sealed';
-import { GenericAttributeCommand } from '@hmi/commands/generic.attribute.command';
-import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
+import { GenericAttributeCommand } from '@hmi/editor/commands/generic.attribute.command';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { PropertyElementComponent } from '../property-element/property.element.component';
 @Component({
   selector: 'app-basic-comp',
@@ -18,11 +15,16 @@ import { PropertyElementComponent } from '../property-element/property.element.c
  * 
  */
 export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComponent {
-  @Input()
-  public editor!: HmiEditorComponent;
+
   protected batchNo?: number | undefined;
   private _attributePath: string = 'data';
   private _attrPaths: string[] = [];
+  /**
+   * 
+   */
+  @ViewChildren(NgModel)
+  protected modelDirectives: QueryList<NgModel> = new QueryList();
+
 
   /**
    * 属性的路径\
@@ -33,7 +35,6 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
    * “data/deviceId”
    */
   @Input()
-  // public readonly attributePath: string = 'data';
   public set attributePath(value: string) {
     this._attributePath = value;
     this._attrPaths = value.split('/');
@@ -44,10 +45,6 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
   }
 
 
-  @Host()
-  private parent: PropertyElementComponent;
-
-
   /**
    * 当绑定的数据为null时 使用当前值
    */
@@ -56,30 +53,31 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
 
 
   /**
-   *,, @Host() private parent: PropertyElementComponent
+   * 当选中多个对象时，如果当前对象支持多个对象且对象的属性不同时 则使用该值
+   */
+  @Input()
+  public diffValue: TPropertyVlaue | undefined;
+
+  public editor!: HmiEditorComponent;
+  public parent: PropertyElementComponent;
+  /**
+   *, @Host() private parent: PropertyElementComponent
    */
   constructor(protected injector: Injector) {
     super(injector);
-    this.parent = this.injector.get(PropertyElementComponent);
     this.batchNo = undefined;
-  }
-
-
-  protected onInit(): void {
+    this.editor = this.injector.get(HmiEditorComponent);
+    this.parent = this.injector.get(PropertyElementComponent);
     this.editor = this.parent.editor;
     this.attributePath = this.parent.attributePath;
   }
 
-
-
   /**
-   * 
+   * 禁止重写此方法\
+   * 组件附加至容器后触发\
+   * 本方法已 no catch ，方法内触发catch不影响主逻辑\
    */
-  @ViewChildren(NgModel)
-  protected modelDirectives: QueryList<NgModel> = new QueryList();
-
-  @Sealed()
-  protected onAfterViewInit(): void {
+  protected readonly onAfterViewInit = (): void => {
     for (let i = 0; i < this.modelDirectives.length; i++) {
       const ngModel = this.modelDirectives.get(i);
       const subscription = ngModel!.update.subscribe(e => { this.saveAndUpdate(e); });
@@ -98,9 +96,14 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
    */
   public saveAndUpdate(value: TPropertyVlaue): void {
     const fixValue = this.dataModify_fix(value);
-    console.log(`数据被变更 ${this.attributePath} => ${value}`);
     const obejcts = this.editor.selection.objects.map(e => e.instance.configure);
     const command = new GenericAttributeCommand(this.editor, obejcts, this.attributePath, [fixValue], this.batchNo);
+    if (this._attrPaths[0] === 'data') {
+      this.editor.selection.objects.map(widget => {
+        const onDataChanged = widget.instance.getMemberFunction('onDataChanged');
+        onDataChanged.apply(widget.instance, [this._attrPaths, value]);
+      });
+    }
     this.editor.execute(command);
     this.detectChanges();
   }
@@ -127,6 +130,11 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
     return value != null ? value : this.nullValue;
   }
 
+
+
+  /**
+   * 获取第一个选中对象的属性
+   */
   public get defaultProperty(): TPropertyVlaue | undefined {
     let value = <TPropertyVlaue><unknown>this.configure;
     if (value == null) return undefined;
@@ -138,19 +146,9 @@ export abstract class BasicPropertyComponent<TPropertyVlaue> extends GenericComp
     return this.dataBinding_fix(value);
   }
 
-
-
-
-
-
-  public get objects(): ComponentRef<BasicWidgetComponent>[] {
-    return this.editor.selection.objects;
-  }
-
-  public get object(): ComponentRef<BasicWidgetComponent> {
-    return this.editor.selection.objects[0];
-  }
-
+  /**
+   * 获取第一个选中对象的配置文件
+   */
   public get configure(): WidgetConfigure | null {
     if (this.editor.selection.objects && this.editor.selection.objects.length > 0) {
       return this.editor.selection.objects[0].instance.configure;

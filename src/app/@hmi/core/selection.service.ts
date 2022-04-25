@@ -1,5 +1,6 @@
 import { ComponentRef } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { WidgetConfigure } from "@hmi/configuration/widget.configure";
 import { HmiMath } from "@hmi/utility/hmi.math";
 import { Rectangle } from "./common";
 
@@ -7,8 +8,8 @@ import { Rectangle } from "./common";
 export class SelectionService {
 
     private components: ComponentRef<BasicWidgetComponent>[];
-
     private _selectionBounds: Rectangle;
+    private _configures: WidgetConfigure[] = [];
 
     /**
      * 获取选区的边界线
@@ -23,6 +24,15 @@ export class SelectionService {
     public get objects(): ComponentRef<BasicWidgetComponent>[] {
         return this.components.slice();
     }
+
+
+    public get configures(): WidgetConfigure[] {
+        return this._configures.slice();
+    }
+
+
+
+
 
     /**
      *
@@ -185,13 +195,15 @@ export class SelectionService {
     public update(): void {
         let bounds: Rectangle | null = null;
         for (let i = 0; i < this.components.length; i++) {
+            const rect = this.components[i].instance.getRelativeRect();  // this.components[i].instance.configure.rect
             if (bounds == null) {
-                bounds = this.components[i].instance.configure.rect;
+                bounds = rect;
             } else {
-                bounds = HmiMath.extendsRectangle(bounds, this.components[i].instance.configure.rect);
+                bounds = HmiMath.extendsRectangle(bounds, rect);
             }
         }
         this._selectionBounds = bounds || { left: 0, top: 0, width: 0, height: 0 };
+        this._configures = this.objects.map(e => e.instance.configure);
     }
 
 

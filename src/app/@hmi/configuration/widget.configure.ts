@@ -15,7 +15,7 @@ export interface WidgetDataConfigure {
 /**
  * 2D组态元素样式
  */
-export interface WidgetStyle {
+export interface WidgetStyles {
 
     /**
      * 组件背景色
@@ -57,6 +57,12 @@ export interface WidgetStyle {
      */
     textAlign?: string;
 
+
+    /**
+     * 对象的旋转方位
+     */
+    rotate?: number;
+
 }
 
 export interface Position {
@@ -97,7 +103,7 @@ export interface WidgetDefaultConfigure {
      * 所有为空的属性请置为null，不要使用undefined\
      * 因为设置为undefined会触发组件的数据兼容从而恢复为默认值
      */
-    style: WidgetStyle;
+    style: WidgetStyles;
 
     /**
      * 组态绑定数据，被动更新 需事件通知\
@@ -107,7 +113,7 @@ export interface WidgetDefaultConfigure {
     data: WidgetDataConfigure;
 
     /**
-     * 刷新间隔(秒)
+     * 刷新间隔(秒)  为0时不刷新
      */
     interval: number;
 
@@ -123,11 +129,11 @@ export interface WidgetEventConfigure {
     /**
      * 目标对象，为空则广播给所有部件
      */
-    target?: string;
+    target: string | null;
     /**
      * 对象的接口方法名
      */
-    method: string;
+    method: string | null;
     /**
      * 指定参数，重写参数
      */

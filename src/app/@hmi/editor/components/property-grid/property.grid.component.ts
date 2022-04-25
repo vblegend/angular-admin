@@ -1,14 +1,7 @@
-import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { BasicCommand } from '@hmi/commands/basic.command';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
-import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
-import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
-
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
-import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
-
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
+import { WidgetPropertiesService } from '@hmi/services/widget.properties.service';
 
 @Component({
   selector: 'hmi-property-grid',
@@ -19,19 +12,8 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
  * 橡皮筋套选工具
  */
 export class PropertyGridComponent extends GenericComponent {
-  @Input() editor!: HmiEditorComponent;
-  /**
-   *
-   */
-  constructor(protected injector: Injector, protected provider: WidgetSchemaService) {
+
+  constructor(protected injector: Injector, public editor: HmiEditorComponent, public properties: WidgetPropertiesService) {
     super(injector);
   }
-
-  protected onInit(): void {
-
-  }
-
-
-
-
 }

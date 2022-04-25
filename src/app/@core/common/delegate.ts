@@ -1,4 +1,3 @@
-import { AnyObject } from "./types";
 
 export declare type Delegate = () => void;
 

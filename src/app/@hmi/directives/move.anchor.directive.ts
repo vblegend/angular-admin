@@ -1,27 +1,21 @@
-import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
+import { Directive, HostListener, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { WidgetAttributeCommand } from '@hmi/commands/widget.attribute.command';
-import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
-import { Position } from '@hmi/configuration/widget.configure';
+import { WidgetAttributeCommand } from '@hmi/editor/commands/widget.attribute.command';
 import { Rectangle, Vector2 } from '@hmi/core/common';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 
 @Directive({
     selector: '[moveAnchor]'
 })
 
 export class MoveAnchorDirective extends BaseDirective {
-    @Input() host!: SelectionAreaComponent;
-    @Input() editor!: HmiEditorComponent;
-
     private buttonDown = false;
     private batchNo!: number;
     private offsetX!: number;
     private offsetY!: number;
     private allowMoved!: boolean;
 
-    constructor(protected injector: Injector) {
+    constructor(protected injector: Injector, private editor: HmiEditorComponent) {
         super(injector);
     }
 
@@ -38,7 +32,7 @@ export class MoveAnchorDirective extends BaseDirective {
             this.batchNo = Math.floor(Math.random() * Number.MAX_VALUE);
             this.element.style.cursor = this.allowMoved ? 'move' : 'no-drop';
             const scale = this.editor.canvas.zoomScale;
-            this.editor.adsorb.captureAnchors();
+            this.editor.adsorbService.captureAnchors();
             this.offsetX = (ev.clientX / scale - this.editor.selection.bounds.left!);
             this.offsetY = (ev.clientY / scale - this.editor.selection.bounds.top!);
             ev.preventDefault();
@@ -56,8 +50,14 @@ export class MoveAnchorDirective extends BaseDirective {
         if (this.buttonDown) {
             if (this.allowMoved) {
                 const scale = this.editor.canvas.zoomScale;
-                const ox = Math.floor(Math.max((ev.clientX / scale - this.offsetX), 0));
-                const oy = Math.floor(Math.max((ev.clientY / scale - this.offsetY), 0));
+                const ox = Math.floor(Math.min(Math.max((ev.clientX / scale - this.offsetX), 0), this.editor.canvas.width - this.editor.selection.bounds.width));
+                const oy = Math.floor(Math.min(Math.max((ev.clientY / scale - this.offsetY), 0), this.editor.canvas.height - this.editor.selection.bounds.height));
+
+
+
+
+
+
                 if (Number.isNaN(oy) || Number.isNaN(ox) ||
                     (this.editor.selection.bounds.left === ox && this.editor.selection.bounds.top === oy)) {
                     ev.preventDefault();
@@ -83,9 +83,9 @@ export class MoveAnchorDirective extends BaseDirective {
         this.editor.canvas.hideSnapLines();
 
         // 横轴吸附坐标辅助线
-        const l = this.editor.adsorb.matchXAxis(pos.x, this.editor.DEFAULT_ADSORB_THRESHOLD);
-        const c = this.editor.adsorb.matchXAxis(pos.x + bounds.width / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
-        const r = this.editor.adsorb.matchXAxis(pos.x + bounds.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const l = this.editor.adsorbService.matchXAxis(pos.x, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const c = this.editor.adsorbService.matchXAxis(pos.x + bounds.width / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const r = this.editor.adsorbService.matchXAxis(pos.x + bounds.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const xOffset = bounds.width / 2;
         // 把左中右侧左边全部转换为左侧坐标
         const xRes = [l, c ? c - xOffset : null, r ? r - bounds.width : null];
@@ -99,9 +99,9 @@ export class MoveAnchorDirective extends BaseDirective {
             }
         }
         // 纵轴吸附坐标辅助线
-        const t = this.editor.adsorb.matchYAxis(pos.y, this.editor.DEFAULT_ADSORB_THRESHOLD);
-        const m = this.editor.adsorb.matchYAxis(pos.y + bounds.height / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
-        const b = this.editor.adsorb.matchYAxis(pos.y + bounds.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const t = this.editor.adsorbService.matchYAxis(pos.y, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const m = this.editor.adsorbService.matchYAxis(pos.y + bounds.height / 2, this.editor.DEFAULT_ADSORB_THRESHOLD);
+        const b = this.editor.adsorbService.matchYAxis(pos.y + bounds.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
         const yOffset = bounds.height / 2;
         const yRes = [t, m ? m - yOffset : null, b ? b - bounds.height : null];
         const yIndex = this.getMinValueInArray([t!, m!, b!]);

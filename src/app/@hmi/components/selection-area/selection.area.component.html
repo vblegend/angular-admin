@@ -1,23 +1,25 @@
 <div [ngStyle]="{ 'pointer-events': canvas.ctrlPressed ? 'none' : ''}" class="move-button"
-  (contextmenu)="contextMenu($event, menu)" moveAnchor [host]="this" [editor]="editor"> </div>
+  (contextmenu)="contextMenu($event, menu)" moveAnchor> </div>
 
-<div class="anchor left-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.Left"> </div>
-<div class="anchor right-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.Right"> </div>
-<div class="anchor top-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.Top"> </div>
-<div class="anchor down-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.Down"> </div>
-<div class="anchor lTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.LeftTop"> </div>
-<div class="anchor rTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.RightTop"> </div>
-<div class="anchor lDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.LeftDown"> </div>
-<div class="anchor rDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [host]="this" [editor]="editor"
-  [position]="AnchorPosition.RightDown"> </div>
+<div class="anchor left-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.Left">
+</div>
+<div class="anchor right-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.Right">
+</div>
+<div class="anchor top-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.Top">
+</div>
+<div class="anchor down-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.Down">
+</div>
+<div class="anchor lTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.LeftTop">
+</div>
+<div class="anchor rTop-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.RightTop">
+</div>
+<div class="anchor lDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.LeftDown">
+</div>
+<div class="anchor rDown-button" *ngIf="!editor.selection.hasLocking" resizeAnchor [position]="AnchorPosition.RightDown">
+</div>
 
+<div class="anchor center-button" *ngIf="!editor.selection.hasLocking">
+</div>
 
 
 <nz-dropdown-menu #menu="nzDropdownMenu">

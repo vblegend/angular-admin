@@ -4,9 +4,13 @@ import { WidgetConfigure } from '../../configuration/widget.configure';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
-import { Rectangle } from '@hmi/core/common';
+import { CurrentVersion, DocumentMagicCode, Rectangle } from '@hmi/core/common';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
-import { TimerPoolService } from '@hmi/services/timer.pool.service';
+import { TimerPoolService } from '@core/services/timer.pool.service';
+import { WidgetDefaultVlaues } from '@hmi/core/widget.meta.data';
+import { MetaDataService } from '@hmi/services/meta.data.service';
+import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
+
 
 @Component({
   selector: 'hmi-view-canvas',
@@ -14,6 +18,7 @@ import { TimerPoolService } from '@hmi/services/timer.pool.service';
   styleUrls: ['./view.canvas.component.less'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
+    /* 为每个canvas 生成单独的管理服务 */
     WidgetEventService,
     TimerPoolService
   ]
@@ -22,12 +27,18 @@ export class ViewCanvasComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
   public container!: ViewContainerRef;
   private _children: ComponentRef<BasicWidgetComponent>[];
-  private _eventHub: WidgetEventService;
-  /**
- * 获取定时器池
- */
-  public readonly timerPool: TimerPoolService;
+  private readonly _eventHub: WidgetEventService;
+  public readonly metaData: MetaDataService;
 
+  /**
+   * 获取/设置 部件组态画板的标准宽度
+   */
+  public width: number;
+
+  /**
+   * 获取/设置 部件组件画板的标准高度
+   */
+  public height: number;
 
 
 
@@ -37,9 +48,11 @@ export class ViewCanvasComponent extends GenericComponent {
   constructor(protected injector: Injector, public provider: WidgetSchemaService) {
     super(injector);
     this._children = [];
-    this.timerPool = injector.get(TimerPoolService);
     this._eventHub = injector.get(WidgetEventService);
     this._eventHub.initCanvas$(this);
+    this.metaData = injector.get(MetaDataService);
+    this.width = 1920;
+    this.height = 1080;
   }
 
 
@@ -55,7 +68,7 @@ export class ViewCanvasComponent extends GenericComponent {
    * 更新容器的zIndex属性
    * 数值越大越往前
    */
-  public updatezIndexs() {
+  public updatezIndexs(): void {
     this._children.sort((a, b) => b.instance.zIndex! - a.instance.zIndex!);
   }
 
@@ -69,9 +82,10 @@ export class ViewCanvasComponent extends GenericComponent {
   public add(ref: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
     const ofIndex = this._children.indexOf(ref);
     if (ofIndex === -1) {
-      this.container.insert(ref.hostView, ref.instance.zIndex);
+      this.container.insert(ref.hostView);
       this._children.push(ref);
       ref.hostView.reattach();
+      this.metaData.add(ref);
       if (ref.instance.zIndex == null) {
         ref.instance.configure.zIndex = this._children.length;
       }
@@ -92,6 +106,7 @@ export class ViewCanvasComponent extends GenericComponent {
       const v = this.container.indexOf(ref.hostView);
       this.container.detach(v);
       ref.hostView.detach();
+      this.metaData.remove(ref);
     }
     return ref;
   }
@@ -108,7 +123,7 @@ export class ViewCanvasComponent extends GenericComponent {
   /**
    * 清理并销毁掉所有组件
    */
-  public clear() {
+  public clear() : void{
     while (this._children.length > 0) {
       const compRef = this._children[0];
       this.remove(compRef);
@@ -126,17 +141,18 @@ export class ViewCanvasComponent extends GenericComponent {
     let componentRef: ComponentRef<BasicWidgetComponent> | null = null;
     const comRef = this.provider.getType(configure.type);
     if (comRef) {
-      const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
-      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, undefined, this.injector);
+      const factoryResolver = this.componentFactoryResolver.resolveComponentFactory(comRef.component);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(factoryResolver, undefined, this.injector);
       if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
         const v = this.container.indexOf(componentRef.hostView);
         this.container.detach(v);
         componentRef.hostView.detach();
         const widgetSchema = this.provider.getType(configure.type);
-        componentRef.instance.$initialization(this, configure, widgetSchema!.default);
+        const defaultValue = widgetSchema!.component.prototype.metaData.default as WidgetDefaultVlaues;
+        componentRef.instance.$initialization(this, configure, defaultValue);
       }
     }
-    if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
+    if (componentRef == null) this.onError(new Error(`未知的组态类型：${configure.type}.`));
     return componentRef;
   }
 
@@ -158,8 +174,8 @@ export class ViewCanvasComponent extends GenericComponent {
 
 
   protected onDestroy(): void {
-    super.onDestroy();
     this.clear();
+    super.onDestroy();
   }
 
 
@@ -181,6 +197,7 @@ export class ViewCanvasComponent extends GenericComponent {
         result = HmiMath.extendsRectangle(result, comp.instance.configure.rect);
       }
     }
+    if (result == null) result = { left: 0, top: 0, width: 0, height: 0 };
     return result;
   }
 

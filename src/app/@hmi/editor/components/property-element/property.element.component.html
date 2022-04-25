@@ -1,6 +1,6 @@
-<div class="prioerty-row" *ngIf="ngDisplayed()">
+<div class="prioerty-row" *ngIf="hasProperty">
     <div class="prioerty-name" nz-tooltip [nzTooltipTitle]="tooltip" nzTooltipPlacement="left">
-        <span>{{title}}</span>
+        <span>{{header}}</span>
     </div>
     <div class="prioerty-value">
         <ng-content>

@@ -1,4 +1,4 @@
-@import "mixin.less";
+@import "../../../../../styles/themes/mixin.less";
 
 .themeMixin({
     :host {
@@ -24,17 +24,20 @@
     display: block;
   }
   .widget-icon{
-    font-size: 48px;
+    font-size: 32px;
   }
   .widget-item {
     user-select: none;
-    width: 64px;
-    height: 64px;
-    line-height: 64px;
-    vertical-align: middle;
-    text-align: center;
-    display: inline-block;
+    width: 64px !important;
+    height: 64px !important;
+    line-height: 64px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    display: inline-block !important;
     // border: solid 1px @border-color-base;
+  }
+  .anticon{
+    line-height: 64px !important;
   }
 
   // .widget-item:hover{

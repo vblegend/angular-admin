@@ -7,19 +7,19 @@ export class FixedTimer {
 
     private _interval: number;
     private _callback: Function;
-    private _thisContext: Object;
+    private _thisContext?: Object;
     private _timeId?: number;
     private _thisfunction: Function;
 
-    private _onStart: Function;
-    private _onStop: Function;
+    private _onStart?: Function;
+    private _onStop?: Function;
 
 
 
     /**
      *
      */
-    constructor(callback: FixedTimerHandler, onStart: FixedTimerHandler, onStop: FixedTimerHandler, thisContext: Object) {
+    constructor(callback: FixedTimerHandler, onStart?: FixedTimerHandler, onStop?: FixedTimerHandler, thisContext?: Object) {
         this._callback = callback;
         this._onStart = onStart;
         this._onStop = onStop;

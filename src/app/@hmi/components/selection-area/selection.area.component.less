@@ -1,4 +1,4 @@
-@import "mixin.less";
+@import "../../../../styles/themes/mixin.less";
 
 .themeMixin( {
     :host {
@@ -90,6 +90,12 @@
     right: -4px;
     bottom: -4px;
     cursor: nw-resize;
+  }
+
+  .center-button {
+    pointer-events: none;
+    left: calc(50% - 4px);
+    top: calc(50% - 5px);
   }
 
   .move-button {

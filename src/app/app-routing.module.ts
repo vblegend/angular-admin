@@ -5,8 +5,9 @@ import { ErrorComponent } from './@core/components/error/error.component';
 import { LoginPageComponent } from './@core/components/login/loginpage.component';
 import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 import { AuthGuardService } from './@core/services/auth.guard.service';
+import { HmiSchemaService } from './pages/dashboard/service/hmi.schema.service';
 import { EditorComponent } from './pages/editor/editor.component';
-import { HmiSchemaService } from './pages/services/hmi.schema.service';
+
 
 const routes: Routes = [
   {

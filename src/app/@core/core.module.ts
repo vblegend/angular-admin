@@ -49,6 +49,8 @@ import { CacheService } from './services/cache.service';
 import { EventBusService } from './services/event.bus.service';
 import { AngularSplitModule } from 'angular-split';
 import { CollapseComponent } from './components/ngx-collapse/ngx.collapse.component';
+import { TimerPoolService } from './services/timer.pool.service';
+import { NotificationService } from './services/notification.service';
 
 
 const EXPORT_PIPES: Provider[] = [
@@ -92,7 +94,9 @@ const PROVIDERS: Provider[] = [
   MenuService,
   NzDrawerService,
   CacheService,
-  EventBusService
+  EventBusService,
+  TimerPoolService,
+  NotificationService
 ];
 
 

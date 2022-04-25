@@ -1,12 +1,12 @@
 import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { BasicCommand } from '@hmi/commands/basic.command';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
-import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
+import { BasicCommand } from '@hmi/editor/commands/basic.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { SelectionToggleCommand } from '@hmi/editor/commands/selection.toggle.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 
 
@@ -19,12 +19,12 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
  * 橡皮筋套选工具
  */
 export class ObjectListComponent extends GenericComponent {
-  @Input() canvas!: DisignerCanvasComponent;
-  @Input() editor!: HmiEditorComponent;
+  @Input()
+  public canvas!: DisignerCanvasComponent;
   /**
    *
    */
-  constructor(protected injector: Injector, protected provider: WidgetSchemaService) {
+  constructor(protected injector: Injector, protected provider: WidgetSchemaService, public editor: HmiEditorComponent) {
     super(injector);
   }
 
@@ -55,7 +55,7 @@ export class ObjectListComponent extends GenericComponent {
       command = new SelectionFillCommand(this.editor, selecteds);
     }
     this.editor.execute(command);
-    this.canvas.selectionArea.changeDetectorRef.detectChanges();
+    this.canvas.selectionArea.detectChanges();
   }
 
 

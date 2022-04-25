@@ -7,9 +7,9 @@
                 (dblclick)="widget_dblClick(widget,$event)" 
                 nzTooltipPlacement="right"
                 *ngFor="let widget of category.children;">
-                <div>
+            
                     <i nz-icon class="widget-icon" [nzIconfont]="widget.icon"></i>
-                </div>
+               
             </div>
         </div>
     </ngx-collapse>

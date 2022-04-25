@@ -2,6 +2,7 @@ import { KeyValue } from '@angular/common';
 import { Component, Injector } from '@angular/core';
 import { Exception } from '@core/common/exception';
 import { FixedTimer } from '@core/common/fixedtimer';
+import { TimerTask } from '@core/common/timer.task';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { DialogService } from '@core/services/dialog.service';
 import { MenuService } from '@core/services/menu.service';
@@ -29,19 +30,16 @@ export class HeaderComponent extends GenericComponent {
     for (const key in this.themeService.themes) {
       this.themes.push({ key, value: this.themeService.themes[key] })
     }
-    const timer = this.createTimer(this.timerUpdate);
-    timer.interval = 1000;
-    timer.start();
+    const timer = this.createTimer(this.timerUpdate,1000);
   }
 
-  private timerUpdate(timer: FixedTimer): void {
+  private timerUpdate(task: TimerTask): void {
     this.today = new Date();
-    timer.start();
   }
 
 
 
-  public changeTheme(event: string) {
+  public changeTheme(event: string): void {
     this.themeService.changeTheme(event);
     this.sessionService.set('theme', event);
   }

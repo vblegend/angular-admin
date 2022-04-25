@@ -1,0 +1,44 @@
+<div class="toolbar" nz-element #toolBar="nzElement" [class.toolbar-retracted]="!toolbarState">
+
+  <div class="toolbar-continer">
+    <div class="hoverline" (click)="retracted_click()">
+    </div>
+    <nz-space [nzSize]="20" nzAlign="center">
+      <button *nzSpaceItem class="toolbar-button" (click)="save_click()" nzTooltipTitle="保存配置" nzTooltipColor="#108EE9"
+        [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef" nzTooltipPlacement="top" nz-button
+        nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-baocun"></i>
+      </button>
+      <button *nzSpaceItem class="toolbar-button" (click)="import_click()" nzTooltipTitle="导入配置"
+        nzTooltipColor="#108EE9" [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef"
+        nzTooltipPlacement="top" nz-button nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-daoru"></i>
+      </button>
+      <button *nzSpaceItem class="toolbar-button" (click)="export_click()" nzTooltipTitle="导出配置"
+        nzTooltipColor="#108EE9" [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef"
+        nzTooltipPlacement="top" nz-button nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-xiazai"></i>
+      </button>
+      <button *nzSpaceItem class="toolbar-button" (click)="fullscreen_click()" nzTooltipTitle="全屏切换"
+        nzTooltipColor="#108EE9" [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef"
+        nzTooltipPlacement="top" nz-button nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-Basic_Screen_a"></i>
+      </button>
+      <button *nzSpaceItem class="toolbar-button" (click)="setting_click()" nzTooltipTitle="组态设置" nzTooltipColor="#108EE9"
+        [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef" nzTooltipPlacement="top" nz-button
+        nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-a-Basic_setup_a"></i>
+      </button>
+      <button *nzSpaceItem class="toolbar-button" (click)="close_click()" nzTooltipTitle="关闭退出" nzTooltipColor="#108EE9"
+        [nzTooltipMouseLeaveDelay]="0" [nzTooltipOrigin]="toolBar.elementRef" nzTooltipPlacement="top" nz-button
+        nz-tooltip nzType="link">
+        <i nz-icon nzIconfont="grace-iconfontzhuxiao1"></i>
+      </button>
+
+      
+
+
+    </nz-space>
+
+  </div>
+</div>

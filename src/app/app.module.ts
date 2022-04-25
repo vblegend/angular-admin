@@ -153,7 +153,7 @@ export class AppModule {
 
   private async init(): Promise<void> {
     this.netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
-    try {
+    // try {
       // const state = await this.netWorkService.connection();
       // if (!state) throw Exception.build('app init', 'failed to connect to server!');
       // console.time('websocket');
@@ -167,8 +167,8 @@ export class AppModule {
       // }
       // await Promise.all(list);
       // console.timeEnd('websocket');
-    } catch (e) {
-    }
+    // } catch (e) {
+    // }
   }
 
 

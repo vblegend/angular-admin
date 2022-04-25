@@ -1,9 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { Location } from '@angular/common';
 import { Observable, Subject, Subscription } from "rxjs";
-import { Exception } from "@core/common/exception";
-import { FixedTimer, FixedTimerHandler } from "@core/common/fixedtimer";
 import { ComponentPortal } from '@angular/cdk/portal';
 import { ComponentType, Overlay } from '@angular/cdk/overlay';
 import { NzModalService } from "ng-zorro-antd/modal";
@@ -18,6 +16,9 @@ import { Action } from "@core/common/delegate";
 import { AnyObject } from "@core/common/types";
 import { Sealed } from "@core/decorators/sealed";
 import { EventBusService } from "@core/services/event.bus.service";
+import { TimerTask, TimerTaskEventHandler } from "@core/common/timer.task";
+import { TimerPoolService } from "@core/services/timer.pool.service";
+import { NotificationService } from "@core/services/notification.service";
 
 
 
@@ -33,7 +34,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('view', { read: ViewContainerRef })
     public view?: ViewContainerRef;
 
-    private _times: FixedTimer[];
+    private _times: TimerTask[];
     private _isDispose: boolean;
     private _queryParams?: ParamMap;
     private _subscriptions: Subscription[];
@@ -56,7 +57,13 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     protected readonly overlay: Overlay;
     public readonly viewContainerRef: ViewContainerRef;
     protected readonly eventBusService: EventBusService;
+    protected readonly notification: NotificationService;
 
+
+    /**
+     * 获取定时器池
+     */
+    public readonly timerPool: TimerPoolService;
 
     /**
      * get current route request parameters \
@@ -64,6 +71,11 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      */
     protected get queryParams(): ParamMap {
         return this._queryParams!;
+    }
+
+    public get selector(): string {
+        const factory = this.componentFactoryResolver.resolveComponentFactory(<Type<unknown>>this.constructor);
+        return factory.selector;
     }
 
     /**
@@ -88,6 +100,19 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
         this.contextMenuService = injector.get(NzContextMenuService);
         this.eventBusService = injector.get(EventBusService);
+        this.timerPool = injector.get(TimerPoolService);
+        this.notification = injector.get(NotificationService);
+        if (GenericComponent.prototype.ngOnInit != this.ngOnInit) {
+            throw new Error(`不要试图在 ${this.selector} 中重写 ngOnInit 方法，请重写 onInit 方法以实现。`);
+        }
+        if (GenericComponent.prototype.ngAfterViewInit != this.ngAfterViewInit) {
+            throw new Error(`不要试图在 ${this.selector} 中试图重写 ngAfterViewInit 方法，请重写 onAfterViewInit 方法以实现。`);
+        }
+        if (GenericComponent.prototype.ngOnDestroy != this.ngOnDestroy) {
+            throw new Error(`不要试图在 ${this.selector} 中重写 ngOnDestroy 方法，请重写 onDestroy 方法以实现。`);
+        }
+
+
         this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
@@ -102,17 +127,17 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * 更改检测树相关
      */
-    protected attachView() {
+    protected attachView(): void {
         this.ifDisposeThrowException();
         this.changeDetector.reattach();
     }
 
-    protected detachView() {
+    protected detachView(): void {
         this.ifDisposeThrowException();
         this.changeDetector.detach();
     }
 
-    protected detectChanges() {
+    public detectChanges(): void {
         this.ifDisposeThrowException();
         this.changeDetector.detectChanges();
     }
@@ -133,7 +158,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @returns 
      */
     protected subscribe<T>(target: Observable<T> | EventEmitter<T> | Subject<T>, next?: (value: T) => void, once?: boolean): Subscription {
-        const that = this as Object;
+        const that = this as any;
         this.ifDisposeThrowException();
         const subscription: Subscription = target.subscribe((value) => {
             next!.apply(that, [value]);
@@ -205,7 +230,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param fn 
      * @returns 
      */
-    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: Object): T {
+    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: any): T {
         this.ifDisposeThrowException();
         return this.zone.runOutsideAngular(thisContext ? fn.bind(thisContext) : fn);
     }
@@ -224,16 +249,50 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
 
-    protected createTimer(handler: FixedTimerHandler): FixedTimer {
+
+    /**
+     * 创建一个托管类型定时器任务\
+     * 该定时器任务运行在Angular ngZone 管理范围之外\
+     * 请在回调中调用 this.run() 运行需要更新的代码
+     * @param callback 执行回调函数（执行上下文为当前对象本身）
+     * @param interval 执行间隔 单位秒
+     * @returns 任务对象
+     */
+    protected createTimer(callback: TimerTaskEventHandler, interval: number): TimerTask {
         this.ifDisposeThrowException();
-        return new FixedTimer(handler, this.timer_onstart, this.timer_onstop, this);
+        const task = this.timerPool.allocTimer(callback, this, interval);
+        const sub = task.subscribeCancelEvent(this.timer_cancelEvent.bind(this));
+        this.managedSubscription(sub);
+        this._times.push(task);
+        return task;
     }
 
-    private timer_onstart(timer: FixedTimer) {
-        this._times.push(timer);
+
+    /**
+     * 创建一个timeout 计时器任务\
+     * 该对象在任务完成后自动销毁\
+     * 可通过返回 @TimerTask 对任务进行管理
+     * @param timeout 超时时间 单位秒
+     * @param callback 回调地址
+     * @returns 任务对象
+     */
+    protected timeout(timeout: number, callback: TimerTaskEventHandler): TimerTask {
+        this.ifDisposeThrowException();
+        const timer = this.createTimer((task: TimerTask) => {
+            timer.cancel();
+            callback.apply(this, [task]);
+        }, timeout);
+        return timer;
     }
 
-    private timer_onstop(timer: FixedTimer) {
+
+
+
+
+
+
+
+    private timer_cancelEvent(timer: TimerTask) {
         const index = this._times.indexOf(timer);
         if (index > -1) {
             this._times.splice(index, 1);
@@ -265,9 +324,9 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param options Message Data Options
      */
     public showMessage(message: string, type: MessageType, options?: NzMessageDataOptions): void {
+        this.ifDisposeThrowException();
         this.messageService.create(type, message, options);
     }
-
 
     /**
      * Open a drawer that cannot be mask closable 
@@ -359,9 +418,10 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param location 发生位置
      * @param ex 异常问题
      */
-    protected onError(location: string, ex: any) {
-        console.error(`${location}=> ${ex}`);
+    protected onError(ex: Error): void {
+        console.error(ex.stack);
     }
+
 
     /**
      * 组件的初始化事件[生命周期开始]\
@@ -394,9 +454,9 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * 如果当前组件已被销毁，则抛出一个异常信息。
      */
-    protected ifDisposeThrowException() {
+    protected ifDisposeThrowException(): void {
         if (this._isDispose) {
-            throw Exception.build(`${typeof this} has been destroyed.`, 'cannot continue to operate components that have been destroyed.');
+            throw new Error(`${typeof this} has been destroyed. 'cannot continue to operate components that have been destroyed.'`);
         }
     }
 
@@ -416,10 +476,11 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     @Sealed()
     public ngOnInit(): void {
         try {
+            /* 订阅 queryParamMap 而不是 paramMap */
+            this.subscribe(this.activatedRoute.queryParamMap, this.route_updateParam);
             this.onInit();
         } catch (ex) {
-            console.warn(ex);
-            this.callMethodNoCatch(this.onError, 'onInit', ex);
+            this.callMethodNoCatch(this.onError, ex);
         }
     }
 
@@ -429,7 +490,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * 安全调用一个方法，屏蔽掉方法内所有可能出现的catch
      * @param method 
      */
-    protected callMethodNoCatch(method: Action, ...params: any[]) {
+    protected callMethodNoCatch(method: Action, ...params: any[]): void {
         try {
             if (method) method.apply(this, params);
         }
@@ -455,7 +516,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnDestroy(): void {
         if (this._isDispose) return;
         while (this._times.length) {
-            this._times[0].stop();
+            this._times[0].cancel();
         }
         while (this._subscriptions.length) {
             this.unsubscribe(this._subscriptions[0]);
@@ -465,7 +526,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
             this.onDestroy();
         } catch (ex) {
             console.warn(ex);
-            this.callMethodNoCatch(this.onError, 'onDestroy', ex);
+            this.callMethodNoCatch(this.onError, ex);
         }
 
 

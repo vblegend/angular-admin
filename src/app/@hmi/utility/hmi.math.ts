@@ -1,4 +1,4 @@
-import { Rectangle } from "@hmi/core/common";
+import { Rectangle, Vector2 } from "@hmi/core/common";
 
 
 export class HmiMath {
@@ -36,7 +36,12 @@ export class HmiMath {
     }
 
 
-
+    public static rotateVector2(point: Vector2, center: Vector2, a: number): Vector2 {
+        const ang = a / 180 * Math.PI;
+        const x = (point.x - center.x) * Math.cos(ang) - (point.y - center.y) * Math.sin(ang) + center.x;
+        const y = (point.x - center.x) * Math.sin(ang) + (point.y - center.y) * Math.cos(ang) + center.y;
+        return { x, y };
+    }
 
 
 }

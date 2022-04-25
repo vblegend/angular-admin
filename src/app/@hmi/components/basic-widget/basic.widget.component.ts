@@ -1,12 +1,17 @@
 import { Component, Host, HostBinding, Injector } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { EventBusService } from '@core/services/event.bus.service';
-import { WidgetConfigure, WidgetDataConfigure, WidgetDefaultConfigure } from '../../configuration/widget.configure';
-import { WidgetMetaObject } from '@hmi/core/widget.meta.data';
+import { WidgetConfigure, WidgetDataConfigure, WidgetDefaultConfigure, WidgetStyles } from '../../configuration/widget.configure';
+import { WidgetDefaultVlaues, WidgetMetaObject } from '@hmi/core/widget.meta.data';
 import { WidgetEventService } from '@hmi/services/widget.event.service';
 import { ObjectUtil } from '@core/util/object.util';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
+import { TimerTask } from '@core/common/timer.task';
+import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
+import { DefaultGlobalWidgetStyle } from '@hmi/configuration/global.default.configure';
+import { Rectangle, Vector2 } from '@hmi/core/common';
+import { HmiMath } from '@hmi/utility/hmi.math';
+
 
 @Component({
   selector: 'app-basic-comp',
@@ -21,12 +26,16 @@ export abstract class BasicWidgetComponent extends GenericComponent {
 
   @Host()
   private viewParent!: ViewCanvasComponent;
-
   /**
    * 小部件内部事件处理服务\
    * 由canvas进行隔离\
    */
   private readonly eventService: WidgetEventService;
+
+  /**
+   * 部件的默认定时器
+   */
+  private defaultTimer !: TimerTask;
   /**
    * 小部件的元数据\
    * 
@@ -40,11 +49,19 @@ export abstract class BasicWidgetComponent extends GenericComponent {
 
 
   /**
+   * 当前是否为编辑模式
+   */
+  public get isEditMode(): boolean {
+    return this.viewParent instanceof DisignerCanvasComponent;
+  }
+
+  /**
    * 获取成员函数
    * @param funcName 
    * @returns 
    */
   public getMemberFunction(funcName: string): Function {
+    this.ifDisposeThrowException();
     return <Function><unknown>this[funcName as keyof this];
   }
 
@@ -182,19 +199,35 @@ export abstract class BasicWidgetComponent extends GenericComponent {
 
 
   /**
-   * get component configure profile
+   * get component transform rotates
+   * binding host position
    */
+  @HostBinding('style.transform')
+  public get transform(): string | undefined {
+    if (this.configure.style.rotate) {
+      return `rotateZ(${this.configure.style.rotate}deg)`;
+    } else {
+      return `rotateZ(0deg)`;
+    }
+  }
+
+
+
+
+
   public get configure(): WidgetConfigure {
     return this._config;
   }
 
 
   /**
-   * get component bind data
+   * get component data profile
    */
-  public get data(): WidgetDataConfigure {
-    return this._config.data;
+  public data<TType extends WidgetDataConfigure>(): TType {
+    this.ifDisposeThrowException();
+    return <TType>this._config.data;
   }
+
 
 
 
@@ -204,14 +237,18 @@ export abstract class BasicWidgetComponent extends GenericComponent {
   }
 
 
+
   /**
    * 派遣一个事件
    * 使用此功能需要在class对象使用@WidgetEvent 注解
    * @param event 要触发的事件，必须是使用在{@WidgetEvent}列表内的
-   * @param params 事件的参数
+   * @param params 事件的参数 必须满足声明的事件参数
    */
   protected dispatchEvent<T extends Record<string, any>>(event: string, params: T): void {
-    const _eventMeta = this.metaData.events[event];
+    // 编辑模式不触发事件
+    if (this.isEditMode) return;
+    this.ifDisposeThrowException();
+    const _eventMeta = this.metaData.events.find(e => e.event == event);
     if (_eventMeta == null) {
       throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${event}”的声明。`;
     }
@@ -220,12 +257,16 @@ export abstract class BasicWidgetComponent extends GenericComponent {
         throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${event}”缺少参数“${key}”。`;
       }
     }
-    if (this.configure.events == null) return;
-    const eventCfg = this.configure.events[event];
-    if (eventCfg == null || eventCfg.length === 0) return;
-    for (const cfg of eventCfg) {
-      this.eventService.dispatch(this, cfg.target, cfg.method, Object.assign({}, params, cfg.params));
-    }
+
+    this.run(() => {
+      if (this.configure.events == null) return;
+      const eventCfg = this.configure.events[event];
+      if (eventCfg == null || eventCfg.length === 0) return;
+      for (const cfg of eventCfg) {
+        this.eventService.dispatch(this, cfg.target!, cfg.method!, Object.assign({}, params, cfg.params));
+      }
+    });
+
   }
 
   /**
@@ -233,56 +274,92 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * 保证变量data不可修改
    * @param _data 
    */
-  public $initialization(parent: ViewCanvasComponent, _config: WidgetConfigure, _default: WidgetDefaultConfigure): void {
+  public $initialization(parent: ViewCanvasComponent, _config: WidgetConfigure, _default: WidgetDefaultVlaues): void {
     if (this._config) throw 'This method is only available on first run ';
     this.viewParent = parent;
     this._config = ObjectUtil.clone(_config)!;
     // 升级数据属性
     ObjectUtil.upgrade(this._config.data, _default.data);
-    // 升级样式属性
+    // 升级部件的样式默认值
     ObjectUtil.upgrade(this._config.style, _default.style);
+    // 升级全局的样式默认值
+    ObjectUtil.upgrade(this._config.style, DefaultGlobalWidgetStyle);
 
 
+    // 订阅定时器
+    if (this.timerPool) {
+      this.defaultTimer = this.createTimer(this.onDefaultTimer, this.configure.interval);
+      // 在组态编辑器下 挂起默认计时器
+      if (this.isEditMode) this.defaultTimer.suspend();
+    }
+  }
+
+  /**
+   * 禁止重写该方法\
+   * 请重写 @onWidgetInit 方法以实现
+   */
+  protected readonly onInit = (): void => { this.onWidgetInit(this.configure.data); };
+
+
+
+
+  /**
+   * 部件的初始化事件
+   * @param data  部件的绑定数据，使用时请在部件中重写此参数类型
+   */
+  protected onWidgetInit(data: WidgetDataConfigure) {
 
   }
 
 
+
   /**
-   * 默认定时器事件\
+   * 默认定时器事件 `本参数运行于outside angular zone`\
+   * 默认更新数据后不触发变更检测，需手动调用以下代码\
+   * 重写时可选择async异步方法，或普通方法
+   * ```
+   * this.run(()=>{ 
+   *   // some thing
+   * });
+   * ```
    * 由小部件的interval参数决定触发周期\
-   * @param counter 触发次数 
+   * @param task 计时器任务对象 
    */
-  protected onDefaultTimer(counter: number): void {
+  protected async onDefaultTimer(task: TimerTask): Promise<void> {
+    // console.log(`${DateUtil.currentDateToString()} [${this.configure.id}]=> ${this.constructor.name}`);
+  }
+
+  /**
+   * 在编辑状态下的组件非绑定数据更新\
+   * 适用于编辑状态下非绑定数据的更新事件通知
+   * @param attributePath 更改的属性路径 
+   * @param value 属性值 
+   */
+  protected onDataChanged(attributePath: string[], value: any) {
 
   }
 
 
   /**
-   * 布局更新
+   * 获取小部件在canvas中的矩形区域
+   * @returns 
    */
-  protected onLayoutChanged() {
-
+  public getRelativeRect(): Rectangle {
+    const rect = this.configure.rect!;
+    if (this.configure.style.rotate != null && this.configure.style.rotate != 0) {
+      const center: Vector2 = { x: rect.left! + rect.width / 2, y: rect.top! + rect.height / 2 };
+      const lt = HmiMath.rotateVector2({ x: rect.left!, y: rect.top! }, center, this.configure.style.rotate);
+      const ld = HmiMath.rotateVector2({ x: rect.left!, y: rect.top! + rect.height }, center, this.configure.style.rotate);
+      const rt = HmiMath.rotateVector2({ x: rect.left! + rect.width, y: rect.top! }, center, this.configure.style.rotate);
+      const rd = HmiMath.rotateVector2({ x: rect.left! + rect.width, y: rect.top! + rect.height }, center, this.configure.style.rotate);
+      const left = Math.floor(Math.min(lt.x, ld.x, rt.x, rd.x));
+      const top = Math.floor(Math.min(lt.y, ld.y, rt.y, rd.y));
+      const right = Math.floor(Math.max(lt.x, ld.x, rt.x, rd.x));
+      const bottom = Math.floor(Math.max(lt.y, ld.y, rt.y, rd.y));
+      return { left, top, width: right - left, height: bottom - top };
+    } else {
+      return { left: rect.left, top: rect.top, width: rect.width, height: rect.height };
+    }
   }
-
-  /**
-   * 绑定数据更新
-   * @param data 
-   */
-  protected onDataChanged(data: WidgetDataConfigure) {
-
-  }
-
-
-
-  /**
-   * 组件异常事件
-   * 通常发生在onInit 与 onDestroy中
-   * @param ex 
-   */
-  protected onError(location: string, ex: AnyObject) {
-    console.error(`异常出现在 => ${location}：${ex}`);
-  }
-
-
 
 }

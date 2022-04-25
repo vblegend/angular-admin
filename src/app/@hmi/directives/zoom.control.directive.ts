@@ -1,8 +1,7 @@
-import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 import { Vector2 } from '@hmi/core/common';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
 
 @Directive({
     selector: '[zoom-control]'
@@ -13,11 +12,16 @@ import { HmiEditorComponent } from '@hmi/hmi.editor.component';
  */
 export class ZoomControlDirective extends BaseDirective {
     // @Input() editor: EditorComponent;
-    @Input() canvas!: DisignerCanvasComponent;
     @Output() mouseEnter = new EventEmitter<boolean>();
     private readonly scales: number[] = [0.1, 0.2, 0.5, 0.8, 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     private index!: number;
 
+    /**
+     *
+     */
+    constructor(protected injector: Injector, private canvas: DisignerCanvasComponent) {
+        super(injector);
+    }
 
     public onInit(): void {
         this.index = this.scales.indexOf(1);
@@ -47,7 +51,7 @@ export class ZoomControlDirective extends BaseDirective {
         const offsetY = (pointOnCanvas.y / scale);
         // this.canvas.scrollViewer.nativeElement.scrollLeft = offsetX;
         // this.canvas.scrollViewer.nativeElement.scrollTop = offsetY;
-        console.log(`${offsetX}            ${offsetY}`)
+        console.log(`${this.canvas.zoomScale}`)
 
         ev.preventDefault();
         ev.stopPropagation();

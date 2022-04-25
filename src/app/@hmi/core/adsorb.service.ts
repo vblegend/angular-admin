@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Vector2 } from "@hmi/core/common";
-import { HmiEditorComponent } from "@hmi/hmi.editor.component";
+import { HmiEditorComponent } from "../editor/hmi.editor.component";
 
 @Injectable({
     providedIn: 'root'

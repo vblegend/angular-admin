@@ -1,58 +1,15 @@
 <nz-tabset class="objects-tabset">
-    <nz-tab nzTitle="属性">
-        <ngx-collapse header="基础属性" [expanded]="true">
+    <nz-tab *ngFor="let table of properties.tables;" [nzTitle]="table.name">
+        <ngx-collapse *ngFor="let group of table.groups;" [header]="group.name" [expanded]="true">
             <div class="prioerty-continer">
-                <hmi-property-element [editor]="editor" attributePath="zIndex" title="层级索引" tooltip="决定小部件之间的层级，谁压住了谁">
-                    <hmi-number-property [max]="10000" [min]="0" [precision]="0" [step]="1" [nullValue]="0">
-                    </hmi-number-property>
-                </hmi-property-element>
-
-                <hmi-property-element [editor]="editor" attributePath="interval" title="刷新间隔" tooltip="数据刷新间隔">
-                    <hmi-number-property [max]="10000" [min]="0" [precision]="0" [step]="1"  unit="秒" [nullValue]="0">
-                    </hmi-number-property>
-                </hmi-property-element>
-
-                <hmi-property-element [editor]="editor" attributePath="name" title="部件名称" tooltip="小部件的名称，用于识别">
-                    <hmi-text-property nullValue="">
-                    </hmi-text-property>
-                </hmi-property-element>
-
-                <hmi-property-element [editor]="editor" attributePath="locked" title="锁定移动" tooltip="被锁定的小部件将不能移动它">
-                    <hmi-boolean-select-property [options]="[{ label: '是', value: true },{ label: '否', value: false }]"
-                        [nullValue]="false">
-                    </hmi-boolean-select-property>
-                </hmi-property-element>
-
-                <hmi-property-element [editor]="editor" attributePath="style/background" title="背景颜色" tooltip="字体颜色值">
-                    <hmi-color-property nullValue="transparent">
-                    </hmi-color-property>
-                </hmi-property-element>
-
-                <hmi-property-element [editor]="editor" attributePath="style/opacity" title="透明度" tooltip="字体颜色值">
-                    <hmi-slider-property [max]="1" [min]="0" [step]="0.1" unit="单位" [nullValue]="1">
-                    </hmi-slider-property>
-                </hmi-property-element>
-
-
-
-                <hmi-property-element [editor]="editor" attributePath="style/color" title="字体颜色" tooltip="字体颜色值">
-                    <hmi-color-property>
-                    </hmi-color-property>
-                </hmi-property-element>
+                <ng-container *ngFor="let propertiesTemplate of group.templates;"
+                    [ngTemplateOutlet]="propertiesTemplate">
+                </ng-container>
             </div>
         </ngx-collapse>
-    </nz-tab>
-    <nz-tab nzTitle="样式">
-        <ngx-collapse header="基础样式" [expanded]="true">
-        </ngx-collapse>
-        <ngx-collapse header="高级样式" [expanded]="true">
-        </ngx-collapse>
-    </nz-tab>
-    <nz-tab nzTitle="事件" expanded="true">
-        <!-- <ngx-collapse header="事件列表" expanded="true"> -->
-        <!-- <hmi-widget-event [editor]="editor">
-
-            </hmi-widget-event> -->
-        <!-- </ngx-collapse> -->
+        <div class="prioerty-continer">
+            <ng-container *ngFor="let propertiesTemplate of table.templates;" [ngTemplateOutlet]="propertiesTemplate">
+            </ng-container>
+        </div>
     </nz-tab>
 </nz-tabset>

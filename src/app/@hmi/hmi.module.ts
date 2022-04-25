@@ -5,7 +5,7 @@ import { ReSizeAnchorDirective } from './directives/resize.anchor.directive';
 import { MoveAnchorDirective } from './directives/move.anchor.directive';
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
 import { ZoomControlDirective } from './directives/zoom.control.directive';
-import { HmiEditorComponent } from './hmi.editor.component';
+import { HmiEditorComponent } from './editor/hmi.editor.component';
 import { WidgetSchemaService } from './services/widget.schema.service';
 import { RubberBandDirective } from './directives/rubber.band.directive';
 import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
@@ -24,6 +24,11 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
 import { NzSliderModule } from 'ng-zorro-antd/slider';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzSwitchModule } from 'ng-zorro-antd/switch';
+import { NzElementPatchModule } from 'ng-zorro-antd/core/element-patch';
+
+
 
 import { SnapLineComponent } from './components/snap-line/snap.line.component';
 import { PanControlComponent } from './components/pan-control/pan.control.component';
@@ -34,14 +39,26 @@ import { WidgetListComponent } from './editor/components/widget-list/widget.list
 import { WidgetDragDirective } from './directives/widget.drag.directive';
 import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
 import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
-import { TextPropertyComponent } from './editor/properties/text.property/text.property.component';
-import { NumberPropertyComponent } from './editor/properties/number.property/number.property.component';
-import { SelectPropertyComponent } from './editor/properties/select.property/select.property.component';
+import { TextInputPropertyComponent } from './editor/property.components/text.input.property/text.input.property.component';
+import { NumberInputPropertyComponent } from './editor/property.components/number.input.property/number.input.property.component';
 import { PropertyElementComponent } from './editor/components/property-element/property.element.component';
-import { ColorPropertyComponent } from './editor/properties/color.property/color.property.component';
-import { SliderPropertyComponent } from './editor/properties/slider.property/slider.property.component';
-import { BooleanSelectPropertyComponent } from './editor/properties/boolean.select.property/boolean.select.property.component';
-// import { DataPropertyDirective } from './editor/directives/prop.directive';
+import { SelectColorPropertyComponent } from './editor/property.components/select.color.property/select.color.property.component';
+import { NumberSliderPropertyComponent } from './editor/property.components/number.slider.property/number.slider.property.component';
+import { SelectBooleanPropertyComponent } from './editor/property.components/select.boolean.property/select.boolean.property.component';
+import { SelectStringPropertyComponent } from './editor/property.components/select.string.property/select.string.property.component';
+import { SelectNumberPropertyComponent } from './editor/property.components/select.number.property/select.number.property.component';
+import { BasicPropertiesComponent } from './editor/basic.properties/basic.properties.component';
+import { WidgetPropertiesService } from './services/widget.properties.service';
+import { PropertieDefineTemplateDirective } from './editor/directives/properties.template.directive';
+import { ButtonActionPropertyComponent } from './editor/property.components/button.action.property/button.action.property.component';
+import { DataTransferService } from './services/data.transfer.service';
+import { WidgetEventComponent } from './editor/property.components/common.event.property/widget.event.component';
+import { HmiEditorService } from './services/hmi.editor.service';
+import { SwitchBooleanPropertyComponent } from './editor/property.components/switch.boolean.property/switch.boolean.property.component';
+import { EditorToolbarComponent } from './editor/components/toolbar/toolbar.component';
+import { CanvasSettingComponent } from './editor/components/canvas-setting/canvas.setting.component';
+import { NzDividerModule } from 'ng-zorro-antd/divider';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -49,7 +66,9 @@ export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
  * services
  */
 const PROVIDERS: Provider[] = [
-
+  WidgetPropertiesService,
+  DataTransferService,
+  HmiEditorService
 ];
 
 
@@ -65,6 +84,7 @@ const EXPORT_DIRECTIVES: Provider[] = [
   RubberBandDirective,
   DisignerHotkeysDirective,
   WidgetDragDirective,
+  PropertieDefineTemplateDirective
   // DataPropertyDirective
 ];
 
@@ -73,8 +93,6 @@ const EXPORT_DIRECTIVES: Provider[] = [
  * EXPORT CONPONENTS
  */
 const EXPORT_COMPONENTS = [
-  // AgentComponent,
-  // BasicComponent,
   ViewCanvasComponent,
   DisignerCanvasComponent,
   HmiEditorComponent,
@@ -88,17 +106,20 @@ const EXPORT_COMPONENTS = [
   DragPreviewComponent,
   PropertyGridComponent,
   PropertyElementComponent,
-
+  BasicPropertiesComponent,
+  EditorToolbarComponent,
+  CanvasSettingComponent,
   // propertys
-
-
-
-  TextPropertyComponent,
-  NumberPropertyComponent,
-  SelectPropertyComponent,
-  ColorPropertyComponent,
-  SliderPropertyComponent,
-  BooleanSelectPropertyComponent
+  WidgetEventComponent,
+  TextInputPropertyComponent,
+  NumberInputPropertyComponent,
+  SelectColorPropertyComponent,
+  NumberSliderPropertyComponent,
+  SelectBooleanPropertyComponent,
+  SelectStringPropertyComponent,
+  SelectNumberPropertyComponent,
+  ButtonActionPropertyComponent,
+  SwitchBooleanPropertyComponent
 ];
 
 /**
@@ -107,6 +128,7 @@ const EXPORT_COMPONENTS = [
 @NgModule({
   imports: [
     CommonModule,
+    NzElementPatchModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
@@ -120,7 +142,12 @@ const EXPORT_COMPONENTS = [
     NzToolTipModule,
     NzSelectModule,
     NzInputNumberModule,
-    NzSliderModule
+    NzSliderModule,
+    NzSpaceModule,
+    NzSwitchModule,
+    NzDividerModule,
+    NzFormModule,
+    // 
   ],
   exports: [
     EXPORT_COMPONENTS,

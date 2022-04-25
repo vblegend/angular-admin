@@ -1,18 +1,16 @@
-import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, Injector, Input } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { ObjectUtil } from '@core/util/object.util';
-import { BasicCommand } from '@hmi/commands/basic.command';
-import { WidgetAddCommand } from '@hmi/commands/widget.add.command';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
-import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
-import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
+import { WidgetAddCommand } from '@hmi/editor/commands/widget.add.command';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
 import { WidgetSchema } from '@hmi/configuration/widget.schema';
 
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { HmiMath } from '@hmi/utility/hmi.math';
+import { WidgetDefaultVlaues } from '@hmi/core/widget.meta.data';
+import { DataTransferService } from '@hmi/services/data.transfer.service';
 
 
 @Component({
@@ -25,14 +23,13 @@ import { HmiMath } from '@hmi/utility/hmi.math';
  */
 export class WidgetListComponent extends GenericComponent {
   @Input() canvas!: DisignerCanvasComponent;
-  @Input() editor!: HmiEditorComponent;
 
-  // @ViewChild('dragImage', { static: true }) dragImage: ElementRef<HTMLImageElement>;
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService, private dataTransferService: DataTransferService, public editor: HmiEditorComponent) {
     super(injector);
+    
   }
 
   protected onInit(): void {
@@ -46,7 +43,8 @@ export class WidgetListComponent extends GenericComponent {
 
   public widget_dragstart(schema: WidgetSchema, event: DragEvent) {
     event.dataTransfer!.setDragImage(new Image(), 0, 0);
-    event.dataTransfer!.setData('json/widget', JSON.stringify(schema));
+    // event.dataTransfer!.setData('json/widget', schema.type!);
+    this.dataTransferService.setText('json/widget', schema.type!);
     // 设置所有widget不接受鼠标事件
     this.canvas.children.map(e => {
       const element = e.location.nativeElement as HTMLElement;
@@ -57,6 +55,7 @@ export class WidgetListComponent extends GenericComponent {
 
   public widget_dragend(schema: WidgetSchema, event: DragEvent) {
     // 设置所有widget接受鼠标事件
+    this.dataTransferService.setText('json/widget', null);
     this.canvas.children.map(e => {
       const element = e.location.nativeElement as HTMLElement;
       element.style.pointerEvents = '';
@@ -82,21 +81,24 @@ export class WidgetListComponent extends GenericComponent {
 
 
   public widget_dblClick(schema: WidgetSchema, event: MouseEvent) {
+    const widgetSchema = this.provider.getType(schema.type!);
+    const defaultValue = widgetSchema!.component.prototype.metaData.default as WidgetDefaultVlaues;
     const configure: WidgetConfigure = {
       id: this.generateId(),
       name: this.generateName(schema.name),
       type: schema.type!,
-      interval: schema.default.interval,
+      interval: defaultValue.interval,
       zIndex: this.editor.canvas.children.length,
-      style: ObjectUtil.clone(schema.default.style)!,
-      data: ObjectUtil.clone(schema.default.data)!,
-      rect: ObjectUtil.clone(schema.default.rect)!,
-      events: {}
+      style: ObjectUtil.clone(defaultValue.style)!,
+      data: ObjectUtil.clone(defaultValue.data)!,
+      rect: {
+        left: Math.floor(this.canvas.scrollViewer.nativeElement.scrollLeft / this.canvas.zoomScale),
+        top: Math.floor(this.canvas.scrollViewer.nativeElement.scrollTop / this.canvas.zoomScale),
+        width: defaultValue.size.width,
+        height: defaultValue.size.height
+      },
+      events:  ObjectUtil.clone(defaultValue.events)!,
     };
-
-
-    configure.rect!.left = Math.floor(this.canvas.scrollViewer.nativeElement.scrollLeft / this.canvas.zoomScale);
-    configure.rect!.top = Math.floor(this.canvas.scrollViewer.nativeElement.scrollTop / this.canvas.zoomScale);
     const compRef = this.canvas.parseComponent(configure);
     if (compRef) {
       this.editor.execute(new WidgetAddCommand(this.editor, [compRef], true));

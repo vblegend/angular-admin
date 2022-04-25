@@ -1,11 +1,11 @@
-import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, ViewContainerRef, Injector } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { WidgetAttributeCommand } from '@hmi/commands/widget.attribute.command';
+import { WidgetAttributeCommand } from '@hmi/editor/commands/widget.attribute.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Position } from '@hmi/configuration/widget.configure';
 import { Rectangle, Vector2 } from '@hmi/core/common';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 
 
 
@@ -28,9 +28,8 @@ export enum AnchorPosition {
  * 用于在编辑态调整组件大小
  */
 export class ReSizeAnchorDirective extends BaseDirective {
-    @Input() host!: SelectionAreaComponent;
-    @Input() position!: AnchorPosition;
-    @Input() editor!: HmiEditorComponent;
+    @Input() 
+    public position!: AnchorPosition;
     private buttonDown!: boolean;
     /* 鼠标按下时的坐标 */
     private pressedPoint!: Vector2;
@@ -42,6 +41,11 @@ export class ReSizeAnchorDirective extends BaseDirective {
     private batchNo!: number;
     /* 选中对象的位置大小在选框内的位置快照 */
     private snapshots: Rectangle[] = [];
+
+
+    constructor(protected injector: Injector, private editor: HmiEditorComponent) {
+        super(injector);
+    }
 
     /**
      * 抓取选中对象在选定区域的位置(0-1)
@@ -70,7 +74,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 height: this.editor.selection.bounds.height
             };
             this.captureComponents();
-            this.editor.adsorb.captureAnchors();
+            this.editor.adsorbService.captureAnchors();
             this.buttonDown = true;
             const scale = this.editor.canvas.zoomScale;
             this.pressedPoint = {
@@ -95,8 +99,8 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 x: ev.clientX / scale + this.editor.canvas.scrollViewer.nativeElement.scrollLeft,
                 y: ev.clientY / scale + this.editor.canvas.scrollViewer.nativeElement.scrollTop
             }
-            let xLen = (currentPoint.x - this.pressedPoint.x);
-            let yLen = (currentPoint.y - this.pressedPoint.y);
+            let xLen = Math.floor(currentPoint.x - this.pressedPoint.x);
+            let yLen =  Math.floor(currentPoint.y - this.pressedPoint.y);
             if (Number.isNaN(xLen)) return;
             if (Number.isNaN(yLen)) return;
 
@@ -104,7 +108,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 xLen = -Math.min(this.rectRealTime.left!, -xLen);
                 this.rectRealTime.left = this.rectOrigin.left! + xLen;
                 this.rectRealTime.width = this.rectOrigin.width - xLen;
-                const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorbService.matchXAxis(this.rectRealTime.left, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.left = result;
                     this.rectRealTime.width = this.rectOrigin.left! + this.rectOrigin.width - result;
@@ -115,7 +119,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
                 yLen = -Math.min(this.rectRealTime.top!, -yLen);
                 this.rectRealTime.top = this.rectOrigin.top! + yLen;
                 this.rectRealTime.height = this.rectOrigin.height - yLen;
-                const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorbService.matchYAxis(this.rectRealTime.top, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.top = result;
                     this.rectRealTime.height = this.rectOrigin.top! + this.rectOrigin.height - result;
@@ -125,7 +129,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
 
             if (this.position.indexOf(AnchorPosition.Right) > -1) {
                 this.rectRealTime.width = this.rectOrigin.width + xLen;
-                const result = this.editor.adsorb.matchXAxis(this.rectRealTime.left! + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorbService.matchXAxis(this.rectRealTime.left! + this.rectRealTime.width, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.width = result - this.rectOrigin.left!;
                     this.editor.canvas.vSnapLines[2] = { x: (this.rectRealTime.left! + this.rectRealTime.width) * scale, y: this.editor.canvas.scrollViewer.nativeElement.scrollTop };
@@ -134,7 +138,7 @@ export class ReSizeAnchorDirective extends BaseDirective {
 
             if (this.position.indexOf(AnchorPosition.Down) > -1) {
                 this.rectRealTime.height = this.rectOrigin.height + yLen;
-                const result = this.editor.adsorb.matchYAxis(this.rectRealTime.top! + this.rectRealTime.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
+                const result = this.editor.adsorbService.matchYAxis(this.rectRealTime.top! + this.rectRealTime.height, this.editor.DEFAULT_ADSORB_THRESHOLD);
                 if (result != null) {
                     this.rectRealTime.height = result - this.rectOrigin.top!;
                     this.editor.canvas.hSnapLines[2] = { x: this.editor.canvas.scrollViewer.nativeElement.scrollLeft, y: (this.rectRealTime.top! + this.rectRealTime.height) * scale };

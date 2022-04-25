@@ -23,7 +23,6 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
-import { TaskWidgetComponent } from './task-widget/task.widget.component';
 
 
 
@@ -31,8 +30,7 @@ import { TaskWidgetComponent } from './task-widget/task.widget.component';
 @NgModule({
   declarations: [
     TaskListComponent,
-    TaskAddComponent,
-    TaskWidgetComponent
+    TaskAddComponent
   ],
   imports: [
     CommonModule,

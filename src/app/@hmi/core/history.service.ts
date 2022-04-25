@@ -1,5 +1,5 @@
-import { BasicCommand } from "../commands/basic.command";
-import { HmiEditorComponent } from "../hmi.editor.component";
+import { BasicCommand } from "../editor/commands/basic.command";
+import { HmiEditorComponent } from "../editor/hmi.editor.component";
 
 
 

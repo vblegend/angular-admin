@@ -1,24 +1,21 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, ComponentRef, Injector, ComponentFactoryResolver } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { BasicCommand } from '@hmi/commands/basic.command';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
-import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
+import { BasicCommand } from '@hmi/editor/commands/basic.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { SelectionToggleCommand } from '@hmi/editor/commands/selection.toggle.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 import { RubberbandComponent } from '@hmi/components/rubber-band/rubber.band.component';
-import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Rectangle } from '@hmi/core/common';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
-import { Console } from 'console';
 
 @Directive({
     selector: '[rubber-band]'
 })
 
 export class RubberBandDirective extends BaseDirective {
-    @Input() editor!: HmiEditorComponent;
-    @Input() canvas!: DisignerCanvasComponent;
+
     private rectComponent: ComponentRef<RubberbandComponent>;
     /**
      * 橡皮筋所选区域窗口坐标
@@ -38,18 +35,13 @@ export class RubberBandDirective extends BaseDirective {
     private startY: number = 0;
     private endX: number = 0;
     private endY: number = 0;
-
-    constructor(protected injector: Injector) {
+    constructor(protected injector: Injector,private editor: HmiEditorComponent, private canvas: DisignerCanvasComponent) {
         super(injector);
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory<RubberbandComponent>(RubberbandComponent);
         this.rectComponent = this.viewContainerRef.createComponent<RubberbandComponent>(componentFactory, undefined, this.injector);
         this.rectComponent.hostView.detach();
         this.rubberBandArea = { left: 0, top: 0, width: 0, height: 0 };
         this.selectionArea = { left: 0, top: 0, width: 0, height: 0 };
-    }
-
-    public onInit(): void {
-        this.editor = this.canvas.editor;
     }
 
     @HostListener('mousedown', ['$event'])

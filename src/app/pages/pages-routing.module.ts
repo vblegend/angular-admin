@@ -2,7 +2,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { ExamplesComponent } from './examples/examples.component';
 
 const routes: Routes = [{
@@ -17,7 +16,7 @@ const routes: Routes = [{
     {
       path: 'dashboard',
       title: { value: 'dashboard', needsTranslator: true },
-      component: DashboardComponent
+      loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
     },
     {
       path: 'examples',

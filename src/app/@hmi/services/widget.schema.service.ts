@@ -20,6 +20,9 @@ class WidgetSchemaCategory {
 
 
 
+/**
+ * 小部件 部件架构注册服务
+ */
 @Injectable({
     providedIn: 'root'
 })
@@ -49,7 +52,6 @@ export class WidgetSchemaService {
             const factory = this.componentFactoryResolver.resolveComponentFactory(widget.component);
             if (factory) {
                 const type = factory.selector;
-                console.log(type);
                 if (this._widgetsMap[type] == null) {
                     if (widget.type == null) widget.type = type;
                     this._widgetsMap[type] = widget;

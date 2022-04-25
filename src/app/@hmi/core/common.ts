@@ -1,6 +1,39 @@
 import { ObjectUtil } from "@core/util/object.util";
-import { EventMeta, WidgetMetaObject } from "./widget.meta.data";
+import { WidgetDataConfigure, WidgetDefaultConfigure, WidgetEventConfigure, WidgetStyles } from "@hmi/configuration/widget.configure";
+import { EventMeta, WidgetDefaultVlaues, WidgetMetaObject } from "./widget.meta.data";
 
+
+/**
+ * 当前版本
+ */
+export const CurrentVersion: number[] = [0, 0, 1];
+/**
+ * 配置文件魔法代码
+ */
+export const DocumentMagicCode: string = 'graphic.config.file';
+
+
+
+export declare type DecoratorFunction = (target: Function) => void;
+
+
+/**
+ * Hmi 组态缩放模式
+ */
+export enum HmiZoomMode {
+    /**
+     * 原始大小，不缩放
+     */
+    None = 0,
+    /**
+     * 保持比例缩放
+     */
+    Scale = 1,
+    /**
+     * 拉伸缩放
+     */
+    Stretch = 2,
+}
 
 
 /**
@@ -27,21 +60,133 @@ export interface Rectangle {
  * 
  * @param options 
  */
-export function WidgetEvent(events: EventMeta[]): (target: Function) => void {
+export function DefineEvents(events: EventMeta[]): DecoratorFunction {
     return function (target: any) {
         const metaData = target.prototype.metaData as WidgetMetaObject;
-        metaData.prototype = target;
         if (events == null || events.length == 0) return;
         for (const event of events) {
-            if (metaData.events[event.event] == null) {
-                metaData.events[event.event] = event;
-            }
+            const result = metaData.events.find(e => e.event == event.event);
+            if (result) throw new Error(`事件重复定义，[${target}][${event.event}]已被定义。`);
+            metaData.events.push(event);
         }
-        ObjectUtil.freeze(metaData.events);
+    };
+}
+
+/**
+ * 定义Widget对象在编辑器内所支持的属性\
+ * 列表中的属性必须在 hmi-property-element 定义\
+ * 如下所示 ```key="signalId"```
+ * ```
+ *  <ng-template hmi-properties tableName="属性" groupName="数据绑定">
+ *      <hmi-property-element key="signalId" [multiple]="false" attributePath="data/signalId"
+ *          header="绑定信号" tooltip="绑定信号">
+ *          <hmi-button-action-property>
+ *          </hmi-button-action-property>
+ *      </hmi-property-element>
+ *  </ng-template>
+ * ```
+ * @param properties 提供一个属性列表
+ * @returns 
+ */
+export function DefineProperties(properties: string[]): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.properties = properties;
+    };
+}
+
+/**
+ * 默认通用的部件属性
+ */
+export const CommonWidgetPropertys: string[] = ['Name', 'Index', 'Interval', 'Locked', 'Background', 'Opacity', 'Color', 'Events'];
+
+
+/**
+ * 定义Widget对象的默认数据\
+ *  属性定义查询 @WidgetDefaultVlaues 也可以使用下列装饰器
+ * @DefaultInterval
+ * @DefaultSize
+ * @DefaultStyle
+ * @DefaultEvents
+ * 
+ * @param key 默认属性名
+ * @param value 默认值
+ * @returns 
+ */
+export function DefaultValue<T extends keyof WidgetDefaultVlaues>(key: T, value: WidgetDefaultVlaues[T]): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default[key] = value;
     };
 }
 
 
+
+
+/**
+ * 定义Widget对象的默认Data对象结构\
+ * **注意：** 此默认数据必须包含所有字段\
+ * **默认数据内的空值必须使用null表示**\
+ * 因为data在upgrade环节会将结构中为undefined字段替换为 defaultData 中的字段
+ * 
+ * @param defaultData 
+ * @returns 
+ */
+export function DefaultData<TData extends WidgetDataConfigure>(defaultData: TData): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default.data = defaultData;
+    };
+}
+/**
+ * 定义Widget对象的默认时钟刷新周期
+ * @param interval 间隔 单位秒
+ * @returns 
+ */
+export function DefaultInterval(interval: number): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default.interval = interval;
+    };
+}
+
+/**
+ * 定义Widget对象添加时的默认大小\
+ * 当手动拖放或双击添加部件时的默认大小
+ * @param width 宽度 单位px
+ * @param height 高度 单位px
+ * @returns 
+ */
+export function DefaultSize(width: number, height: number): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default.size = { width, height };
+    };
+}
+/**
+ * 定义Widget对象的默认样式表
+ * @param style 样式表
+ * @returns 
+ */
+export function DefaultStyle(style: WidgetStyles): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default.style = style;
+    };
+}
+
+/**
+ * 定义Widget对象的默认触发事件模板\
+ * 通常用于预制事件
+ * @param events 事件表
+ * @returns 
+ */
+export function DefaultEvents(events: Record<string, WidgetEventConfigure[]>): DecoratorFunction {
+    return function (target: any) {
+        const metaData = target.prototype.metaData as WidgetMetaObject;
+        metaData.default.events = events;
+    };
+}
 
 /**
  * 用于声明一个Widget对外接口\
@@ -55,7 +200,6 @@ export function WidgetEvent(events: EventMeta[]): (target: Function) => void {
 export function WidgetInterface(name: string, description: string, strict?: boolean): (target: any, methodName: string, descriptor: PropertyDescriptor) => void {
     return function (prototype: any, methodName: string, descriptor: PropertyDescriptor) {
         const metaData = prototype.metaData as WidgetMetaObject;
-        metaData.prototype = prototype;
         if (metaData.interface[methodName] == null) {
             metaData.interface[methodName] = { methodName, name, description, descriptor, args: [], strict: strict ? true : false };
         }
@@ -78,7 +222,7 @@ export function Params(argName: string): (target: Function, methodName: string, 
     return function (target: any, methodName: string, paramIndex: number) {
         const metaData = target.metaData as WidgetMetaObject;
         if (metaData.interface[methodName] == null) {
-            metaData.interface[methodName] = { methodName:  undefined, name: undefined, description: undefined, descriptor: undefined, args: [], strict: false };
+            metaData.interface[methodName] = { methodName: undefined, name: undefined, description: undefined, descriptor: undefined, args: [], strict: false };
         }
         const method = metaData.interface[methodName];
         method.args![paramIndex] = { argName, paramIndex };

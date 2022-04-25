@@ -66,11 +66,13 @@ export class WidgetEventService {
    * @param params 事件参数
    */
   private eventHandle(receiver: BasicWidgetComponent, method: string, params: AnyObject): void {
-    const methodMeta = receiver.metaData.interface[method];
-    const methodFunc = receiver.getMemberFunction(method);
-    if (method && methodFunc) {
+    if (method == null) return;
+    const methodName = method.split(':').pop()!;
+    const methodMeta = receiver.metaData.interface[methodName];
+    const methodFunc = receiver.getMemberFunction(methodName);
+    if (methodName && methodFunc) {
       const args = this.getEventParams(methodMeta, params);
-      if (args != null) methodFunc.apply(this, args);
+      if (args != null) methodFunc.apply(receiver, args);
     }
   }
 

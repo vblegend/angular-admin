@@ -88,7 +88,7 @@ export class LocalCache<TObject, TKey> {
      * @param type 
      * @param data 
      */
-    private emit(type: DataChangeTypes, data: TObject[]) {
+    private emit(type: DataChangeTypes, data: TObject[]): void {
         if (this._subscribers.length == 0) return;
         Object.freeze(data);
         const ems = this._subscribers.slice();
@@ -104,7 +104,7 @@ export class LocalCache<TObject, TKey> {
      * load data from object array
      * @param entries 
      */
-    public load(entries: TObject[]) {
+    public load(entries: TObject[]): void {
         this.batchPut(entries);
     }
 
@@ -156,7 +156,7 @@ export class LocalCache<TObject, TKey> {
         return result;
     }
 
-    public clear() {
+    public clear(): void {
         this.emit(DataChangeTypes.Remove, this._buffer.slice());
         this._indexs.clear();
         this._buffer.length = 0;
