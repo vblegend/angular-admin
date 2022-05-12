@@ -2,7 +2,9 @@
 
 import { ScriptEvalContext } from "@core/common/script.eval.context";
 
-
+/**
+ * 支持上下文的脚本执行器工具类
+ */
 export class EvalUtil {
 
 
