@@ -82,7 +82,7 @@ export class ScriptEvalContext {
     /**
      * 获取已注册的所有对象
      */
-    public get values(): string[] {
+    public get values(): any[] {
         return this.registerValues.slice();
     }
 
