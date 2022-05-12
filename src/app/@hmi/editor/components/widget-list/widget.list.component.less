@@ -1,0 +1,47 @@
+@import "../../../../../styles/themes/mixin.less";
+
+.themeMixin({
+    :host {
+      .widget-item {
+         border: solid 1px fade(@border-color-base,20%);
+      }
+      .widget-item:hover {
+        background-color: @table-header-bg;
+        border: solid 1px @border-color-split;
+      }
+
+    }
+});
+
+
+:host {
+  .flex {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .widget-continer {
+    display: block;
+  }
+  .widget-icon{
+    font-size: 32px;
+  }
+  .widget-item {
+    user-select: none;
+    width: 64px !important;
+    height: 64px !important;
+    line-height: 64px !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+    display: inline-block !important;
+    // border: solid 1px @border-color-base;
+  }
+  .anticon{
+    line-height: 64px !important;
+  }
+
+  // .widget-item:hover{
+  //   background-color: @border-color-base;
+  // }
+
+}

@@ -1,35 +1,69 @@
 import { ComponentFactoryResolver, Injectable, Injector } from "@angular/core";
 import { WidgetSchema } from "@hmi/configuration/widget.schema";
 
+class WidgetSchemaCategory {
+    public name: string;
+    public children: WidgetSchema[];
+
+    /**
+     *
+     */
+    constructor(category: string) {
+        this.children = [];
+        this.name = category;
+    }
+
+
+
+
+}
+
+
+
+/**
+ * 小部件 部件架构注册服务
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class WidgetSchemaService {
 
     private _widgetsMap: Record<string, WidgetSchema>;
-    private _widgetsArray: WidgetSchema[];
     private componentFactoryResolver: ComponentFactoryResolver;
+    private _categorys: WidgetSchemaCategory[];
+
+
+    public get categorys(): WidgetSchemaCategory[] {
+        return this._categorys.slice();
+    }
+
 
     /**
      *
      */
     constructor(protected injector: Injector) {
         this._widgetsMap = {};
-        this._widgetsArray = [];
+        this._categorys = [];
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
     }
 
-    public load(data: WidgetSchema[]) {
+    public register(data: WidgetSchema[]) {
         for (const widget of data) {
             const factory = this.componentFactoryResolver.resolveComponentFactory(widget.component);
             if (factory) {
-                widget.type = factory.selector;
-                Object.freeze(widget);
-                if (this._widgetsMap[widget.type] == null) {
-                    this._widgetsMap[widget.type] = widget;
-                    this._widgetsArray.push(widget);
+                const type = factory.selector;
+                if (this._widgetsMap[type] == null) {
+                    if (widget.type == null) widget.type = type;
+                    this._widgetsMap[type] = widget;
+                    Object.freeze(widget);
+                    let category = this.findWidgetCategory(widget.classify);
+                    if (category == null) {
+                        category = new WidgetSchemaCategory(widget.classify);
+                        this._categorys.push(category);
+                    }
+                    category.children.push(widget);
                 } else {
-                    console.warn(`关键字${widget.type}已被注册，跳过当前组件：${widget.component}`);
+                    console.warn(`关键字${type}已被注册，跳过当前组件：${widget.component}`);
                 }
             }
             else {
@@ -38,21 +72,27 @@ export class WidgetSchemaService {
         }
     }
 
-    public getType(type: string): WidgetSchema {
-        return this._widgetsMap[type];
+    public findWidgetCategory(category: string): WidgetSchemaCategory | undefined {
+        return this._categorys.find(e => e.name === category);
     }
 
-    public register(type: string, component: WidgetSchema) {
-        this._widgetsMap[type] = component;
+    public getType(type: string | null): WidgetSchema | null {
+        if (type == null) {
+            return null;
+        } else {
+            return this._widgetsMap[type];
+        }
     }
 
-
-    public get length(): number {
-        return this._widgetsArray.length;
+    public random(): WidgetSchema | undefined {
+        if (this._categorys.length == 0) return undefined;
+        while (true) {
+            const categoryIndex = Math.floor(Math.random() * this._categorys.length);
+            const category = this._categorys[categoryIndex];
+            if (category && category.children.length > 0) {
+                const index = Math.floor(Math.random() * category.children.length);
+                return category.children[index];
+            }
+        }
     }
-
-    public getIndex(index: number): WidgetSchema {
-        return this._widgetsArray[index];
-    }
-
 }

@@ -1,6 +1,6 @@
-<div class="graphic-scrollviewer" [ngStyle]="getScrollViewerStyle()">
+<div class="graphic-scrollviewer" [class.overflow]="zoomMode == 0">
     <div class="graphic-view" [ngStyle]="getStyle()">
-        <ngx-view-canvas #canvas>
-        </ngx-view-canvas>
+        <hmi-view-canvas #canvas>
+        </hmi-view-canvas>
     </div>
 </div>

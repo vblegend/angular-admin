@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Vector2 } from "@hmi/core/common";
-import { HmiEditorComponent } from "@hmi/hmi.editor.component";
+import { HmiEditorComponent } from "../editor/hmi.editor.component";
 
 @Injectable({
     providedIn: 'root'
@@ -57,12 +57,12 @@ export class AdsorbService {
         const selection = this.editor.selection;
         for (const comp of this.editor.canvas.children) {
             if (!selection.contains(comp)) {
-                this.axisX.push(comp.instance.left);
-                this.axisX.push(Math.floor(comp.instance.left + comp.instance.width / 2));
-                this.axisX.push(comp.instance.left + comp.instance.width);
-                this.axisY.push(comp.instance.top);
-                this.axisY.push(Math.floor(comp.instance.top + comp.instance.height / 2));
-                this.axisY.push(comp.instance.top + comp.instance.height);
+                this.axisX.push(comp.instance.left!);
+                this.axisX.push(Math.floor(comp.instance.left! + comp.instance.width! / 2));
+                this.axisX.push(comp.instance.left! + comp.instance.width!);
+                this.axisY.push(comp.instance.top!);
+                this.axisY.push(Math.floor(comp.instance.top! + comp.instance.height! / 2));
+                this.axisY.push(comp.instance.top! + comp.instance.height!);
             }
         }
         this.axisX = Array.from(new Set(this.axisX)).sort((a, b) => a - b);
@@ -118,7 +118,7 @@ export class AdsorbService {
      * @param threshold 查询阈值
      * @returns x轴点
      */
-    public matchXAxis(x: number, threshold = 5): number {
+    public matchXAxis(x: number, threshold = 5): number | null {
         const result = this.binarySearch(this.axisX, x);
         if (result && Math.abs(result - x) < threshold) {
             return result;
@@ -133,7 +133,7 @@ export class AdsorbService {
      * @param threshold 查询阈值
      * @returns y轴点
      */
-    public matchYAxis(y: number, threshold = 5): number {
+    public matchYAxis(y: number, threshold = 5): number | null {
         const result = this.binarySearch(this.axisY, y);
         if (result && Math.abs(result - y) < threshold) {
             return result;
@@ -149,7 +149,7 @@ export class AdsorbService {
      * @param return        Vector2 (x,y) 返回 x,y轴修正的范围 当坐标值为null时 未吸附到值
      */
     public match(in_out_Point: Vector2, threshold = 15): Vector2 {
-        const result: Vector2 = { x: null, y: null };
+        const result: Vector2 = { x: 0, y: 0 };
         // lessValue *= this.designer.res;
         const x = this.binarySearch(this.axisX, in_out_Point.x);
         const y = this.binarySearch(this.axisY, in_out_Point.y);

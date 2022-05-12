@@ -10,7 +10,7 @@
 </nz-page-header>
 
 
-<nz-table #filterTable nzShowSizeChanger nzShowPagination nzPageSize="10" [nzFrontPagination]="true" [nzData]="listOfDisplay"
+<nz-table #filterTable nzShowSizeChanger nzShowPagination [nzPageSize]="10" [nzFrontPagination]="true" [nzData]="listOfDisplay"
    [nzLoading]="loading">
   <thead>
     <tr>
@@ -22,7 +22,7 @@
       </th>
       <th nzColumnKey="service" [nzFilters]="serviceFilters" [nzFilterFn]="serviceFilterFn">注册服务</th>
       <th nzColumnKey="mode">触发方式</th>
-      <th nzColumnKey="ipAddress" [nzSortOrder]="true" [nzSortFn]="true">{{'IP地址' | translator : this}}</th>
+      <th nzColumnKey="ipAddress" nzSortOrder="true" [nzSortFn]="true">{{'IP地址' | translator : this}}</th>
       <th nzRight nzWidth="150px">操作</th>
     </tr>
   </thead>

@@ -32,7 +32,7 @@ export class SessionService {
      * @param key 
      * @returns 
      */
-    public get<T>(key: string): T {
+    public get<T>(key: string): T | null {
         const _key = this.generateKey(key);
         const value = sessionStorage.getItem(_key);
         if (value == null) return null;

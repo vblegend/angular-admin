@@ -8,7 +8,7 @@ export class BootstrapService {
     /**
      * loading animation element
      */
-    public loadingElement: HTMLElement;
+    public loadingElement!: HTMLElement | null;
 
 
     private _bootstrapInits: DelegateContext[];

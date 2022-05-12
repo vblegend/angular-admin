@@ -1,11 +1,10 @@
 import { Component, ElementRef, HostBinding, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { Rectangle, Vector2 } from '@hmi/core/common';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 
 
 @Component({
-  selector: 'ngx-pan-control',
+  selector: 'hmi-pan-control',
   templateUrl: './pan.control.component.html',
   styleUrls: ['./pan.control.component.less']
 })
@@ -13,18 +12,16 @@ import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.comp
  * 移动工具
  */
 export class PanControlComponent extends GenericComponent {
-  @Input() canvas: DisignerCanvasComponent;
-
-  private scrollViewer: HTMLDivElement;
-  private buttonDown: boolean;
-  private disX: number;
-  private disY: number;
+  private scrollViewer!: HTMLDivElement;
+  private buttonDown!: boolean;
+  private disX!: number;
+  private disY!: number;
 
 
   /**
    *
    */
-  constructor(protected injector: Injector) {
+  constructor(protected injector: Injector, private canvas: DisignerCanvasComponent) {
     super(injector);
     this.buttonDown = false;
   }
@@ -98,7 +95,7 @@ export class PanControlComponent extends GenericComponent {
       this.buttonDown = false;
     }
     ev.preventDefault();
-    ev.stopPropagation();        
+    ev.stopPropagation();
   }
 
   /**

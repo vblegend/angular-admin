@@ -27,6 +27,10 @@
   color: @primary-5;
 }
 
+.ant-layout .ant-layout-content{
+  position: relative;
+}
+
 body {
   margin: 0;
   font-size: 14px;
@@ -61,6 +65,18 @@ body {
   transition: font-size 0.15s cubic-bezier(0.215, 0.61, 0.355, 1),
     margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0.3s;
 }
+
+.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+  padding: 0px 5px;
+}
+
+.ant-tooltip{
+  user-select: none;
+  pointer-events: none;
+}
+
+
 
 // fix side menu border-botton
 .ant-menu-submenu.ant-menu-submenu-inline {

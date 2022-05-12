@@ -11,8 +11,8 @@ import { Subscription } from 'rxjs';
 })
 export class WelcomeComponent extends GenericComponent {
   @Output() public deleteRequest: EventEmitter<Object> = new EventEmitter<Object>(true);
-  public id: string;
-  public name: string = null;
+  public id!: string | null;
+  public name!: string;
 
 
   // private subscription: Subscription;

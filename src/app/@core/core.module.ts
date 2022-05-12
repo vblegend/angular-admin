@@ -35,19 +35,22 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { MenuService } from './services/menu.service';
 import { HoverDirective } from './directives/hover.directive';
-import { MutableDirective } from './directives/mutable.directive';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { GlobalErrorHandler } from './private/GlobalErrorHandler';
 import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
-import { TemplateService } from './services/template.service';
 import { UnSelectedDirective } from './directives/unselected.directive';
 import { NzDrawerService } from 'ng-zorro-antd/drawer';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { OutSideEventPluginService } from './services/outside.event.plugin.service';
 import { SessionService } from './services/session.service';
 import { CacheService } from './services/cache.service';
+import { EventBusService } from './services/event.bus.service';
+import { AngularSplitModule } from 'angular-split';
+import { CollapseComponent } from './components/ngx-collapse/ngx.collapse.component';
+import { TimerPoolService } from './services/timer.pool.service';
+import { NotificationService } from './services/notification.service';
 
 
 const EXPORT_PIPES: Provider[] = [
@@ -58,7 +61,6 @@ const EXPORT_PIPES: Provider[] = [
 
 const EXPORT_DIRECTIVES: Provider[] = [
   HoverDirective,
-  MutableDirective,
   UnSelectedDirective
 ];
 
@@ -71,7 +73,8 @@ const EXPORT_COMPONENTS = [
   NotFoundComponent,
   ThemeSettingComponent,
   TerminalComponent,
-  ErrorComponent
+  ErrorComponent,
+  CollapseComponent
 ];
 
 
@@ -89,9 +92,11 @@ const PROVIDERS: Provider[] = [
   ThemeService,
   BootstrapService,
   MenuService,
-  TemplateService,
   NzDrawerService,
-  CacheService
+  CacheService,
+  EventBusService,
+  TimerPoolService,
+  NotificationService
 ];
 
 
@@ -119,7 +124,8 @@ const PROVIDERS: Provider[] = [
     NzNotificationModule,
     NzMessageModule,
     NzAvatarModule,
-    NzPopoverModule
+    NzPopoverModule,
+    AngularSplitModule
   ],
   exports: [
     EXPORT_COMPONENTS,
@@ -157,7 +163,7 @@ export class CoreModule {
         {
           provide: ErrorHandler,
           useClass: GlobalErrorHandler,
-          deps: [NzNotificationService, TemplateService]
+          deps: [NzNotificationService]
         },
         {
           provide: EVENT_MANAGER_PLUGINS,

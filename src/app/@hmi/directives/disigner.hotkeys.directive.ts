@@ -1,6 +1,7 @@
-import { Directive, HostListener, Input } from "@angular/core";
+import { Directive, HostListener, Injector, Input } from "@angular/core";
 import { BaseDirective } from "@core/directives/base.directive";
-import { HmiEditorComponent } from "@hmi/hmi.editor.component";
+import { WidgetRemoveCommand } from "@hmi/editor/commands/widget.remove.command";
+import { HmiEditorComponent } from "@hmi/editor/hmi.editor.component";
 
 
 @Directive({
@@ -11,7 +12,15 @@ import { HmiEditorComponent } from "@hmi/hmi.editor.component";
  * 用于在编辑器下快捷键的实现
  */
 export class DisignerHotkeysDirective extends BaseDirective {
-    @Input() editor: HmiEditorComponent;
+
+    /**
+     *
+     */
+    constructor(protected injector: Injector, private editor: HmiEditorComponent) {
+        super(injector);
+
+    }
+
 
     protected onInit(): void {
 
@@ -19,31 +28,44 @@ export class DisignerHotkeysDirective extends BaseDirective {
 
     @HostListener('document:keydown', ['$event'])
     public onKeyDown(event: KeyboardEvent): void {
-        switch (event.key.toLowerCase()) {
-            case 'c':
+        if (!(event.target instanceof HTMLDivElement)) return;
+        switch (event.code.toLowerCase()) {
+            case 'delete':
+                this.editor.executeDeleteCommand();
+                event.preventDefault();
+                event.stopPropagation();
+                break;
+            case 'keya':
+                if (event.ctrlKey) {
+                    this.editor.executeSelectAll();
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                break;
+            case 'keyc':
                 if (event.ctrlKey) {
                     // this.editor.executeCopy();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'v':
+            case 'keyv':
                 if (event.ctrlKey) {
                     // this.editor.executePaste();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'z':
+            case 'keyz':
                 if (event.ctrlKey) {
-                    this.editor.undo();
+                    this.editor.executeUndo();
                     event.preventDefault();
                     event.stopPropagation();
                 }
                 break;
-            case 'y':
+            case 'keyy':
                 if (event.ctrlKey) {
-                    this.editor.redo();
+                    this.editor.executeRedo();
                     event.preventDefault();
                     event.stopPropagation();
                 }

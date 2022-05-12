@@ -1,4 +1,6 @@
+import { Size, WidgetDataConfigure, WidgetEventConfigure, WidgetStyles } from "@hmi/configuration/widget.configure";
 import { AnyObject } from "chart.js/types/basic";
+import { Vector2 } from "./common";
 
 export interface MethodArgument {
     /**
@@ -16,28 +18,28 @@ export interface MethodMeta {
     /**
      * 接口方法名称
      */
-    methodName: string;
+    methodName: string | undefined;
     /**
      * 接口名
      */
-    name: string;
+    name: string | undefined;
     /**
      * 是否为严格模式（默认为false）
      * 严格模式下需所有参数都被匹配才会触发
      */
-    strict: boolean;
+    strict: boolean | undefined;
     /**
      * 接口说明
      */
-    description: string;
+    description: string | undefined;
     /**
      * 接口方法对象
      */
-    descriptor: PropertyDescriptor;
+    descriptor: PropertyDescriptor | undefined;
     /**
     * 接口参数
     */
-    args: MethodArgument[];
+    args: MethodArgument[] | undefined;
 
 }
 
@@ -56,21 +58,70 @@ export interface EventMeta {
     eventName: string;
 }
 
+/**
+ * 小部件默认数据对象
+ */
+export class WidgetDefaultVlaues {
+    /**
+     * 定义Widget对象的默认触发事件模板\
+     * 用于特殊对象的预定义事件
+     */
+    public events: Record<string, WidgetEventConfigure[]> = {};
+
+    /**
+     * 定义Widget对象的默认刷新周期 单位：秒
+     */
+    public interval: number = 0;
+
+    /**
+     * 定义Widget对象的默认样式表
+     */
+    public style: WidgetStyles = {};
+
+    /**
+     * 定义Widget对象的默认大小 单位：px
+     */
+    public size: Size = { width: 0, height: 0 };
+
+    /**
+     * 定义Widget对象的默认Data对象结构\
+     * **注意：** 此默认数据必须包含所有字段\
+     * **默认数据内的空值必须使用null表示**\
+     * 因为data在upgrade环节会将结构中为undefined字段替换为 defaultData 中的字段
+     */
+    public data: WidgetDataConfigure = {};
+
+
+
+
+
+}
+
+
+
 
 /**
  * 部件的元数据对象
  */
 export class WidgetMetaObject {
-    private _interface: Record<string, MethodMeta>;
-    private _events: Record<string, EventMeta>;
-    public get interface(): Record<string, MethodMeta> { return this._interface; }
-    public get events(): Record<string, EventMeta> { return this._events }
-    public prototype: AnyObject;
     /**
-     *
+     * Widget 接口声明
      */
-    constructor() {
-        this._interface = {};
-        this._events = {};
-    }
+    public readonly interface: Record<string, MethodMeta> = {}
+    /**
+     * Widget 事件声明
+     */
+    public readonly events: EventMeta[] = [];
+
+    /**
+     * Widget 默认数据
+     */
+    public readonly default: WidgetDefaultVlaues = new WidgetDefaultVlaues();
+
+
+    /**
+   * 对象支持的属性key
+   */
+    public properties: string[] = [];
+
 }

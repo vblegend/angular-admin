@@ -1,5 +1,6 @@
 import { ComponentRef } from "@angular/core";
 import { BasicWidgetComponent } from "@hmi/components/basic-widget/basic.widget.component";
+import { WidgetConfigure } from "@hmi/configuration/widget.configure";
 import { HmiMath } from "@hmi/utility/hmi.math";
 import { Rectangle } from "./common";
 
@@ -7,8 +8,8 @@ import { Rectangle } from "./common";
 export class SelectionService {
 
     private components: ComponentRef<BasicWidgetComponent>[];
-
     private _selectionBounds: Rectangle;
+    private _configures: WidgetConfigure[] = [];
 
     /**
      * 获取选区的边界线
@@ -23,6 +24,15 @@ export class SelectionService {
     public get objects(): ComponentRef<BasicWidgetComponent>[] {
         return this.components.slice();
     }
+
+
+    public get configures(): WidgetConfigure[] {
+        return this._configures.slice();
+    }
+
+
+
+
 
     /**
      *
@@ -65,7 +75,7 @@ export class SelectionService {
      * 添加一个对象至选区。
      * @param component 
      */
-    public add(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public add(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const comp = this.addItem(component);
         if (comp) this.update();
         return comp;
@@ -84,7 +94,7 @@ export class SelectionService {
      * 从选区删除一个对象，取消对象的选中状态
      * @param component 
      */
-    public remove(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public remove(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const comp = this.removeItem(component);
         if (comp) this.update();
         return comp;
@@ -97,7 +107,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    public addItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    public addItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         if (component) {
             const index = this.components.indexOf(component);
             if (index === -1) {
@@ -115,7 +125,7 @@ export class SelectionService {
      * @param component 
      * @returns 
      */
-    private removeItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
+    private removeItem(component: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> | null {
         const index = this.components.indexOf(component);
         if (index > -1) {
             this.components.splice(index, 1);
@@ -151,19 +161,49 @@ export class SelectionService {
 
 
     /**
+     * 当前选中对象是否包含组合的
+     */
+    public get hasGrouping(): boolean {
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i].instance.configure.group != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 当前选中对象是否包含锁定的
+     */
+    public get hasLocking(): boolean {
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i].instance.configure.locked == true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+    /**
      * 获取所有选中的范围
      * @returns 
      */
     public update(): void {
-        let bounds: Rectangle = null;
+        let bounds: Rectangle | null = null;
         for (let i = 0; i < this.components.length; i++) {
+            const rect = this.components[i].instance.getRelativeRect();  // this.components[i].instance.configure.rect
             if (bounds == null) {
-                bounds = this.components[i].instance.configure.rect;
+                bounds = rect;
             } else {
-                bounds = HmiMath.extendsRectangle(bounds, this.components[i].instance.configure.rect);
+                bounds = HmiMath.extendsRectangle(bounds, rect);
             }
         }
         this._selectionBounds = bounds || { left: 0, top: 0, width: 0, height: 0 };
+        this._configures = this.objects.map(e => e.instance.configure);
     }
 
 

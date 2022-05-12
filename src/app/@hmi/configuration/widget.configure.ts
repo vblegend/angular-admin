@@ -1,3 +1,4 @@
+import { AnyObject } from "@core/common/types";
 import { Rectangle } from "@hmi/core/common";
 
 
@@ -6,37 +7,62 @@ import { Rectangle } from "@hmi/core/common";
  */
 export interface WidgetDataConfigure {
 
+
+
+
 }
 
 /**
  * 2D组态元素样式
  */
-export interface WidgetStyle {
+export interface WidgetStyles {
+
     /**
-     * 组件默认背景色
+     * 组件背景色
      */
     background?: string;
 
     /**
-     * 组件默认不透明度
+     * 前景颜色
+     */
+    color?: string;
+
+    /**
+     * 组件不透明度
      */
     opacity?: number;
 
     /**
-     * 边框
+     * 边框 solid 1px #ffffff
      */
     border?: string;
 
     /**
-     * 是否忽略鼠标事件 默认为 false
-     * 为true时鼠标事件穿透
+     * 边框圆角
      */
-    ignoreEvent?: boolean;
+    radius?: number;
 
     /**
-     * 部件的默认字体大小
+     * 字体
+     */
+    fontFamily?: string;
+
+    /**
+     * 字体大小
      */
     fontSize?: number;
+
+    /**
+     * 文本对齐方式
+     */
+    textAlign?: string;
+
+
+    /**
+     * 对象的旋转方位
+     */
+    rotate?: number;
+
 }
 
 export interface Position {
@@ -70,17 +96,26 @@ export interface WidgetDefaultConfigure {
     /**
      * 位置与大小
      */
-    rect?: Rectangle;
+    rect: Rectangle | null;
     /**
      * 
      * 样式属性，主动更新。
+     * 所有为空的属性请置为null，不要使用undefined\
+     * 因为设置为undefined会触发组件的数据兼容从而恢复为默认值
      */
-    style: WidgetStyle;
+    style: WidgetStyles;
 
     /**
-     * 组态绑定数据，被动更新 需事件通知
+     * 组态绑定数据，被动更新 需事件通知\
+     * 所有为空的属性请置为null，不要使用undefined\
+     * 因为设置为undefined会触发组件的数据兼容从而恢复为默认值
      */
     data: WidgetDataConfigure;
+
+    /**
+     * 刷新间隔(秒)  为0时不刷新
+     */
+    interval: number;
 
     /**
      * 部件的事件触发
@@ -94,11 +129,11 @@ export interface WidgetEventConfigure {
     /**
      * 目标对象，为空则广播给所有部件
      */
-    target?: string;
+    target: string | null;
     /**
      * 对象的接口方法名
      */
-    method: string;
+    method: string | null;
     /**
      * 指定参数，重写参数
      */
@@ -110,6 +145,7 @@ export interface WidgetEventConfigure {
  * 2D组态元素配置
  */
 export interface WidgetConfigure extends WidgetDefaultConfigure {
+
     /**
      * 对象唯一ID
      */
@@ -121,15 +157,20 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
     /**
      * 对象类型
      */
-    type: string;
+    type: string | null;
     /**
      * 被锁定的
      */
     locked?: boolean;
     /**
+     * 是否忽略鼠标事件 默认为 false
+     * 为true时鼠标事件穿透
+     */
+    ignoreEvent?: boolean;
+    /**
      * 组件所属分组
      */
-    group?: string;
+    group?: number;
     /**
      * 组件层级索引
      */
@@ -138,5 +179,7 @@ export interface WidgetConfigure extends WidgetDefaultConfigure {
      * 是否可见
      */
     visible?: boolean;
+
+
 
 }

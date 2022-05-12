@@ -14,7 +14,8 @@ import { StringNameValue } from '../../../../../typings';
   templateUrl: './theme.setting.component.html'
 })
 export class ThemeSettingComponent extends GenericComponent {
-  @ViewChild('TerminalParent', { static: true }) private terminalDiv: ElementRef;
+  @ViewChild('TerminalParent', { static: true })
+  private terminalDiv!: ElementRef;
   public themes: StringNameValue[] = [
     {
       value: 'default',

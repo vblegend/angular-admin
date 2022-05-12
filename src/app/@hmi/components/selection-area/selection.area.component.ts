@@ -1,40 +1,26 @@
-import { Component, ComponentRef, HostBinding, HostListener, Injector, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, HostBinding, HostListener, Injector, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { WidgetConfigure } from '../../configuration/widget.configure';
-import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
-import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
-import { Rectangle } from '@hmi/core/common';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { AnchorPosition } from '@hmi/directives/resize.anchor.directive';
 
 @Component({
-  selector: 'ngx-selection-area',
+  selector: 'hmi-selection-area',
   templateUrl: './selection.area.component.html',
   styleUrls: ['./selection.area.component.less']
 })
 export class SelectionAreaComponent extends GenericComponent {
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  private _canvas: DisignerCanvasComponent;
-  private _editor: HmiEditorComponent;
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
+  public container!: ViewContainerRef;
+  public AnchorPosition: any = AnchorPosition;
 
-
-  /**
-   * 获取当前代理对象所属canvas
-   */
-  public get canvas(): DisignerCanvasComponent {
-    return this._canvas;
-  }
-
-  public get editor(): HmiEditorComponent {
-    return this._editor;
-  }
 
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+  constructor(protected injector: Injector, public canvas: DisignerCanvasComponent, public editor: HmiEditorComponent) {
     super(injector);
   }
 
@@ -55,6 +41,7 @@ export class SelectionAreaComponent extends GenericComponent {
 
   @HostListener('document:keydown', ['$event'])
   public onKeyDown(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLDivElement)) return;
     switch (event.code) {
       case 'Escape':
         if (this.editor.selection.length === 0) return;
@@ -91,27 +78,9 @@ export class SelectionAreaComponent extends GenericComponent {
     }
   }
 
-
-
-
-
-
-
-
-  public init(_canvas: DisignerCanvasComponent) {
-    this._canvas = _canvas;
-    this._editor = _canvas.editor;
-  }
-
-
-  protected onInit(): void {
-  }
-
-
   protected onDestroy(): void {
+
   }
-
-
 
   /**
    * host的绑定数据，不可修改。
@@ -126,7 +95,7 @@ export class SelectionAreaComponent extends GenericComponent {
    */
   @HostBinding('style.left')
   public get left(): string {
-    return `${this._editor.selection.bounds.left}px`;
+    return `${this.editor.selection.bounds.left}px`;
   }
 
   /**
@@ -135,7 +104,7 @@ export class SelectionAreaComponent extends GenericComponent {
    */
   @HostBinding('style.top')
   public get top(): string {
-    return `${this._editor.selection.bounds.top}px`;
+    return `${this.editor.selection.bounds.top}px`;
   }
 
   /**
@@ -144,7 +113,7 @@ export class SelectionAreaComponent extends GenericComponent {
    */
   @HostBinding('style.width')
   public get width(): string {
-    return `${this._editor.selection.bounds.width}px`;
+    return `${this.editor.selection.bounds.width}px`;
   }
 
   /**
@@ -153,7 +122,7 @@ export class SelectionAreaComponent extends GenericComponent {
    */
   @HostBinding('style.height')
   public get height(): string {
-    return `${this._editor.selection.bounds.height}px`;
+    return `${this.editor.selection.bounds.height}px`;
   }
 
   /**
@@ -170,7 +139,7 @@ export class SelectionAreaComponent extends GenericComponent {
    */
   @HostBinding('style.display')
   public get display(): string {
-    return this._editor.selection.bounds.height > 0 && this._editor.selection.bounds.width > 0 ? '' : 'none';
+    return this.editor.selection.bounds.height > 0 && this.editor.selection.bounds.width > 0 ? '' : 'none';
   }
 
 

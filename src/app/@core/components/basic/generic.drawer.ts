@@ -10,21 +10,14 @@ import { GenericComponent } from "./generic.component";
 })
 export class GenericDrawerComponent<TInput, TOut> extends GenericComponent {
     @Input()
-    public readonly input: TInput;
+    public readonly input?: TInput;
 
     protected readonly drawerRef: NzDrawerRef<TOut>;
-    
+
     constructor(injector: Injector) {
         super(injector);
         this.drawerRef = injector.get(NzDrawerRef);
     }
-
-
-
-
-
-
-
 
     public submit(): void {
         this.close();
@@ -39,7 +32,7 @@ export class GenericDrawerComponent<TInput, TOut> extends GenericComponent {
      * close drawer and result value
      * @param value 
      */
-    public close(value: TOut = null): void {
+    public close(value?: TOut): void {
         this.drawerRef.close(value);
     }
 }

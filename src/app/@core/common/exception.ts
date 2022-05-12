@@ -34,7 +34,7 @@ export class Exception {
         if (target == null) return;
         const keys = Object.keys(target)
         for (let i = 0; i < keys.length; i++) {
-            this[keys[i]] = target[keys[i]];
+            this[keys[i]] = target[keys[i] as keyof Object];
         }
     }
 

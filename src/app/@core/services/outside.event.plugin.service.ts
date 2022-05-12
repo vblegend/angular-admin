@@ -11,7 +11,7 @@ import { EventManager } from "@angular/platform-browser";
 
 @Injectable()
 export class OutSideEventPluginService {
-    public manager: EventManager;
+    public manager!: EventManager;
 
     public supports(eventName: string): boolean {
         return eventName.endsWith("@outside");

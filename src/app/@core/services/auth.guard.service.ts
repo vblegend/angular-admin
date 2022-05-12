@@ -24,7 +24,7 @@ export class AuthGuardService implements CanActivate {
     //     })
     //   );
     const userCookie = this.sessionService.get<{ userName: string }>("user");
-    if (!this.verifyLoginState(userCookie) || !this.verifyNetWorkState()) {
+    if (!this.verifyLoginState(userCookie!) || !this.verifyNetWorkState()) {
       this.router.navigateByUrl('/login');
       return false;
     } else {

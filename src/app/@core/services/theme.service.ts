@@ -6,8 +6,8 @@ import { ThemeConfigure } from '../common/themeconfigure';
     providedIn: 'root',
 })
 export class ThemeService {
-    private readonly _themes: Record<string, string>;
-    private _currentTheme: string;
+    private readonly _themes!: Record<string, string>;
+    private _currentTheme!: string;
 
 
     public get currentTheme(): string {

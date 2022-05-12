@@ -13,7 +13,7 @@ export class SidebarComponent extends GenericComponent {
     super(injector);
   }
 
-  public menus: RouteConfigure[];
+  public menus: RouteConfigure[] = [];
 
 
   protected onInit(): void {

@@ -18,7 +18,7 @@ export interface CacheEKeyMaps {
     providedIn: 'root'
 })
 export class CacheService {
-    private _caches: Map<string, LocalCache<Object, Object>> = new Map();
+    private _caches: Map<string, any> = new Map();
     constructor(protected injector: Injector) {
     }
 

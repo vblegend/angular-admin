@@ -4,7 +4,7 @@ import { Rectangle } from '@hmi/core/common';
 
 
 @Component({
-  selector: 'ngx-rubber-band',
+  selector: 'hmi-rubber-band',
   templateUrl: './rubber.band.component.html',
   styleUrls: ['./rubber.band.component.less']
 })
@@ -12,7 +12,7 @@ import { Rectangle } from '@hmi/core/common';
  * 橡皮筋套选工具
  */
 export class RubberbandComponent extends GenericComponent {
-  @ViewChild('selectionDiv', { static: true }) selectionDiv: ElementRef<HTMLDivElement>;
+  // @ViewChild('selectionDiv', { static: true }) selectionDiv: ElementRef<HTMLDivElement>;
   public rect: Rectangle;
 
   /**
@@ -29,11 +29,11 @@ export class RubberbandComponent extends GenericComponent {
    */
   public updateRectangle(rect: Rectangle) {
     this.rect = rect;
-    this.selectionDiv.nativeElement.style.left = `${this.rect.left}px`;
-    this.selectionDiv.nativeElement.style.top = `${this.rect.top}px`;
-    this.selectionDiv.nativeElement.style.width = `${this.rect.width}px`;
-    this.selectionDiv.nativeElement.style.height = `${this.rect.height}px`;
-    this.selectionDiv.nativeElement.style.display = (this.rect.width === 0 && this.rect.height === 0) ? `none` : '';
+    this.viewContainerRef.element.nativeElement.style.left = `${this.rect.left}px`;
+    this.viewContainerRef.element.nativeElement.style.top = `${this.rect.top}px`;
+    this.viewContainerRef.element.nativeElement.style.width = `${this.rect.width}px`;
+    this.viewContainerRef.element.nativeElement.style.height = `${this.rect.height}px`;
+    this.viewContainerRef.element.nativeElement.style.display = (this.rect.width === 0 && this.rect.height === 0) ? `none` : '';
   }
 
 

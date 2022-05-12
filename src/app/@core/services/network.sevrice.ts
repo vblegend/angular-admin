@@ -21,12 +21,12 @@ export interface WebSocketMessage<T> {
     providedIn: 'root'
 })
 export class NetWorkService {
-    private _connectPromise: Promise<boolean>;
-    private webSocket: WebSocket;
+    private _connectPromise: Promise<boolean> | null = null;
+    private webSocket!: WebSocket | null;
     private serialNumber: number;
     private tasklist: Map<number, WebSocketTask>;
     public timeout = 120000;
-    private _url: string;
+    private _url!: string;
 
     constructor() {
         this.serialNumber = 0;
@@ -99,7 +99,8 @@ export class NetWorkService {
      * @returns 
      */
     public async send<TData, TResult>(method: string, data: TData, timeout?: number): Promise<TResult> {
-        if (timeout == null) timeout = this.timeout;
+        let _timeout = this.timeout;
+        if (timeout != null) _timeout = this.timeout;
         const promise = new Promise<TResult>((resolve, rejects) => {
             const sn = this.getSerialNumber();
             if (this.webSocket == null) return rejects(Exception.build('network service', 'websocket is not initialized!'));
@@ -115,7 +116,7 @@ export class NetWorkService {
                     this.tasklist.delete(sn);
                 }
             }, timeout);
-            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout, complate: false, timer: timer };
+            const task: WebSocketTask = { tickcount: this.tickCount, resolve, rejects, timeout: _timeout, complate: false, timer: timer };
             this.tasklist.set(sn, task);
         });
         return promise;
@@ -150,7 +151,7 @@ export class NetWorkService {
 
 
     public get isConnect(): boolean {
-        return this.webSocket && this.webSocket.readyState === WebSocket.OPEN;
+        return this.webSocket! && this.webSocket!.readyState === WebSocket.OPEN;
     }
 
 

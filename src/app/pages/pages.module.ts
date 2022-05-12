@@ -26,15 +26,11 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
-import { SvgWidgetComponent } from './widgets/svg.widget/svg.widget.component';
-import { HmiSchemaService } from './services/hmi.schema.service';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
-import { ImgWidgetComponent } from './widgets/img.widget/img.widget.component';
 import { ExamplesComponent } from './examples/examples.component';
-import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/submit.button.widget.component';
+import { EditorComponent } from './editor/editor.component';
 
 @NgModule({
   imports: [
@@ -60,23 +56,20 @@ import { SubmitButtonWidgetComponent } from './widgets/submit.button.widget/subm
     NzDropDownModule,
     NzInputModule,
     NzDividerModule,
-    DragDropModule
+    DragDropModule,
   ],
   declarations: [
     PagesComponent,
     WelcomeComponent,
     ExamplesComponent,
-    DashboardComponent,
-    SvgWidgetComponent,
-    ImgWidgetComponent,
-    SubmitButtonWidgetComponent
+    EditorComponent
   ],
-  providers: [
-    {
-      provide: WidgetSchemaService,
-      useClass: HmiSchemaService,
-    }
-  ]
+  // providers: [
+  //   {
+  //     provide: WidgetSchemaService,
+  //     useClass: HmiSchemaService,
+  //   }
+  // ]
 })
 export class PagesModule {
 

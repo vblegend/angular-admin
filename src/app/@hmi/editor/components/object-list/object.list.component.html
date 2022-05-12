@@ -1,0 +1,21 @@
+<div class="flex">
+    <div class="search-group">
+        <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+            <input class="search" type="text" nz-input placeholder="输入搜索关键字" />
+        </nz-input-group>
+        <ng-template #suffixButton>
+            <button class="search search-btn" nz-button nzType="primary" nzSize="large" nzSearch>搜索</button>
+        </ng-template>
+    </div>
+
+
+    <div class="object-continer">
+        <div *ngFor="let child of canvas.children;">
+            
+            <div class="object-item" (click)="widget_click($event,child)" [ngStyle]="getItemStyle(child)">
+                <i nz-icon [nzIconfont]="getIcon(child)"></i>
+                {{child.instance.configure.name}}</div>
+        </div>
+    </div>
+
+</div>

@@ -30,13 +30,13 @@ export class ObjectUtil {
         if (typeof target === 'object') {
             if (target instanceof Array) {
                 for (let i = 0; i < target.length; i++) {
-                    if (typeof target[i] === 'object')  this.freeze(target[i]);
+                    if (typeof target[i] === 'object') this.freeze(target[i]);
                 }
             } else {
                 var keys = Object.keys(target);
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
-                    if (typeof target[key] === 'object') this.freeze(target[key]);
+                    if (typeof target[key as keyof T] === 'object') this.freeze(target[key as keyof T]);
                 }
             }
             Object.freeze(target);
@@ -51,14 +51,14 @@ export class ObjectUtil {
      * @param object 
      * @param override Overwrite existing options 
      */
-    public static merge<T>(target: T, object: any, override?: boolean) {
+    public static merge<T extends Object>(target: T, object: any, override?: boolean) {
         if (target == null || object == null) return;
         const deObject = this.clone(object);
         const keys = Object.keys(deObject);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (!target.hasOwnProperty(key) || override) {
-                target[key] = deObject[key];
+                target[key as keyof T] = deObject[key];
             }
         }
     }
@@ -71,14 +71,14 @@ export class ObjectUtil {
      * @param thisContext 
      * @returns 
      */
-    public static clone<T>(target: T, thisContext?: Object): T {
+    public static clone<T>(target: T, thisContext?: Object): T | undefined | null {
         if (typeof target === 'undefined') return undefined;
         if (typeof target === 'string') return target.substring(0) as any;
         if (typeof target === 'number') return target;
         if (typeof target === 'boolean') return target;
         if (typeof target === 'function') return target.bind(thisContext);
         if (target === null) return null;
-        let result = null;
+        let result : Record<string,any>;
         if (target instanceof Array) {
             result = [];
             for (let i = 0; i < target.length; i++) {
@@ -89,9 +89,41 @@ export class ObjectUtil {
             const keys = Object.keys(target);
             for (let i = 0; i < keys.length; i++) {
                 const key = keys[i];
-                result[key] = this.clone(target[key], result);
+                result[key] = this.clone(target[key as keyof T], result);
             }
         }
-        return result
+        return  <T>result
     }
+
+
+    /**
+     * upgrade object\
+     * 当_target字段为undefined时，赋值为_default中的字段\
+     * @param _target 
+     * @param _default 
+     */
+    public static upgrade<T>(_target: T, _default: T): void {
+        if (typeof _target === 'undefined') return;
+        if (typeof _target === 'string') return;
+        if (typeof _target === 'number') return;
+        if (typeof _target === 'boolean') return;
+        if (typeof _target === 'function') return;
+        if (_target === null) return;
+        for (const key in _default) {
+            if (_default[key] === undefined) continue;
+            if (_target[key] === undefined) {
+                _target[key as keyof T] = ObjectUtil.clone(_default[key])!;
+            } else {
+                this.upgrade(_target[key], _default[key]);
+            }
+        }
+    }
+
+ 
+ 
+
+
+
+
+
 }

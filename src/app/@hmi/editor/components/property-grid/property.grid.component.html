@@ -1,0 +1,15 @@
+<nz-tabset class="objects-tabset">
+    <nz-tab *ngFor="let table of properties.tables;" [nzTitle]="table.name">
+        <ngx-collapse *ngFor="let group of table.groups;" [header]="group.name" [expanded]="true">
+            <div class="prioerty-continer">
+                <ng-container *ngFor="let propertiesTemplate of group.templates;"
+                    [ngTemplateOutlet]="propertiesTemplate">
+                </ng-container>
+            </div>
+        </ngx-collapse>
+        <div class="prioerty-continer">
+            <ng-container *ngFor="let propertiesTemplate of table.templates;" [ngTemplateOutlet]="propertiesTemplate">
+            </ng-container>
+        </div>
+    </nz-tab>
+</nz-tabset>

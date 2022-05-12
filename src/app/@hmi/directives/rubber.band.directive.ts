@@ -1,23 +1,21 @@
 import { Directive, ElementRef, HostListener, Input, Output, EventEmitter, OnInit, Optional, ViewContainerRef, ViewRef, ComponentRef, Injector, ComponentFactoryResolver } from '@angular/core';
 import { BaseDirective } from '@core/directives/base.directive';
-import { BasicCommand } from '@hmi/commands/basic.command';
-import { SelectionFillCommand } from '@hmi/commands/selection.fill.command';
-import { SelectionToggleCommand } from '@hmi/commands/selection.toggle.command';
+import { BasicCommand } from '@hmi/editor/commands/basic.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { SelectionToggleCommand } from '@hmi/editor/commands/selection.toggle.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
 import { RubberbandComponent } from '@hmi/components/rubber-band/rubber.band.component';
-import { SelectionAreaComponent } from '@hmi/components/selection-area/selection.area.component';
 import { Rectangle } from '@hmi/core/common';
-import { HmiEditorComponent } from '@hmi/hmi.editor.component';
-import { Console } from 'console';
+import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
+import { HmiMath } from '@hmi/utility/hmi.math';
 
 @Directive({
     selector: '[rubber-band]'
 })
 
 export class RubberBandDirective extends BaseDirective {
-    @Input() editor: HmiEditorComponent;
-    @Input() canvas: DisignerCanvasComponent;
+
     private rectComponent: ComponentRef<RubberbandComponent>;
     /**
      * 橡皮筋所选区域窗口坐标
@@ -30,54 +28,42 @@ export class RubberBandDirective extends BaseDirective {
     private selectionArea: Rectangle;
 
 
-    private buttonDown = false;
-    private startX: number;
-    private startY: number;
-    private endX: number;
-    private endY: number;
+    private widgets: ComponentRef<BasicWidgetComponent>[] = [];
 
-    constructor(protected injector: Injector) {
+    private buttonDown = false;
+    private startX: number = 0;
+    private startY: number = 0;
+    private endX: number = 0;
+    private endY: number = 0;
+    constructor(protected injector: Injector,private editor: HmiEditorComponent, private canvas: DisignerCanvasComponent) {
         super(injector);
         const componentFactory = this.componentFactoryResolver.resolveComponentFactory<RubberbandComponent>(RubberbandComponent);
-        this.rectComponent = this.viewContainerRef.createComponent<RubberbandComponent>(componentFactory, null, this.injector);
+        this.rectComponent = this.viewContainerRef.createComponent<RubberbandComponent>(componentFactory, undefined, this.injector);
         this.rectComponent.hostView.detach();
         this.rubberBandArea = { left: 0, top: 0, width: 0, height: 0 };
         this.selectionArea = { left: 0, top: 0, width: 0, height: 0 };
-    }
-
-    public onInit(): void {
-        this.editor = this.canvas.editor;
     }
 
     @HostListener('mousedown', ['$event'])
     public onMouseDown(ev: MouseEvent): void {
         if (ev.buttons === 1 || ev.buttons == 2) {
             // 过滤滚动条上的点击事件
-            if (ev.clientX - this.element.offsetLeft > this.element.clientWidth ||
-            ev.clientY - this.element.offsetTop > this.element.clientHeight) return;
-
-
-
-
-            this.buttonDown = true;
             const rect = this.element.getBoundingClientRect();
+            if (ev.clientX - rect.left > this.element.clientWidth ||
+                ev.clientY - rect.top > this.element.clientHeight) return;
+            this.buttonDown = true;
             // 仅限左键更改指针,右键为菜单项 不修改指针样式
             if (ev.buttons == 1) this.element.style.cursor = 'crosshair';
             this.endX = this.startX = (ev.clientX - rect.left);
             this.endY = this.startY = (ev.clientY - rect.top);
+            // 更新画布上所有的小部件
+            this.widgets = this.canvas.children;
+            this.widgets.sort((a, b) => a.instance.zIndex! - b.instance.zIndex!);
             this.updatePosition();
             this.viewContainerRef.insert(this.rectComponent.hostView);
             ev.preventDefault();
             ev.stopPropagation();
         }
-        if (ev.buttons == 2) {
-
-
-
-
-        }
-
-
     }
 
     /**
@@ -103,7 +89,7 @@ export class RubberBandDirective extends BaseDirective {
         if (this.buttonDown) {
             this.element.style.cursor = '';
             this.buttonDown = false;
-            const rect = this.element.getBoundingClientRect();
+            // const rect = this.element.getBoundingClientRect();
             this.element.style.cursor = '';
             this.updateSelectionArea(this.startX === this.endX && this.startY === this.endY, ev.ctrlKey);
             const index = this.viewContainerRef.indexOf(this.rectComponent.hostView);
@@ -113,7 +99,9 @@ export class RubberBandDirective extends BaseDirective {
             this.rectComponent.instance.updateRectangle({ left: 0, top: 0, width: 0, height: 0 });
             ev.preventDefault();
             ev.stopPropagation();
+            this.canvas.focus();
         }
+
     }
 
 
@@ -128,6 +116,14 @@ export class RubberBandDirective extends BaseDirective {
         this.endY = Math.max(Math.min(this.endY, this.element.clientHeight), 0);
         // 更新橡皮筋
         const scale = this.editor.canvas.zoomScale;
+
+
+        const left = Math.min(this.endX, this.startX);
+        const top = Math.min(this.endY, this.startY);
+        const width = Math.abs(this.endX - this.startX);
+        const height = Math.abs(this.endY - this.startY);
+
+
         this.rubberBandArea = {
             left: Math.min(this.endX, this.startX),
             top: Math.min(this.endY, this.startY),
@@ -137,10 +133,10 @@ export class RubberBandDirective extends BaseDirective {
         this.rectComponent.instance.updateRectangle(this.rubberBandArea);
         // 更新选中区域
         this.selectionArea = {
-            left: this.rubberBandArea.left / scale + this.element.scrollLeft / scale,
-            top: this.rubberBandArea.top / scale + this.element.scrollTop / scale,
-            width: this.rubberBandArea.width / scale,
-            height: this.rubberBandArea.height / scale
+            left: left / scale + this.element.scrollLeft / scale,
+            top: top / scale + this.element.scrollTop / scale,
+            width: width / scale,
+            height: height / scale
         };
     }
 
@@ -151,47 +147,38 @@ export class RubberBandDirective extends BaseDirective {
      */
     private updateSelectionArea(isClick: boolean, ctrlKey: boolean) {
         const selecteds: ComponentRef<BasicWidgetComponent>[] = [];
-        let command: BasicCommand = null;
-        const children = this.editor.canvas.children;
+        let command: BasicCommand | null = null;
         if (isClick) {
-            const selected = children.find(comp => {
-                return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
-            });
-            selecteds.push(selected);
+            for (let i = this.widgets.length - 1; i >= 0; i--) {
+                if (HmiMath.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                    selecteds.push(this.widgets[i]);
+                    break;
+                }
+            }
         } else {
-            const hitObjects = children.filter(comp => {
-                return this.checkRectangleCross(comp.instance.configure.rect, this.selectionArea);
-            });
-            selecteds.push(...hitObjects);
+            for (let i = this.widgets.length - 1; i >= 0; i--) {
+                if (HmiMath.checkRectangleCross(this.widgets[i].instance.configure.rect, this.selectionArea)) {
+                    selecteds.push(this.widgets[i]);
+                }
+            }
         }
-        // if (selecteds.length > 0) {
+        // 分组过滤选中
+        const groupIds = Array.from(new Set(selecteds.filter(e => e.instance.configure.group != null).map(e => e.instance.groupId)));
+        if (groupIds.length > 0) {
+            const result = this.widgets.filter(e => e.instance.groupId != null && selecteds.indexOf(e) == -1 && groupIds.indexOf(e.instance.groupId) > -1);
+            if (result.length > 0) selecteds.push(...result);
+        }
         if (ctrlKey) {
             command = new SelectionToggleCommand(this.editor, selecteds);
         } else {
             command = new SelectionFillCommand(this.editor, selecteds);
         }
         this.editor.execute(command);
-        // }
     }
 
 
 
 
-
-
-
-    /**
-     * 检测两个矩形是否碰撞
-     * @param rect1 
-     * @param rect2 
-     * @returns 
-     */
-    public checkRectangleCross(rect1: Rectangle, rect2: Rectangle): boolean {
-        return rect1.left + rect1.width >= rect2.left &&
-            rect1.left <= rect2.left + rect2.width &&
-            rect1.top + rect1.height >= rect2.top &&
-            rect1.top <= rect2.top + rect2.height;
-    }
 
 
 

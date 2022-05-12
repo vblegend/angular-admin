@@ -4,18 +4,57 @@ import { WidgetConfigure } from '../../configuration/widget.configure';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
-import { Rectangle } from '@hmi/core/common';
+import { CurrentVersion, DocumentMagicCode, Rectangle } from '@hmi/core/common';
+import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { TimerPoolService } from '@core/services/timer.pool.service';
+import { WidgetDefaultVlaues } from '@hmi/core/widget.meta.data';
+import { MetaDataService } from '@hmi/services/meta.data.service';
+import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
+
 
 @Component({
-  selector: 'ngx-view-canvas',
+  selector: 'hmi-view-canvas',
   templateUrl: './view.canvas.component.html',
   styleUrls: ['./view.canvas.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    /* 为每个canvas 生成单独的管理服务 */
+    WidgetEventService,
+    TimerPoolService
+  ]
 })
 export class ViewCanvasComponent extends GenericComponent {
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
+  public container!: ViewContainerRef;
   private _children: ComponentRef<BasicWidgetComponent>[];
+  private readonly _eventHub: WidgetEventService;
+  public readonly metaData: MetaDataService;
+
+  /**
+   * 获取/设置 部件组态画板的标准宽度
+   */
+  public width: number;
+
+  /**
+   * 获取/设置 部件组件画板的标准高度
+   */
+  public height: number;
+
+
+
+  /**
+   *
+   */
+  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+    super(injector);
+    this._children = [];
+    this._eventHub = injector.get(WidgetEventService);
+    this._eventHub.initCanvas$(this);
+    this.metaData = injector.get(MetaDataService);
+    this.width = 1920;
+    this.height = 1080;
+  }
+
 
   /**
    * 获取容器内所有组件列表
@@ -29,8 +68,8 @@ export class ViewCanvasComponent extends GenericComponent {
    * 更新容器的zIndex属性
    * 数值越大越往前
    */
-  public updatezIndexs() {
-    this._children.sort((a, b) => b.instance.zIndex - a.instance.zIndex);
+  public updatezIndexs(): void {
+    this._children.sort((a, b) => b.instance.zIndex! - a.instance.zIndex!);
   }
 
 
@@ -40,14 +79,17 @@ export class ViewCanvasComponent extends GenericComponent {
    * @param index 
    * @returns 
    */
-  public add(ref: ComponentRef<BasicWidgetComponent>, index?: number): ComponentRef<BasicWidgetComponent> {
+  public add(ref: ComponentRef<BasicWidgetComponent>): ComponentRef<BasicWidgetComponent> {
     const ofIndex = this._children.indexOf(ref);
     if (ofIndex === -1) {
-      this.container.insert(ref.hostView, index);
+      this.container.insert(ref.hostView);
       this._children.push(ref);
+      ref.hostView.reattach();
+      this.metaData.add(ref);
       if (ref.instance.zIndex == null) {
         ref.instance.configure.zIndex = this._children.length;
       }
+      ref.changeDetectorRef.detectChanges();
     }
     return ref;
   }
@@ -63,6 +105,8 @@ export class ViewCanvasComponent extends GenericComponent {
       this._children.splice(ofIndex, 1);
       const v = this.container.indexOf(ref.hostView);
       this.container.detach(v);
+      ref.hostView.detach();
+      this.metaData.remove(ref);
     }
     return ref;
   }
@@ -74,18 +118,12 @@ export class ViewCanvasComponent extends GenericComponent {
     return false;
   }
 
-  /**
-   *
-   */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
-    super(injector);
-    this._children = [];
-  }
+
 
   /**
    * 清理并销毁掉所有组件
    */
-  public clear() {
+  public clear() : void{
     while (this._children.length > 0) {
       const compRef = this._children[0];
       this.remove(compRef);
@@ -99,20 +137,36 @@ export class ViewCanvasComponent extends GenericComponent {
    * @param configure 
    * @returns 
    */
-  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> {
-    let componentRef: ComponentRef<BasicWidgetComponent> = null;
+  public parseComponent(configure: WidgetConfigure): ComponentRef<BasicWidgetComponent> | null {
+    let componentRef: ComponentRef<BasicWidgetComponent> | null = null;
     const comRef = this.provider.getType(configure.type);
     if (comRef) {
-      const componentFactory = this.componentFactoryResolver.resolveComponentFactory<BasicWidgetComponent>(comRef.component);
-      componentRef = this.container.createComponent<BasicWidgetComponent>(componentFactory, null, this.injector);
+      const factoryResolver = this.componentFactoryResolver.resolveComponentFactory(comRef.component);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(factoryResolver, undefined, this.injector);
       if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
+        const v = this.container.indexOf(componentRef.hostView);
+        this.container.detach(v);
         componentRef.hostView.detach();
-        componentRef.instance.$initialization(configure);
+        const widgetSchema = this.provider.getType(configure.type);
+        const defaultValue = widgetSchema!.component.prototype.metaData.default as WidgetDefaultVlaues;
+        componentRef.instance.$initialization(this, configure, defaultValue);
       }
     }
-    if (componentRef == null) this.onError('parseComponent', `未知的组态类型：${configure.type}.`);
+    if (componentRef == null) this.onError(new Error(`未知的组态类型：${configure.type}.`));
     return componentRef;
   }
+
+
+  public findWidgetByName(name: string): ComponentRef<BasicWidgetComponent> | null {
+    if (name == null) return null;
+    return this.children.find(e => e.instance.configure && e.instance.configure.name === name)!;
+  }
+
+  public findWidgetById(id: string): ComponentRef<BasicWidgetComponent> | null {
+    if (id == null) return null;
+    return this.children.find(e => e.instance.configure && e.instance.configure.id === id)!;
+  }
+
 
   protected onInit(): void {
 
@@ -120,8 +174,8 @@ export class ViewCanvasComponent extends GenericComponent {
 
 
   protected onDestroy(): void {
-    super.onDestroy();
     this.clear();
+    super.onDestroy();
   }
 
 
@@ -129,22 +183,36 @@ export class ViewCanvasComponent extends GenericComponent {
    * 获取所有容器的总大小。
    * @returns 
    */
-  public getComponentsBound(): Rectangle {
-    let result: Rectangle = null;
+  public getComponentsBound(): Rectangle | null {
+    let result: Rectangle | null = null;
     for (const comp of this.children) {
       if (result == null) {
         result = {
-          left: comp.instance.configure.rect.left,
-          top: comp.instance.configure.rect.top,
-          width: comp.instance.configure.rect.width,
-          height: comp.instance.configure.rect.height
+          left: comp.instance.configure.rect!.left,
+          top: comp.instance.configure.rect!.top,
+          width: comp.instance.configure.rect!.width,
+          height: comp.instance.configure.rect!.height
         };
       } else {
         result = HmiMath.extendsRectangle(result, comp.instance.configure.rect);
       }
     }
+    if (result == null) result = { left: 0, top: 0, width: 0, height: 0 };
     return result;
   }
+
+
+
+
+
+  /**
+   * 获取所有小部件的配置项
+   * @returns 
+   */
+  public getConfigure(): WidgetConfigure[] {
+    return this.children.map(e => e.instance.configure);
+  }
+
 
 
 

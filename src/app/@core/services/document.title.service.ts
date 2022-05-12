@@ -9,10 +9,10 @@ import { Subscription } from 'rxjs';
 })
 export class DocumentTitleService {
 
-    private subscription: Subscription;
-    private _defaultTitle: RouteTitle;
-    private _globalSuffix: RouteTitle;
-    private _globalPrefix: RouteTitle;
+    private subscription!: Subscription | null;
+    private _defaultTitle!: RouteTitle;
+    private _globalSuffix!: RouteTitle;
+    private _globalPrefix!: RouteTitle;
 
     constructor(private router: Router,
         public titleService: Title) {
@@ -54,7 +54,7 @@ export class DocumentTitleService {
      */
     public register(): void {
         if (this.subscription == null) {
-            this.subscription = this.router.events.subscribe(this.router_event.bind(this));
+            this.subscription = this.router.events.subscribe(<any>this.router_event.bind(this));
         }
     }
 
@@ -64,7 +64,7 @@ export class DocumentTitleService {
         const segments: string[] = [];
         while (next) {
             segments.unshift(...next.url.map(e => e.path));
-            next = next.parent;
+            next = next.parent!;
         }
         return segments.join('/');
     }
@@ -118,8 +118,8 @@ export class DocumentTitleService {
         return value;
     }
 
-    private getCurrentTitle(router: Router): RouteTitle {
-        let title: RouteTitle = null;
+    private getCurrentTitle(router: Router): RouteTitle | undefined {
+        let title: RouteTitle | undefined = undefined;
         const state: RouterState = router.routerState;
         const snapshot: RouterStateSnapshot = state.snapshot;
         let node = snapshot.root;
@@ -127,7 +127,7 @@ export class DocumentTitleService {
             if (node.routeConfig) {
                 title = node.routeConfig.title;
             }
-            node = node.firstChild;
+            node = node.firstChild!;
         }
         return title;
     }

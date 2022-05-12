@@ -1,56 +1,72 @@
 
-import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ComponentRef, ElementRef, Host, HostListener, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Vector2 } from '@hmi/core/common';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { NzDropdownMenuComponent } from 'ng-zorro-antd/dropdown';
-import { WidgetConfigure } from '../../configuration/widget.configure';
-import { HmiEditorComponent } from '../../hmi.editor.component';
+import { HmiEditorComponent } from '../../editor/hmi.editor.component';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { SelectionAreaComponent } from '../selection-area/selection.area.component';
+import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { TimerPoolService } from '@core/services/timer.pool.service';
+import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
+import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
+import { BatchCommand } from '@hmi/editor/commands/batch.command';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
+import { WidgetRemoveCommand } from '@hmi/editor/commands/widget.remove.command';
+import { WidgetAddCommand } from '@hmi/editor/commands/widget.add.command';
+
 
 @Component({
-  selector: 'ngx-disigner-canvas',
+  selector: 'hmi-disigner-canvas',
   templateUrl: './disigner.canvas.component.html',
   styleUrls: ['./disigner.canvas.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    /* 为每个canvas 生成单独的管理服务 */
+    WidgetEventService,
+    TimerPoolService
+  ]
 })
 export class DisignerCanvasComponent extends ViewCanvasComponent {
-  @Input() editor: HmiEditorComponent;
-  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef }) container: ViewContainerRef;
-  @ViewChild('scrollViewer', { static: true }) scrollViewer: ElementRef<HTMLDivElement>;
-  // @ViewChild('snapLineAxisV', { static: true }) snapLineAxisV: DisignerCanvasComponent;
+
+  @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
+  public container!: ViewContainerRef;
+
+  @ViewChild('scrollViewer', { static: true })
+  public scrollViewer!: ElementRef<HTMLDivElement>;
+
+  @ViewChild('selectionArea', { static: true })
+  public selectionArea!: SelectionAreaComponent;
 
   public ignoreContextMenu?: boolean;
-
-  public selectionArea: ComponentRef<SelectionAreaComponent>;
   /**
    * 设置/获取 视图的缩放倍率
    */
   public zoomScale: number;
-  private _ctrlPressed: boolean;
-  public spaceKeyDown: boolean;
+  private _ctrlPressed!: boolean;
+  public spaceKeyDown!: boolean;
 
   /**
    * 水平对齐线的位置
    */
-  public readonly hSnapLines: Vector2[] = [null, null, null];
+  public readonly hSnapLines: Vector2[] | undefined[] = [undefined, undefined, undefined];
 
   /**
    * 垂直对齐线位置
    */
-  public readonly vSnapLines: Vector2[] = [null, null, null];
+  public readonly vSnapLines: Vector2[] | undefined[] = [undefined, undefined, undefined];
 
 
   /**
    * 隐藏/重置 所有对齐辅助线
    */
   public hideSnapLines(): void {
-    this.hSnapLines[0] = null;
-    this.vSnapLines[0] = null;
-    this.hSnapLines[1] = null;
-    this.vSnapLines[1] = null;
-    this.hSnapLines[2] = null;
-    this.vSnapLines[2] = null;
+    this.hSnapLines[0] = undefined;
+    this.vSnapLines[0] = undefined;
+    this.hSnapLines[1] = undefined;
+    this.vSnapLines[1] = undefined;
+    this.hSnapLines[2] = undefined;
+    this.vSnapLines[2] = undefined;
   }
 
 
@@ -66,32 +82,27 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   /**
    *
    */
-  constructor(protected injector: Injector, public provider: WidgetSchemaService) {
+  constructor(protected injector: Injector, public provider: WidgetSchemaService, public editor: HmiEditorComponent) {
     super(injector, provider);
     this.zoomScale = 1;
+    this.editor = editor;
   }
 
 
 
   protected onInit(): void {
     super.onInit();
-    this.initSelectionAreaComponent();
+    // this.selectionArea = this.container.createComponent(SelectionAreaComponent);
+    this.scrollViewer.nativeElement.setAttribute('tabindex', '0');
   }
 
-
-  private initSelectionAreaComponent() {
-    this.selectionArea = this.generateComponent(SelectionAreaComponent);
-    this.selectionArea.instance.init(this);
-    this.selectionArea.hostView.detach();
-    this.container.insert(this.selectionArea.hostView);
+  public focus(): void {
+    this.scrollViewer.nativeElement.focus();
   }
-
-
-
-
 
   @HostListener('document:keydown', ['$event'])
   public onKeybordDown(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLDivElement)) return;
     if (event.code == 'Control') {
       this._ctrlPressed = true;
     }
@@ -107,6 +118,7 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
 
   @HostListener('document:keyup', ['$event'])
   public onKeybordUp(event: KeyboardEvent): void {
+    if (!(event.target instanceof HTMLDivElement)) return;
     if (event.code == 'Control') {
       this._ctrlPressed = false;
     }
@@ -133,5 +145,4 @@ export class DisignerCanvasComponent extends ViewCanvasComponent {
   public closeMenu(): void {
     this.contextMenuService.close();
   }
-
 }

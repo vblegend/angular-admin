@@ -1,5 +1,5 @@
-import { BasicCommand } from "../commands/basic.command";
-import { HmiEditorComponent } from "../hmi.editor.component";
+import { BasicCommand } from "../editor/commands/basic.command";
+import { HmiEditorComponent } from "../editor/hmi.editor.component";
 
 
 
@@ -47,9 +47,10 @@ export class HistoryService {
         let newCommand = true;
         if (this.undos.length > 0) {
             const lastCmd = this.undos[this.undos.length - 1];
-            const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();
-            if (lastCmd.type === cmd.type && lastCmd.attributeName === cmd.attributeName) {
-                if (lastCmd.batchNo === cmd.batchNo) {
+            if (cmd.equal(lastCmd)) {
+                const timeDifference = new Date().getTime() - lastCmd.executeTime.getTime();
+                // 两次操作间隔小于300毫秒  或属于同一批次的 合并
+                if (lastCmd.batchNo === cmd.batchNo || timeDifference < 300) {
                     lastCmd.update(cmd);
                     cmd = lastCmd;
                     newCommand = false;
@@ -65,19 +66,23 @@ export class HistoryService {
         this.redos = [];
     }
 
+
+
+
+
     /**
      * 执行撤销操作  并返回撤销的指令
      */
-    public undo(): BasicCommand {
+    public undo(): BasicCommand | null {
         if (this.disabled) {
             alert("Undo/Redo disabled while scene is playing.");
             return null;
         }
-        let cmd = undefined;
+        let cmd = null;
         if (this.undos.length > 0) {
-            cmd = this.undos.pop();
+            cmd = this.undos.pop()!;
         }
-        if (cmd !== undefined) {
+        if (cmd != null) {
             cmd.undo();
             this.redos.push(cmd);
             // this._onChanged.dispatch(cmd);
@@ -88,17 +93,17 @@ export class HistoryService {
     /*
     * 执行重做操作 并返回重做的指令
     */
-    public redo(): BasicCommand {
+    public redo(): BasicCommand | null {
         if (this.disabled) {
             alert("Undo/Redo disabled while scene is playing.");
             return null;
         }
-        let cmd: BasicCommand = undefined;
+        let cmd: BasicCommand | null = null;
         if (this.redos.length > 0) {
-            cmd = this.redos.pop();
+            cmd = this.redos.pop()!;
         }
-        if (cmd !== undefined) {
-            cmd.execute();
+        if (cmd != null) {
+            cmd!.execute();
             this.undos.push(cmd);
             // this._onChanged.dispatch(cmd);
         }
