@@ -51,12 +51,12 @@ export class SessionService {
     }
 
 
-    public generateKey(key: string) {
+    public generateKey(key: string): string {
         return CryptoJS.MD5(key + JSON.stringify(this.confuseCode)).toString();
     }
 
 
-    public generateIV(key: string) {
+    public generateIV(key: string): string {
         return CryptoJS.MD5(JSON.stringify(this.confuseCode) + key + '$').toString();
     }
 }

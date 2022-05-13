@@ -148,7 +148,7 @@ export class WidgetDragDirective extends BaseDirective {
 
     private generateName(baseName: string): string {
         let i = 1;
-        while (true) {
+        for (;;) {
             const name = baseName + i.toString();
             if (this.editor.canvas.findWidgetByName(name) == null) return name;
             i++;
@@ -156,7 +156,7 @@ export class WidgetDragDirective extends BaseDirective {
     }
 
     private generateId(): string {
-        while (true) {
+        for (;;) {
             const id = HmiMath.randomString(6);
             if (this.editor.canvas.findWidgetById(id) == null) return id;
         }

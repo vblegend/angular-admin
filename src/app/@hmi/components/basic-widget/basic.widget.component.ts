@@ -244,6 +244,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * @param event 要触发的事件，必须是使用在{@WidgetEvent}列表内的
    * @param params 事件的参数 必须满足声明的事件参数
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected dispatchEvent<T extends Record<string, any>>(event: string, params: T): void {
     // 编辑模式不触发事件
     if (this.isEditMode) return;
@@ -253,7 +254,8 @@ export abstract class BasicWidgetComponent extends GenericComponent {
       throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${event}”的声明。`;
     }
     for (const key of _eventMeta.eventParams) {
-      if (!params.hasOwnProperty(key)) {
+      const hasBarProperty = Object.prototype.hasOwnProperty.call(params, key);
+      if (!hasBarProperty) {
         throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${event}”缺少参数“${key}”。`;
       }
     }
@@ -307,7 +309,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * 部件的初始化事件
    * @param data  部件的绑定数据，使用时请在部件中重写此参数类型
    */
-  protected onWidgetInit(data: WidgetDataConfigure) {
+  protected onWidgetInit(data: WidgetDataConfigure): void {
 
   }
 
@@ -335,7 +337,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * @param attributePath 更改的属性路径 
    * @param value 属性值 
    */
-  protected onDataChanged(attributePath: string[], value: any) {
+  protected onDataChanged(attributePath: string[], value: Object): void {
 
   }
 

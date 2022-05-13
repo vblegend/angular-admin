@@ -84,7 +84,7 @@ export class WidgetAttributeCommand<TValue> extends BasicCommand {
         }
     }
 
-    public update(command: WidgetAttributeCommand<TValue>) {
+    public update(command: WidgetAttributeCommand<TValue>) : void{
         this.newValues = command.newValues;
     }
 

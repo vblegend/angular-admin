@@ -42,6 +42,7 @@ export class ZoomControlDirective extends BaseDirective {
         };
         // console.log(`${pointOnScrollView.x}，${pointOnScrollView.y}            ${pointOnCanvas.x}，${pointOnCanvas.y}`);
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const delta = (<any>ev).wheelDelta / 120;  /* wheelDelta */
         this.index = Math.max(0, Math.min(this.index + delta, this.scales.length - 1));
         this.canvas.zoomScale = this.scales[this.index];

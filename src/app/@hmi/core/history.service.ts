@@ -115,7 +115,7 @@ export class HistoryService {
     /**
      * 清除所有（撤销、重做）历史指令
      */
-    public clear() {
+    public clear(): void {
         this.undos = [];
         this.redos = [];
         this.idCounter = 0;

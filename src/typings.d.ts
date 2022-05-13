@@ -4,7 +4,7 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
 import { Route, Data } from '@angular/router';
-import { RouteTitle } from './app/@core/models/RouteTitle'
+import { RouteTitle } from './app/@core/models/route.titlee'
 /* SystemJS module definition */
 // declare var module: NodeModule;
 // interface NodeModule {

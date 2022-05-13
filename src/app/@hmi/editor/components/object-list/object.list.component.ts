@@ -30,6 +30,7 @@ export class ObjectListComponent extends GenericComponent {
 
 
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public getItemStyle(widget: ComponentRef<BasicWidgetComponent>): Record<string, any> {
     const isSelected = this.editor.selection.contains(widget);
     return {
@@ -38,7 +39,7 @@ export class ObjectListComponent extends GenericComponent {
   }
 
 
-  public widget_click(event: MouseEvent, widget: ComponentRef<BasicWidgetComponent>) {
+  public widget_click(event: MouseEvent, widget: ComponentRef<BasicWidgetComponent>) :void{
     let command: BasicCommand | null = null;
     const selecteds: ComponentRef<BasicWidgetComponent>[] = [widget];
     // 分组过滤选中
@@ -50,7 +51,7 @@ export class ObjectListComponent extends GenericComponent {
     if (event.ctrlKey) {
       command = new SelectionToggleCommand(this.editor, selecteds);
     } else if (event.shiftKey) {
-
+      //
     } else {
       command = new SelectionFillCommand(this.editor, selecteds);
     }

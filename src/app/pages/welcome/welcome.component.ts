@@ -21,7 +21,7 @@ export class WelcomeComponent extends GenericComponent {
     super(injector)
   }
 
-  protected onQueryChanges() {
+  protected onQueryChanges(): void {
     this.id = this.queryParams.get('id');
     console.log(`app-welcome onRouter ${this.id}`);
     // this.deleteRequest.emit(this.id);
@@ -30,7 +30,7 @@ export class WelcomeComponent extends GenericComponent {
   }
 
 
-  protected onInit() {
+  protected onInit(): void {
     this.id = this.queryParams.get('id');
     console.log(`app-welcome onInit ${this.id}`);
 
@@ -42,7 +42,7 @@ export class WelcomeComponent extends GenericComponent {
 
   }
 
-  protected onDestroy() {
+  protected onDestroy(): void {
     // this.subscription.unsubscribe();
     console.log(`app-welcome onDestroy`);
   }

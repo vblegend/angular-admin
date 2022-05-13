@@ -51,7 +51,7 @@ export class HeaderComponent extends GenericComponent {
     this.dialogService.createTerminalWindow();
   }
 
-  public throwError() {
+  public throwError(): void {
     throw Exception.build('test Global Error Handle', 'ZHE......');
   }
 

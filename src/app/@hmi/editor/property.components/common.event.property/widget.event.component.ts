@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, Component, ComponentRef, DoCheck, Injector, OnChanges, SimpleChanges } from '@angular/core';
 import { nzSelectItem } from '@core/common/types';
 import { ObjectUtil } from '@core/util/object.util';
@@ -130,17 +131,19 @@ export class WidgetEventComponent extends PropertyElementComponent {
     return value.event;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByValue(index: number, value: any): any {
     return value.value;
   }
-
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByAny(index: number, value: any): any {
     return value;
   }
-
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByKey(index: number, value: any): any {
     return value.key;
   }
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByName(index: number, value: any): any {
     return value.name;
   }

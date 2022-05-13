@@ -77,7 +77,7 @@ export class GenericAttributeCommand<TObject, TValue> extends BasicCommand {
         }
     }
 
-    public update(command: GenericAttributeCommand<TObject, TValue>) {
+    public update(command: GenericAttributeCommand<TObject, TValue>):void {
         this.newValues = command.newValues;
     }
 

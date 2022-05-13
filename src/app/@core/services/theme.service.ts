@@ -29,7 +29,7 @@ export class ThemeService {
      * register themes
      * @param _themes 
      */
-    public registerTheme(_themes: Record<string, string>) {
+    public registerTheme(_themes: Record<string, string>): void {
         for (const key in _themes) {
             this._themes[key] = _themes[key];
         }

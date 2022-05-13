@@ -23,12 +23,12 @@ export class TaskWidgetComponent extends BasicWidgetComponent {
   }
 
 
-  protected onWidgetInit(data: WidgetDataConfigure) {
+  protected onWidgetInit(data: WidgetDataConfigure): void {
 
   }
 
 
-  protected onDestroy() {
+  protected onDestroy(): void {
 
   }
   

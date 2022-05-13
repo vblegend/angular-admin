@@ -5,6 +5,7 @@ import { Rectangle } from "@hmi/core/common";
 /**
  * 2D组态的绑定数据结构
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface WidgetDataConfigure {
 
 
@@ -137,6 +138,7 @@ export interface WidgetEventConfigure {
     /**
      * 指定参数，重写参数
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     params?: Record<string, any>;
 }
 

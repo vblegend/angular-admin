@@ -18,7 +18,7 @@ export class PagesComponent extends GenericComponent {
     super(injector);
   }
 
-  protected onQueryChanges() {
+  protected onQueryChanges(): void {
     console.log(`ngx-pages onRouter ${this.queryParams.get('id')}`);
 
   }

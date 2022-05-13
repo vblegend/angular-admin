@@ -33,12 +33,12 @@ export class SubmitButtonWidgetComponent extends BasicWidgetComponent {
     super(injector)
   }
 
-  protected onWidgetInit(data: WidgetDataConfigure) {
+  protected onWidgetInit(data: WidgetDataConfigure): void {
 
   }
 
 
-  protected onDestroy() {
+  protected onDestroy(): void {
 
   }
 
@@ -50,7 +50,7 @@ export class SubmitButtonWidgetComponent extends BasicWidgetComponent {
 
 
   @WidgetInterface('更新按钮文本', '刷新部件数据')
-  public updateButtonText(@Params('text') text?: string) {
+  public updateButtonText(@Params('text') text?: string): void {
     this.text = text!;
   }
 

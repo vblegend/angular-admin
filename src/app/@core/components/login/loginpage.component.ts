@@ -21,13 +21,13 @@ export class LoginPageComponent extends GenericComponent {
     this.background = 'url(/assets/images/team.png)';
   }
 
-  protected onInit() {
+  protected onInit(): void {
     console.log(`on init login`);
     console.log(this.queryParams.get('name'));
   }
 
 
-  protected onQueryChanges() {
+  protected onQueryChanges(): void {
     console.log(`on query login`);
   }
 

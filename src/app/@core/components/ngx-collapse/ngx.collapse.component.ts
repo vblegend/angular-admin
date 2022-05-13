@@ -15,7 +15,7 @@ export class CollapseComponent extends GenericComponent {
     super(injector);
   }
 
-  public header_click() {
+  public header_click(): void {
     this.expanded = !this.expanded
     // this.detectChanges();
   }

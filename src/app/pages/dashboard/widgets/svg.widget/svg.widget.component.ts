@@ -25,16 +25,16 @@ export class SvgWidgetComponent extends BasicWidgetComponent {
     super(injector)
   }
 
-  protected onWidgetInit(data: WidgetDataConfigure) {
+  protected onWidgetInit(data: WidgetDataConfigure): void {
 
   }
 
-  protected onDestroy() {
-    
+  protected onDestroy(): void {
+
   }
 
   @WidgetInterface('更新信号', '刷新部件数据')
-  public updateSvg(@Params('stationId') stationId?: number, @Params('roomId') roomId?: number, @Params('deviceId') deviceId?: number) {
+  public updateSvg(@Params('stationId') stationId?: number, @Params('roomId') roomId?: number, @Params('deviceId') deviceId?: number): void {
     // console.log(`触发事件 updateSvg => stationId:${stationId}，roomId:${roomId}，deviceId:${deviceId}`);
   }
 

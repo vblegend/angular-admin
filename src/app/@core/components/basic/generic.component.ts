@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { Location } from '@angular/common';
@@ -230,7 +231,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param fn 
      * @returns 
      */
-    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: any): T {
+    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: Object): T {
         this.ifDisposeThrowException();
         return this.zone.runOutsideAngular(thisContext ? fn.bind(thisContext) : fn);
     }
@@ -243,7 +244,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param applyArgs 
      * @returns T
      */
-    protected run<T>(fn: (...args: any[]) => T, applyThis?: any, applyArgs?: any[]): T {
+    protected run<T>(fn: (...args: any[]) => T, applyThis?: Object, applyArgs?: any[]): T {
         this.ifDisposeThrowException();
         return this.zone.run(fn, applyThis, applyArgs);
     }

@@ -14,6 +14,7 @@ import { AnchorPosition } from '@hmi/directives/resize.anchor.directive';
 export class SelectionAreaComponent extends GenericComponent {
   @ViewChild('ChildrenView', { static: true, read: ViewContainerRef })
   public container!: ViewContainerRef;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public AnchorPosition: any = AnchorPosition;
 
 

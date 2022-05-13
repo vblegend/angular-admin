@@ -1,4 +1,6 @@
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export class Exception {
     [name: string]: any;
 
@@ -23,6 +25,7 @@ export class Exception {
         return new Exception(host, message, code);
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     public static fromCatch(host: string, ex: any, message: string): Exception {
         const exc = new Exception(host, message);
         exc.copy(ex);

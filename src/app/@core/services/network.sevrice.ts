@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { Exception } from '../common/exception';
 
@@ -138,7 +139,7 @@ export class NetWorkService {
 
             }
         } catch (e) {
-
+            console.error(e);
         }
     }
 
@@ -173,9 +174,9 @@ export class NetWorkService {
     }
 
     private socket_closed(ev: CloseEvent): void {
-        var code = ev.code;
-        var reason = ev.reason;
-        var wasClean = ev.wasClean;
+        const code = ev.code;
+        const reason = ev.reason;
+        const wasClean = ev.wasClean;
 
     }
 

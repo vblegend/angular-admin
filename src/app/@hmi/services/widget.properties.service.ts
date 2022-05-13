@@ -58,7 +58,7 @@ export class WidgetPropertiesService {
      * 从模板注册部件属性
      * @param properties 
      */
-    public register(properties: PropertiesTemplatesComponent) {
+    public register(properties: PropertiesTemplatesComponent): void {
         const directives = properties.directives.toArray();
         for (const directive of directives) {
             let table = this.tables.find(e => e.name == directive.tableName);
@@ -85,10 +85,10 @@ export class WidgetPropertiesService {
     public unRegister(properties: PropertiesTemplatesComponent): void {
         const directives = properties.directives.toArray();
         for (const directive of directives) {
-            let table = this.tables.find(e => e.name == directive.tableName);
+            const table = this.tables.find(e => e.name == directive.tableName);
             if (table == null) continue;
             if (directive.groupName) {
-                let group = table.groups.find(e => e.name == directive.groupName);
+                const group = table.groups.find(e => e.name == directive.groupName);
                 if (group == null) continue;
                 this.removeTemplate(group.templates, directive.templateRef);
             } else {

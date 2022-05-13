@@ -27,7 +27,7 @@ export class DragPreviewComponent extends GenericComponent {
    * 不使用绑定的方式而是直接使用nativeElement 是为了提高debug下的体验
    * @param rect 
    */
-  public updateRectangle(rect: Rectangle) {
+  public updateRectangle(rect: Rectangle): void {
     this.rect = rect;
     this.viewContainerRef.element.nativeElement.style.left = `${this.rect.left}px`;
     this.viewContainerRef.element.nativeElement.style.top = `${this.rect.top}px`;

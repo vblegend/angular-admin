@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { NgZone } from "@angular/core";
 import { TimerPoolService } from "@core/services/timer.pool.service";
 import { Subject, Subscription } from "rxjs";
@@ -106,6 +107,7 @@ export class FixedTimerTask implements TimerTask {
     /**
      *
      */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public constructor(private _service: TimerPoolService, private _callback: TimerTaskEventHandler, private _thisContext: any, private _interval: number, private ngZone: NgZone) {
         this._counter = 0;
         this._runOfLastTime = new Date().getTime();

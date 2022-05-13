@@ -29,7 +29,7 @@ export class WidgetListComponent extends GenericComponent {
    */
   constructor(protected injector: Injector, public provider: WidgetSchemaService, private dataTransferService: DataTransferService, public editor: HmiEditorComponent) {
     super(injector);
-    
+
   }
 
   protected onInit(): void {
@@ -41,7 +41,7 @@ export class WidgetListComponent extends GenericComponent {
 
 
 
-  public widget_dragstart(schema: WidgetSchema, event: DragEvent) {
+  public widget_dragstart(schema: WidgetSchema, event: DragEvent): void {
     event.dataTransfer!.setDragImage(new Image(), 0, 0);
     // event.dataTransfer!.setData('json/widget', schema.type!);
     this.dataTransferService.setText('json/widget', schema.type!);
@@ -53,7 +53,7 @@ export class WidgetListComponent extends GenericComponent {
   }
 
 
-  public widget_dragend(schema: WidgetSchema, event: DragEvent) {
+  public widget_dragend(schema: WidgetSchema, event: DragEvent): void {
     // 设置所有widget接受鼠标事件
     this.dataTransferService.setText('json/widget', null);
     this.canvas.children.map(e => {
@@ -64,7 +64,7 @@ export class WidgetListComponent extends GenericComponent {
 
   private generateName(baseName: string): string {
     let i = 1;
-    while (true) {
+    for (; ;) {
       const name = baseName + i.toString();
       if (this.canvas.findWidgetByName(name) == null) return name;
       i++;
@@ -72,7 +72,7 @@ export class WidgetListComponent extends GenericComponent {
   }
 
   private generateId(): string {
-    while (true) {
+    for (; ;) {
       const id = HmiMath.randomString(6);
       if (this.canvas.findWidgetById(id) == null) return id;
     }
@@ -80,7 +80,7 @@ export class WidgetListComponent extends GenericComponent {
 
 
 
-  public widget_dblClick(schema: WidgetSchema, event: MouseEvent) {
+  public widget_dblClick(schema: WidgetSchema, event: MouseEvent): void {
     const widgetSchema = this.provider.getType(schema.type!);
     const defaultValue = widgetSchema!.component.prototype.metaData.default as WidgetDefaultVlaues;
     const configure: WidgetConfigure = {
@@ -97,7 +97,7 @@ export class WidgetListComponent extends GenericComponent {
         width: defaultValue.size.width,
         height: defaultValue.size.height
       },
-      events:  ObjectUtil.clone(defaultValue.events)!,
+      events: ObjectUtil.clone(defaultValue.events)!,
     };
     const compRef = this.canvas.parseComponent(configure);
     if (compRef) {

@@ -50,7 +50,7 @@ export class AdsorbService {
     /**
      * 捕获所有未选中对象的坐标点
      */
-    public captureAnchors() {
+    public captureAnchors(): void {
         if (!this.enabled) return;
         this.axisX.length = 0;
         this.axisY.length = 0;
@@ -74,7 +74,7 @@ export class AdsorbService {
     /**
      * 
      */
-    public clear() {
+    public clear(): void {
         this.axisX.length = 0;
         this.axisY.length = 0;
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, ContentChild, ContentChildren, ElementRef, HostBinding, Injector, Input, QueryList } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';

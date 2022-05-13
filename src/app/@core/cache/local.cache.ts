@@ -162,7 +162,7 @@ export class LocalCache<TObject, TKey> {
         this._buffer.length = 0;
     }
 
-    public filter(predicate: (value: TObject, index: number, array: TObject[]) => value is TObject, thisArg?: any): TObject[] {
+    public filter(predicate: (value: TObject, index: number, array: TObject[]) => value is TObject, thisArg?: Object): TObject[] {
         return this._buffer.filter(predicate, thisArg);
     }
 

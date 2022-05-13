@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RouteConfigure } from "../models/RouteConfigure";
+import { RouteConfigure } from "../models/route.configure";
 
 
 @Injectable({

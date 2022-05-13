@@ -30,7 +30,7 @@ export class WidgetEventService {
    * @param method 事件数据
    * @param params 事件参数
    */
-  public dispatch(sender: BasicWidgetComponent, receiver: string | undefined, method: string, params: AnyObject) {
+  public dispatch(sender: BasicWidgetComponent, receiver: string | undefined, method: string, params: AnyObject): void {
     const targets = this.getEventTargets(receiver, sender);
     for (let i = 0; i < targets.length; i++) {
       const comp = targets[i].instance;

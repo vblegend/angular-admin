@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ObjectUtil } from "@core/util/object.util";
 import { WidgetDataConfigure, WidgetDefaultConfigure, WidgetEventConfigure, WidgetStyles } from "@hmi/configuration/widget.configure";
 import { EventMeta, WidgetDefaultVlaues, WidgetMetaObject } from "./widget.meta.data";

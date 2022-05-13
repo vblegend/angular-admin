@@ -47,7 +47,7 @@ export class WidgetSchemaService {
         this.componentFactoryResolver = injector.get(ComponentFactoryResolver);
     }
 
-    public register(data: WidgetSchema[]) {
+    public register(data: WidgetSchema[]): void {
         for (const widget of data) {
             const factory = this.componentFactoryResolver.resolveComponentFactory(widget.component);
             if (factory) {
@@ -86,7 +86,7 @@ export class WidgetSchemaService {
 
     public random(): WidgetSchema | undefined {
         if (this._categorys.length == 0) return undefined;
-        while (true) {
+        for (; ;) {
             const categoryIndex = Math.floor(Math.random() * this._categorys.length);
             const category = this._categorys[categoryIndex];
             if (category && category.children.length > 0) {

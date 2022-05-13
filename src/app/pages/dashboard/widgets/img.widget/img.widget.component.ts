@@ -35,7 +35,7 @@ export class ImgWidgetComponent extends BasicWidgetComponent {
     this.src = './assets/imgs/test.png';
   }
 
-  protected onWidgetInit(data: ImageWidgetDataModel) {
+  protected onWidgetInit(data: ImageWidgetDataModel): void {
     this.src = data.imgSrc!;
     console.log(this.queryParams);
     // throw new Error('ss');
@@ -45,12 +45,12 @@ export class ImgWidgetComponent extends BasicWidgetComponent {
     console.log(this.queryParams);
   }
 
-  protected onDataChanged(attributePath: string[], value: any) {
+  protected onDataChanged(attributePath: string[], value: Object): void {
     console.log(`reload [${attributePath}] => ${value}`);
   }
 
 
-  protected onDestroy() {
+  protected onDestroy(): void {
 
   }
 
@@ -61,7 +61,7 @@ export class ImgWidgetComponent extends BasicWidgetComponent {
   }
 
   @WidgetInterface('更换图片', '使用URL更换图片内容', true)
-  public updateImage(@Params('url') url?: string) {
+  public updateImage(@Params('url') url?: string): void {
     console.log(`触发事件 updateImage => url:${url}`);
     this.src = url!;
   }

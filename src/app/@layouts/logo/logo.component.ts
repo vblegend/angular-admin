@@ -1,4 +1,4 @@
-import { Component, Injector,  } from '@angular/core';
+import { Component, Injector, } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { MenuService } from '@core/services/menu.service';
 
@@ -17,7 +17,7 @@ export class LogoComponent extends GenericComponent {
   protected onInit(): void {
     // console.log(`app-logo onInit`);
   }
-  protected onDestroy() {
+  protected onDestroy(): void {
     console.log(`app-welcome onDestroy`);
   }
 }
