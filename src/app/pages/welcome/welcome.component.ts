@@ -3,6 +3,9 @@ import { GenericComponent } from '@core/components/basic/generic.component';
 import { LoginPageComponent } from '@core/components/login/loginpage.component';
 import { NotFoundComponent } from '@core/components/notfound/not-found.component';
 import { Subscription } from 'rxjs';
+import * as Prism from 'prismjs';
+
+
 
 @Component({
   selector: 'app-welcome',
