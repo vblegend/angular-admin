@@ -3,8 +3,25 @@
  * Based on “Polyfilling the gaps” talk slides http://lea.verou.me/polyfilling-the-gaps/
  * @author Lea Verou
  */
+@import 'mixin.less';
 
-@background-color: transparent;
+
+.themeMixin( {
+    pre[class*="language-"] {
+      color: @text-color;
+      border: solid 1px @menu-item-border-color;
+      background: @component-background;
+    }
+    code[class*="language-"] {
+      color: @text-color;
+      background: @component-background;
+    }
+
+
+  }
+);
+
+
 
 code[class*="language-"],
 pre[class*="language-"] {
@@ -28,22 +45,22 @@ pre[class*="language-"] {
 
 /* Code blocks */
 pre[class*="language-"] {
-  padding: 0.4em 0.8em;
-  margin: 0.5em 0;
+  // padding: 0.4em 0.8em;
+  // margin: 0.5em 0;
   overflow: auto;
-  background-color: @background-color;
   background-size: 1em 1em;
+  outline: none;
+  user-select: none;
 }
 
 code[class*="language-"] {
-  background: @background-color;
+  display: block;
   color: white;
-  box-shadow: -0.3em 0 0 0.3em @background-color,
-    0.3em 0 0 0.3em @background-color;
+  user-select: text;
 }
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
+:not(pre)>code[class*="language-"] {
   padding: 0.2em;
   border-radius: 0.3em;
   box-shadow: none;
@@ -54,7 +71,7 @@ code[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: #6a9955;
+  color: #5e864e;
 }
 
 .token.punctuation {
@@ -62,7 +79,7 @@ code[class*="language-"] {
 }
 
 .token.namespace {
-  opacity: 0.7;
+  // opacity: 0.7;
 }
 
 .token.property,
@@ -77,7 +94,7 @@ code[class*="language-"] {
 .token.selector,
 .token.attr-name,
 .token.builtin {
-  color: yellow;
+  color: #FF8000;
 }
 
 .token.string,
@@ -102,18 +119,20 @@ code[class*="language-"] {
 
 .token.function,
 .token.class-name {
-  color: #dcdcaa; /* yellow */
+  color: #4db49f;
+  /* yellow */
 }
 
 .token.regex,
 .token.important {
-  color: orange;
+  color: rgb(255, 208, 0);
 }
 
 .token.important,
 .token.bold {
   font-weight: bold;
 }
+
 .token.italic {
   font-style: italic;
 }
@@ -127,14 +146,14 @@ code[class*="language-"] {
 }
 
 /* Plugin styles: Diff Highlight */
-pre.diff-highlight.diff-highlight > code .token.deleted:not(.prefix),
-pre > code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
+pre.diff-highlight.diff-highlight>code .token.deleted:not(.prefix),
+pre>code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
   background-color: rgba(255, 0, 0, 0.3);
   display: inline;
 }
 
-pre.diff-highlight.diff-highlight > code .token.inserted:not(.prefix),
-pre > code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
+pre.diff-highlight.diff-highlight>code .token.inserted:not(.prefix),
+pre>code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
   background-color: rgba(0, 255, 128, 0.3);
   display: inline;
 }

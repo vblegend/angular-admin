@@ -37,6 +37,7 @@
             "inlineStyleLanguage": "less",
             "stylePreprocessorOptions": {
               "includePaths": [
+                "src/styles",
                 "src/styles/themes"
               ]
             },

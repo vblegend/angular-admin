@@ -1,17 +1,17 @@
 .themeMixin(@rules) {
   html {
     &.default {
-      @import './default.less';
+      @import './themes/default.less';
       @rules();
     }
 
     &.dark {
-      @import './dark.less';
+      @import './themes/dark.less';
       @rules();
     }
 
     &.white {
-      @import './white.less';
+      @import './themes/white.less';
       @rules();
     }
   }

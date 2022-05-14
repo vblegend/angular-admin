@@ -7,13 +7,16 @@
 //   line-height: 0px;
 //   vertical-align: middle;
 // }
+body {
+  overflow: hidden;
+}
 
 // none select
 .none-select {
   user-select: none;
 }
 
-.anticon{
+.anticon {
   vertical-align: normal;
 }
 
@@ -31,8 +34,15 @@
   color: @primary-5;
 }
 
-.ant-layout .ant-layout-content{
+.ant-layout .ant-layout-content {
   position: relative;
+}
+
+.ant-layout .ant-layout-content>.ng-star-inserted {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
 body {
@@ -48,10 +58,12 @@ body {
 .ant-menu.ant-menu-inline-collapsed {
   width: 64px !important;
 }
-.ant-menu-submenu-popup > .ant-menu {
+
+.ant-menu-submenu-popup>.ant-menu {
   background-color: @component-background;
 }
-.ant-menu-submenu-popup > .ant-menu > .nz-menu-item,
+
+.ant-menu-submenu-popup>.ant-menu>.nz-menu-item,
 .ant-menu-item,
 .ant-menu-submenu,
 .ant-menu-submenu-title {
@@ -60,6 +72,7 @@ body {
   border-bottom: solid 1px;
   border-color: @menu-item-border-color;
 }
+
 .ant-menu-item .ant-menu-item-icon,
 .ant-menu-submenu-title .ant-menu-item-icon,
 .ant-menu-item .anticon,
@@ -70,12 +83,12 @@ body {
     margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1), color 0.3s;
 }
 
-.ant-tabs > .ant-tabs-nav .ant-tabs-nav-wrap,
-.ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-wrap {
+.ant-tabs>.ant-tabs-nav .ant-tabs-nav-wrap,
+.ant-tabs>div>.ant-tabs-nav .ant-tabs-nav-wrap {
   padding: 0px 5px;
 }
 
-.ant-tooltip{
+.ant-tooltip {
   user-select: none;
   pointer-events: none;
 }
@@ -96,6 +109,7 @@ body {
 .ant-dropdown {
   min-width: 150px;
   user-select: none;
+
   .ant-dropdown-menu {
     border-width: 1px;
     border-style: solid;
@@ -154,6 +168,10 @@ body {
 // 页头 菜单的分割线
 @header-menu-divider: 1px solid rgba(255, 255, 255, 0.12);
 @header-menu-divider-shadow: 0px 0px 10px 1px #3a3e3e;
+
+@layout-footer-padding: 10px 10px;
+@layout-footer-background: @component-background;
+
 
 // .ant-tooltip-content>.ant-tooltip-arrow>.ant-tooltip-arrow-content {
 //   background-color: red;
