@@ -100,6 +100,7 @@ export default (cfg: Configuration, opts: CustomWebpackBrowserSchema, targetOpti
       }
       return false;
     },
+    type: 'javascript/auto',
     use: [{
       loader: require.resolve('raw-loader'),
       options: {
@@ -127,3 +128,7 @@ export default (cfg: Configuration, opts: CustomWebpackBrowserSchema, targetOpti
 
   return cfg;
 };
+
+
+
+// https://webpack.js.org/guides/asset-modules/
