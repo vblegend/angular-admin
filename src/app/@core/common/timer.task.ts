@@ -36,29 +36,34 @@ export interface TimerTask {
     /**
      * 获取/设置 定时器间隔(秒)
      */
-    interval: number;
+    get interval(): number;
+
+    /**
+     * 获取/设置 定时器间隔(秒)
+     */
+    set interval(value: number);
 
     /**
      * 定时器当前是否在执行回调函数
      */
-    isExecuteing: boolean;
+    get isExecuteing(): boolean;
 
     /**
      * 定时器当前是否正在运行
      * 如果定时器被取消则返回false
      */
-    state: TimeState;
+    get state(): TimeState;
 
     /**
      * 定时器任务运行计数器
      */
-    counter: number;
+    get counter(): number;
 
     /**
      * 定时器最后一次任务的运行时间戳\
      * 当执行 @continue(true) 方法重置后此值为当前时间
      */
-    runOfLastTime: number;
+    get runOfLastTime(): number;
 
     /**
      * 挂起定时器，停止任务运行（不会停止当前正在执行的任务）

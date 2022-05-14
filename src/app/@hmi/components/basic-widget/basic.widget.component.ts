@@ -1,15 +1,15 @@
-import { Component, Host, HostBinding, Injector } from '@angular/core';
+import { Component, Host, HostBinding, Injector, Type } from '@angular/core';
 import { AnyObject } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { WidgetConfigure, WidgetDataConfigure, WidgetDefaultConfigure, WidgetStyles } from '../../configuration/widget.configure';
-import { WidgetDefaultVlaues, WidgetMetaObject } from '@hmi/core/widget.meta.data';
-import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { WidgetDefaultVlaues, WidgetMetaObject } from '@hmi/configuration/widget.meta.data';
+import { WidgetEventService } from '@hmi/editor/services/widget.event.service';
 import { ObjectUtil } from '@core/util/object.util';
 import { ViewCanvasComponent } from '../view-canvas/view.canvas.component';
 import { TimerTask } from '@core/common/timer.task';
-import { DisignerCanvasComponent } from '../disigner-canvas/disigner.canvas.component';
+import { DisignerCanvasComponent } from '../../editor/components/disigner-canvas/disigner.canvas.component';
 import { DefaultGlobalWidgetStyle } from '@hmi/configuration/global.default.configure';
-import { Rectangle, Vector2 } from '@hmi/core/common';
+import { Params, Rectangle, Vector2, WidgetInterface } from '@hmi/editor/core/common';
 import { HmiMath } from '@hmi/utility/hmi.math';
 
 
@@ -23,7 +23,6 @@ import { HmiMath } from '@hmi/utility/hmi.math';
  */
 export abstract class BasicWidgetComponent extends GenericComponent {
   private _config!: WidgetConfigure;
-
   @Host()
   private viewParent!: ViewCanvasComponent;
   /**
@@ -42,12 +41,38 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    */
   public get metaData(): WidgetMetaObject {
     if (this.constructor.prototype.METADATA == null) {
-      this.constructor.prototype.METADATA = new WidgetMetaObject();
+      this.constructor.prototype.METADATA = new WidgetMetaObject(this.constructor.prototype);
     }
     return this.constructor.prototype.METADATA;
   }
 
 
+  /**
+   * 小部件的元数据\
+   */
+  public upgradeWidgetMetaData(typed: Type<BasicWidgetComponent>): WidgetMetaObject {
+    let meta = this.constructor.prototype.METADATA as WidgetMetaObject;
+    if (meta == null) {
+      this.constructor.prototype.METADATA = new WidgetMetaObject(typed);
+      return this.constructor.prototype.METADATA;
+    }
+    if (typed != meta.typed) {
+      this.constructor.prototype.METADATA = meta = meta.upgrade(typed);
+      // console.log(' need upgrade!');
+    }
+    return meta;
+  }
+
+
+
+
+  /**
+   * 获取当前小部件的样式属性
+   * @returns 
+   */
+  public get style(): WidgetStyles {
+    return this.configure.style;
+  }
   /**
    * 当前是否为编辑模式
    */
@@ -156,9 +181,18 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * get component background
    * binding host position
    */
-  @HostBinding('style.background')
-  public get background(): string | undefined {
-    return this.configure.style.background;
+  @HostBinding('style.font-size')
+  public get fontSize(): string | undefined {
+    return `${this.configure.style.fontSize}px`;
+  }
+
+  /**
+   * get component background
+   * binding host position
+   */
+  @HostBinding('style.font-weight')
+  public get fontWeight(): string | undefined {
+    return this.configure.style.fontBold ? 'bold' : '';
   }
 
   /**
@@ -197,6 +231,14 @@ export abstract class BasicWidgetComponent extends GenericComponent {
     return this.configure.style.border;
   }
 
+  /**
+   * get component zIndex
+   * binding host position
+   */
+  @HostBinding('style.border-radius')
+  public get radius(): string | undefined {
+    return this.configure.style.radius;
+  }
 
   /**
    * get component transform rotates
@@ -207,10 +249,37 @@ export abstract class BasicWidgetComponent extends GenericComponent {
     if (this.configure.style.rotate) {
       return `rotateZ(${this.configure.style.rotate}deg)`;
     } else {
-      return `rotateZ(0deg)`;
+      return ``;
     }
   }
 
+
+
+  /**
+   * get component background
+   * binding host position
+   */
+  @HostBinding('style.background-color')
+  public get backgroundColor(): string | undefined {
+    return this.configure.style.bkColor ?? '';
+  }
+
+  @HostBinding('style.background-image')
+  public get backgroundImage(): string | undefined {
+    if (this.configure.style.bkImage && this.configure.style.bkImage.length > 0) {
+      return `url(${this.configure.style.bkImage})`;
+    }
+    return '';
+  }
+
+  /**
+   * get component transform rotates
+   * binding host position
+   */
+  @HostBinding('style.background-size')
+  public get backgroundSize(): string {
+    return this.style.bkSize === 'tile' ? '' : '100% 100%';
+  }
 
 
 
@@ -219,14 +288,6 @@ export abstract class BasicWidgetComponent extends GenericComponent {
     return this._config;
   }
 
-
-  /**
-   * get component data profile
-   */
-  public data<TType extends WidgetDataConfigure>(): TType {
-    this.ifDisposeThrowException();
-    return <TType>this._config.data;
-  }
 
 
 
@@ -244,7 +305,6 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * @param event 要触发的事件，必须是使用在{@WidgetEvent}列表内的
    * @param params 事件的参数 必须满足声明的事件参数
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected dispatchEvent<T extends Record<string, any>>(event: string, params: T): void {
     // 编辑模式不触发事件
     if (this.isEditMode) return;
@@ -254,8 +314,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
       throw `错误：事件派遣失败，部件“${this.constructor.name}”下未找到事件“${event}”的声明。`;
     }
     for (const key of _eventMeta.eventParams) {
-      const hasBarProperty = Object.prototype.hasOwnProperty.call(params, key);
-      if (!hasBarProperty) {
+      if (!params.hasOwnProperty(key)) {
         throw `错误：事件派遣失败，部件“${this.constructor.name}”下,事件“${event}”缺少参数“${key}”。`;
       }
     }
@@ -296,11 +355,23 @@ export abstract class BasicWidgetComponent extends GenericComponent {
     }
   }
 
+
+  /**
+   * get component data profile
+   */
+  public data?: WidgetDataConfigure;
+
+
+
+
   /**
    * 禁止重写该方法\
    * 请重写 @onWidgetInit 方法以实现
    */
-  protected readonly onInit = (): void => { this.onWidgetInit(this.configure.data); };
+  protected readonly onInit = (): void => {
+    this.data = this._config.data;
+    this.onWidgetInit(this.configure.data);
+  };
 
 
 
@@ -309,10 +380,18 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * 部件的初始化事件
    * @param data  部件的绑定数据，使用时请在部件中重写此参数类型
    */
-  protected onWidgetInit(data: WidgetDataConfigure): void {
+  protected onWidgetInit(data: WidgetDataConfigure) {
 
   }
 
+
+
+  @WidgetInterface('修改样式', '')
+  public setStyleProperties(@Params('color') color?: string, @Params('show', 'boolean') show?: boolean) {
+    if (color) this.viewContainerRef.element.nativeElement.style.color = color;
+    if (show != null) this.viewContainerRef.element.nativeElement.style.opacity = show ? 1 : 0;
+
+  }
 
 
   /**
@@ -337,7 +416,7 @@ export abstract class BasicWidgetComponent extends GenericComponent {
    * @param attributePath 更改的属性路径 
    * @param value 属性值 
    */
-  protected onDataChanged(attributePath: string[], value: Object): void {
+  protected onDataChanged(attributePath: string[], value: any) {
 
   }
 

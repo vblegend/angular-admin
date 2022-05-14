@@ -1,4 +1,4 @@
-import { Rectangle, Vector2 } from "@hmi/core/common";
+import { Rectangle, Vector2 } from "@hmi/editor/core/common";
 
 
 export class HmiMath {
@@ -42,6 +42,5 @@ export class HmiMath {
         const y = (point.x - center.x) * Math.sin(ang) + (point.y - center.y) * Math.cos(ang) + center.y;
         return { x, y };
     }
-
 
 }

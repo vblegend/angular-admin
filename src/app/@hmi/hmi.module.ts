@@ -1,19 +1,18 @@
 import { ModuleWithProviders, NgModule, Provider } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreModule } from '@core/core.module';
-import { ReSizeAnchorDirective } from './directives/resize.anchor.directive';
-import { MoveAnchorDirective } from './directives/move.anchor.directive';
+
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
-import { ZoomControlDirective } from './directives/zoom.control.directive';
+
 import { HmiEditorComponent } from './editor/hmi.editor.component';
 import { WidgetSchemaService } from './services/widget.schema.service';
-import { RubberBandDirective } from './directives/rubber.band.directive';
-import { DisignerCanvasComponent } from './components/disigner-canvas/disigner.canvas.component';
-import { DisignerHotkeysDirective } from './directives/disigner.hotkeys.directive';
+
+import { DisignerCanvasComponent } from './editor/components/disigner-canvas/disigner.canvas.component';
+import { DisignerHotkeysDirective } from './editor/directives/disigner.hotkeys.directive';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { SelectionAreaComponent } from './components/selection-area/selection.area.component';
-import { RubberbandComponent } from './components/rubber-band/rubber.band.component';
+import { SelectionAreaComponent } from './editor/components/selection-area/selection.area.component';
+import { RubberbandComponent } from './editor/components/rubber-band/rubber.band.component';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { Component } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -27,17 +26,17 @@ import { NzSliderModule } from 'ng-zorro-antd/slider';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzSwitchModule } from 'ng-zorro-antd/switch';
 import { NzElementPatchModule } from 'ng-zorro-antd/core/element-patch';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 
 
-
-import { SnapLineComponent } from './components/snap-line/snap.line.component';
-import { PanControlComponent } from './components/pan-control/pan.control.component';
+import { SnapLineComponent } from './editor/components/snap-line/snap.line.component';
+import { PanControlComponent } from './editor/components/pan-control/pan.control.component';
 import { HmiViewerComponent } from './hmi.viewer.component';
 import { AngularSplitModule } from 'angular-split';
 import { ObjectListComponent } from './editor/components/object-list/object.list.component';
 import { WidgetListComponent } from './editor/components/widget-list/widget.list.component';
-import { WidgetDragDirective } from './directives/widget.drag.directive';
-import { DragPreviewComponent } from './components/drag-preview/drag.preview.component';
+
+import { DragPreviewComponent } from './editor/components/drag-preview/drag.preview.component';
 import { PropertyGridComponent } from './editor/components/property-grid/property.grid.component';
 import { TextInputPropertyComponent } from './editor/property.components/text.input.property/text.input.property.component';
 import { NumberInputPropertyComponent } from './editor/property.components/number.input.property/number.input.property.component';
@@ -48,17 +47,24 @@ import { SelectBooleanPropertyComponent } from './editor/property.components/sel
 import { SelectStringPropertyComponent } from './editor/property.components/select.string.property/select.string.property.component';
 import { SelectNumberPropertyComponent } from './editor/property.components/select.number.property/select.number.property.component';
 import { BasicPropertiesComponent } from './editor/basic.properties/basic.properties.component';
-import { WidgetPropertiesService } from './services/widget.properties.service';
+import { WidgetPropertiesService } from './editor/services/widget.properties.service';
 import { PropertieDefineTemplateDirective } from './editor/directives/properties.template.directive';
 import { ButtonActionPropertyComponent } from './editor/property.components/button.action.property/button.action.property.component';
-import { DataTransferService } from './services/data.transfer.service';
+import { DataTransferService } from './editor/services/data.transfer.service';
 import { WidgetEventComponent } from './editor/property.components/common.event.property/widget.event.component';
 import { HmiEditorService } from './services/hmi.editor.service';
 import { SwitchBooleanPropertyComponent } from './editor/property.components/switch.boolean.property/switch.boolean.property.component';
 import { EditorToolbarComponent } from './editor/components/toolbar/toolbar.component';
-import { CanvasSettingComponent } from './editor/components/canvas-setting/canvas.setting.component';
+
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzFormModule } from 'ng-zorro-antd/form';
+import { ReSizeAnchorDirective } from './editor/directives/resize.anchor.directive';
+import { MoveAnchorDirective } from './editor/directives/move.anchor.directive';
+import { ZoomControlDirective } from './editor/directives/zoom.control.directive';
+import { RubberBandDirective } from './editor/directives/rubber.band.directive';
+import { WidgetDragDirective } from './editor/directives/widget.drag.directive';
+import { IconfontSelectPropertyComponent } from './editor/property.components/iconfont.select.property/iconfont.select.property.component';
+import { ImageSelectPropertyComponent } from './editor/property.components/image.select.property/image.select.property.component';
 
 export declare const HMI_COMPONENT_SCHEMA_DECLARES: WidgetSchemaService;
 
@@ -108,7 +114,6 @@ const EXPORT_COMPONENTS = [
   PropertyElementComponent,
   BasicPropertiesComponent,
   EditorToolbarComponent,
-  CanvasSettingComponent,
   // propertys
   WidgetEventComponent,
   TextInputPropertyComponent,
@@ -119,7 +124,9 @@ const EXPORT_COMPONENTS = [
   SelectStringPropertyComponent,
   SelectNumberPropertyComponent,
   ButtonActionPropertyComponent,
-  SwitchBooleanPropertyComponent
+  SwitchBooleanPropertyComponent,
+  IconfontSelectPropertyComponent,
+  ImageSelectPropertyComponent
 ];
 
 /**
@@ -147,6 +154,7 @@ const EXPORT_COMPONENTS = [
     NzSwitchModule,
     NzDividerModule,
     NzFormModule,
+    NzDrawerModule,
     // 
   ],
   exports: [

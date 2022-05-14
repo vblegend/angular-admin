@@ -39,18 +39,18 @@ export class NumberInputPropertyComponent extends BasicPropertyComponent<number>
   @Input()
   public precision: number = 2;
 
+  public readonly formatter: (value: number) => string = (value: number) => (this.unit && this.unit.length) ? `${value} ${this.unit}` : `${value}`;
+  public readonly parser: (value: string) => string = (value: string) => value.replace(this.unit, '');
 
-  public formatter: (value: number) => string;
+
   /**
    *
    */
   constructor(protected injector: Injector) {
     super(injector);
-    this.formatter = this.formatterFunc.bind(this);
     this.nullValue = 0;
   }
 
-  private formatterFunc(value: number): string {
-    return (this.unit && this.unit.length) ? `${value} ${this.unit}` : `${value}`;
-  }
+
+
 }

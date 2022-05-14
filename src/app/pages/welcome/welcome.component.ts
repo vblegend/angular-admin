@@ -16,7 +16,7 @@ export class WelcomeComponent extends GenericComponent {
   @Output() public deleteRequest: EventEmitter<Object> = new EventEmitter<Object>(true);
   public id!: string | null;
   public name!: string;
-
+  public content: string = '';
 
   // private subscription: Subscription;
 
@@ -36,7 +36,12 @@ export class WelcomeComponent extends GenericComponent {
   protected onInit(): void {
     this.id = this.queryParams.get('id');
     console.log(`app-welcome onInit ${this.id}`);
-
+    this.content = `protected onQueryChanges(): void {
+      this.id = this.queryParams.get('id');
+      console.log('app-welcome onRouter');
+      // this.deleteRequest.emit(this.id);
+      // this.subscribe(this.deleteRequest);
+    }`;
     // const ref = this.generateComponent(NotFoundComponent);
     // ref.destroy();
     // this.subscription = this.deleteRequest.subscribe(e => {

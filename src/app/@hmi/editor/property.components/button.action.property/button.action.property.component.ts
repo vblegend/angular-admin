@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Injector, Input, Type } from '@angular/core';
 import { DefaultButtonActionFactory, ButtonActionFactory } from '@hmi/editor/common';
 import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/basic.property.component';

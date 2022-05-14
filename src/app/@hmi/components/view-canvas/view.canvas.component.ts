@@ -4,11 +4,11 @@ import { WidgetConfigure } from '../../configuration/widget.configure';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { BasicWidgetComponent } from '../basic-widget/basic.widget.component';
 import { HmiMath } from '@hmi/utility/hmi.math';
-import { CurrentVersion, DocumentMagicCode, Rectangle } from '@hmi/core/common';
-import { WidgetEventService } from '@hmi/services/widget.event.service';
+import { CurrentVersion, DocumentMagicCode, Rectangle } from '@hmi/editor/core/common';
+import { WidgetEventService } from '@hmi/editor/services/widget.event.service';
 import { TimerPoolService } from '@core/services/timer.pool.service';
-import { WidgetDefaultVlaues } from '@hmi/core/widget.meta.data';
-import { MetaDataService } from '@hmi/services/meta.data.service';
+import { WidgetDefaultVlaues } from '@hmi/configuration/widget.meta.data';
+import { MetaDataService } from '@hmi/editor/services/meta.data.service';
 import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
 
 
@@ -16,7 +16,7 @@ import { GraphicConfigure } from '@hmi/configuration/graphic.configure';
   selector: 'hmi-view-canvas',
   templateUrl: './view.canvas.component.html',
   styleUrls: ['./view.canvas.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     /* 为每个canvas 生成单独的管理服务 */
     WidgetEventService,
@@ -30,17 +30,6 @@ export class ViewCanvasComponent extends GenericComponent {
   private readonly _eventHub: WidgetEventService;
   public readonly metaData: MetaDataService;
 
-  /**
-   * 获取/设置 部件组态画板的标准宽度
-   */
-  public width: number;
-
-  /**
-   * 获取/设置 部件组件画板的标准高度
-   */
-  public height: number;
-
-
 
   /**
    *
@@ -51,8 +40,6 @@ export class ViewCanvasComponent extends GenericComponent {
     this._eventHub = injector.get(WidgetEventService);
     this._eventHub.initCanvas$(this);
     this.metaData = injector.get(MetaDataService);
-    this.width = 1920;
-    this.height = 1080;
   }
 
 
@@ -123,7 +110,7 @@ export class ViewCanvasComponent extends GenericComponent {
   /**
    * 清理并销毁掉所有组件
    */
-  public clear() : void{
+  public clear(): void {
     while (this._children.length > 0) {
       const compRef = this._children[0];
       this.remove(compRef);
@@ -141,8 +128,7 @@ export class ViewCanvasComponent extends GenericComponent {
     let componentRef: ComponentRef<BasicWidgetComponent> | null = null;
     const comRef = this.provider.getType(configure.type);
     if (comRef) {
-      const factoryResolver = this.componentFactoryResolver.resolveComponentFactory(comRef.component);
-      componentRef = this.container.createComponent<BasicWidgetComponent>(factoryResolver, undefined, this.injector);
+      componentRef = this.container.createComponent<BasicWidgetComponent>(comRef.component, { injector: this.injector });
       if (componentRef && componentRef.instance instanceof BasicWidgetComponent) {
         const v = this.container.indexOf(componentRef.hostView);
         this.container.detach(v);
@@ -150,6 +136,8 @@ export class ViewCanvasComponent extends GenericComponent {
         const widgetSchema = this.provider.getType(configure.type);
         const defaultValue = widgetSchema!.component.prototype.metaData.default as WidgetDefaultVlaues;
         componentRef.instance.$initialization(this, configure, defaultValue);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
+        (<any>componentRef)['icon'] = widgetSchema?.icon!;
       }
     }
     if (componentRef == null) this.onError(new Error(`未知的组态类型：${configure.type}.`));

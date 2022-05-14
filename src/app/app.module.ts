@@ -28,6 +28,7 @@ import { CacheService } from '@core/services/cache.service';
 import { SchedulingTask, TaskMode } from './pages/tasks/task-model/tasks.model';
 import { LocalCache } from '@core/cache/local.cache';
 import { HmiModule } from 'app/@hmi/hmi.module';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 registerLocaleData(zh);
@@ -46,6 +47,9 @@ registerLocaleData(zh);
     HmiModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
+    NgxEchartsModule.forRoot({
+      echarts: import('echarts')
+    }),
     // IconsProviderModule,
   ],
   providers: [

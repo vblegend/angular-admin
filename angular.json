@@ -47,8 +47,6 @@
               "src/favicon.png"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/prismjs/themes/prism.css",
               "src/styles/style.less",
               {
                 "input": "src/styles/default.less",
@@ -64,16 +62,21 @@
                 "input": "src/styles/dark.less",
                 "bundleName": "theme-dark",
                 "inject": false
-              }
+              },
+
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
             ],
             "scripts": [
               "node_modules/echarts/dist/echarts.min.js",
-              "node_modules/chart.js/dist/Chart.min.js"
+              "node_modules/chart.js/dist/Chart.min.js",
+              "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js"
             ],
             "allowedCommonJsDependencies": [
               "angular2-chartjs",
               "echarts",
+              "prismjs",
               "lodash",
+              "crypto-js",
               "zrender/lib/svg/svg",
               "zrender/lib/vml/vml"
             ],
@@ -115,7 +118,6 @@
             },
             "development": {
               "optimization": false,
-              "outputHashing": "all",
               "buildOptimizer": false,
               "sourceMap": true
             }

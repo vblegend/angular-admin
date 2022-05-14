@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, Component, ComponentRef, DoCheck, Injector, OnChanges, SimpleChanges } from '@angular/core';
 import { nzSelectItem } from '@core/common/types';
 import { ObjectUtil } from '@core/util/object.util';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
 import { WidgetEventConfigure } from '@hmi/configuration/widget.configure';
-import { EventMeta } from '@hmi/core/widget.meta.data';
+import { EventMeta } from '@hmi/configuration/widget.meta.data';
 import { GenericAttributeCommand } from '@hmi/editor/commands/generic.attribute.command';
 import { WidgetAttributeCommand } from '@hmi/editor/commands/widget.attribute.command';
 import { BasicPropertyComponent } from '@hmi/editor/components/basic-property/basic.property.component';
 import { PropertyElementComponent } from '@hmi/editor/components/property-element/property.element.component';
 import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
-import { MetaDataService } from '@hmi/services/meta.data.service';
+import { MetaDataService } from '@hmi/editor/services/meta.data.service';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
@@ -131,19 +130,17 @@ export class WidgetEventComponent extends PropertyElementComponent {
     return value.event;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByValue(index: number, value: any): any {
     return value.value;
   }
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   public trackByAny(index: number, value: any): any {
     return value;
   }
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
   public trackByKey(index: number, value: any): any {
     return value.key;
   }
-    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public trackByName(index: number, value: any): any {
     return value.name;
   }

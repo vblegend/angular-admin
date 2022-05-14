@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injector } from "@angular/core";
 import { BasicPropertyComponent } from "./components/basic-property/basic.property.component";
 
@@ -20,13 +21,13 @@ export abstract class ButtonActionFactory {
      * 属性到绑定元素的转换函数
      * @param value 显示到按钮中
      */
-    public abstract toBinding(value: Object): string;
+    public abstract toBinding(value: any): string;
 
     /**
      * 按钮是否可以按下
      * @param value 
      */
-    public abstract canExecute(value: Object): boolean;
+    public abstract canExecute(value: any): boolean;
 
     /**
      * 按钮执行函数\

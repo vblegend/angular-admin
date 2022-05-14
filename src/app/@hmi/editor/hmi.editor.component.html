@@ -3,12 +3,12 @@
     <as-split direction="horizontal" [gutterSize]="5" [useTransition]="true" [gutterDblClickDuration]="300"
         [unit]="'pixel'" (gutterDblClick)="gutterDblClick($event)">
         <!-- 左侧小部件对象列表  和小部件组件列表 -->
-        <as-split-area [size]="200" [minSize]="190" [visible]="leftAreaVisible" [order]="1">
+        <as-split-area [size]="215" [minSize]="190" [visible]="leftAreaVisible" [order]="1">
             <as-split direction="vertical" [gutterSize]="5" [useTransition]="true" [unit]="'pixel'">
                 <as-split-area class="object-list-area" [size]="420" [minSize]="320">
                     <nz-tabset class="objects-tabset">
                         <nz-tab nzTitle="对象列表">
-                            <hmi-object-list [canvas]="canvas">
+                            <hmi-object-list #objectList [canvas]="canvas">
                             </hmi-object-list>
                         </nz-tab>
                     </nz-tabset>

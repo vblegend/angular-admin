@@ -91,7 +91,7 @@ export class SelectColorPropertyComponent extends BasicPropertyComponent<string>
    * 预制默认颜色点击应用
    * @param value 
    */
-  public colorClick(value: nzSelectItem):void {
+  public colorClick(value: nzSelectItem) {
     this.saveAndUpdate(value.value);
   }
 

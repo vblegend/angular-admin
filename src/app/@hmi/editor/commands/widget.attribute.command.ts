@@ -63,6 +63,7 @@ export class WidgetAttributeCommand<TValue> extends BasicCommand {
             const rootObject = this.objects[i].instance;
             const object = this.getTarget(rootObject);
             object[this.attributeName] = <AnyObject><unknown>this.newValues[i];
+            // this.objects[i].changeDetectorRef.markForCheck();
             // call setXXX();
             // const setter = `set${this.attributeName[0].toUpperCase()}${this.attributeName.substring(1)}`;
             // if (rootObject[setter as key of AnyObject] && typeof rootObject[setter] === 'function') {
@@ -76,6 +77,7 @@ export class WidgetAttributeCommand<TValue> extends BasicCommand {
             const rootObject = this.objects[i].instance;
             const object = this.getTarget(rootObject);
             object[this.attributeName] = <AnyObject><unknown>this.oldValues[i];
+            // this.objects[i].changeDetectorRef.markForCheck();
             // call setXXX();
             // const setter = `set${this.attributeName![0].toUpperCase()}${this.attributeName!.substring(1)}`;
             // if (rootObject[setter] && typeof rootObject[setter] === 'function') {
@@ -84,7 +86,7 @@ export class WidgetAttributeCommand<TValue> extends BasicCommand {
         }
     }
 
-    public update(command: WidgetAttributeCommand<TValue>) : void{
+    public update(command: WidgetAttributeCommand<TValue>) {
         this.newValues = command.newValues;
     }
 

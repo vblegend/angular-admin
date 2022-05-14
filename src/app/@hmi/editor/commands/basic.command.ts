@@ -10,7 +10,6 @@ export abstract class BasicCommand {
     public attributePaths!: string[];
     protected editor!: HmiEditorComponent;
     public executeTime!: Date;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public objects!: any[];
     /**
      *
