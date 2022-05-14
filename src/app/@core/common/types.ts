@@ -4,7 +4,10 @@
 export interface AnyObject {
     [key: string]: AnyObject;
 }
-
+export interface StringNameValue {
+    name: string;
+    value: string;
+}
 
 export interface nzSelectItem {
     label: string;

@@ -12,14 +12,10 @@ import { RouteTitle } from './app/@core/models/route.titlee'
 // }
 
 
-export interface StringNameValue {
-    name: string;
-    value: string;
-}
+
 // export declare var echarts: any;
 
 declare module '@angular/router' {
-
     /**
      * document title
      */
@@ -27,5 +23,3 @@ declare module '@angular/router' {
         title?: RouteTitle;
     }
 }
-
-

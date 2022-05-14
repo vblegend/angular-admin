@@ -1,10 +1,6 @@
 import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { StringNameValue } from '@core/common/types';
 import { GenericComponent } from '@core/components/basic/generic.component';
-
-
-import { StringNameValue } from '../../../../../typings';
-
-
 
 
 

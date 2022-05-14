@@ -13,7 +13,6 @@
     "noImplicitReturns": true,
     "downlevelIteration": true,
     "noFallthroughCasesInSwitch": true,
-
     "noImplicitAny": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
@@ -21,23 +20,27 @@
     "strictFunctionTypes": true,
     // "strictPropertyInitialization": false,
     "strictPropertyInitialization": true,
-
-
-
-
-    "target": "es2018",
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2018",
     // 允许编译javascript文件
     "allowJs": true,
     // 报告.js文件中的错误。与allowJs一起使用
     "checkJs": false,
     // 跳过默认库检查
     "skipLibCheck": true,
+    "rootDirs": [
+      "./"
+    ],
     "typeRoots": [
       "node_modules/@types",
-      "./typings.d.ts"
+      "./typings"
     ],
+    // "types": [
+    //   "raw-loader.d.ts",
+    //   "node"
+    // ],
     "lib": [
-      "es2018",
+      "ES2018",
       "dom"
     ],
     "plugins": [
@@ -74,6 +77,5 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-
   }
 }

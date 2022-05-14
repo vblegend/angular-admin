@@ -4,6 +4,9 @@ import { LoginPageComponent } from '@core/components/login/loginpage.component';
 import { NotFoundComponent } from '@core/components/notfound/not-found.component';
 import { Subscription } from 'rxjs';
 import * as Prism from 'prismjs';
+import txt from 'raw-loader!./123.txt';
+
+
 
 
 
@@ -22,6 +25,7 @@ export class WelcomeComponent extends GenericComponent {
 
   constructor(injector: Injector) {
     super(injector)
+    console.log(txt);
   }
 
   protected onQueryChanges(): void {

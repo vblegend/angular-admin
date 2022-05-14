@@ -24,10 +24,9 @@
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
             "customWebpackConfig": {
-              "path": "./webpack.config.js",
-              "replaceDuplicatePlugins": true,
-              "mergeStrategies": {
-                "loaders": "append"
+              "path": "./webpack.config.ts",
+              "mergeRules": {
+                "rules": "prepend"
               }
             },
             "preserveSymlinks": true,
@@ -63,7 +62,6 @@
                 "bundleName": "theme-dark",
                 "inject": false
               },
-
               "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css"
             ],
             "scripts": [
