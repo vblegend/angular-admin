@@ -4,7 +4,7 @@ import { LoginPageComponent } from '@core/components/login/loginpage.component';
 import { NotFoundComponent } from '@core/components/notfound/not-found.component';
 import { Subscription } from 'rxjs';
 import * as Prism from 'prismjs';
-import txt from 'raw-loader!./123.txt';
+import txt from '!!raw-loader!./123.txt';
 
 
 
