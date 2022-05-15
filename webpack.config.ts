@@ -15,7 +15,9 @@ export default (cfg: Configuration, opts: CustomWebpackBrowserSchema, targetOpti
   const packageName = require('./package.json').name;
   const logo = require("fs").readFileSync("./.profile", 'utf8').replace('$projectname', packageName);
   console.warn(`\n${logo}\n`);
+  const entry = cfg.entry! as Record<string, string>;
 
+  entry['editor.worker'] = 'monaco-editor/esm/vs/editor/editor.worker.js';
 
   cfg.module?.rules?.push({
     test: /\.(jpe?g|png|svg|gif)/i,

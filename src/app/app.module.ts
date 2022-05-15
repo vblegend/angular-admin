@@ -85,7 +85,7 @@ export class AppModule {
     if (theme) {
       themeService.changeTheme(theme);
     } else {
-      themeService.changeTheme('default');
+      themeService.changeTheme('dark');
     }
     // loading 
     bootstrapService.loadingElement = document.getElementById('global-spinner');

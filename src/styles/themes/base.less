@@ -93,8 +93,6 @@ body {
   pointer-events: none;
 }
 
-
-
 // fix side menu border-botton
 .ant-menu-submenu.ant-menu-submenu-inline {
   border-bottom: solid 0px;
@@ -126,8 +124,8 @@ body {
 }
 
 /* 全局滚动条样式 */
-@scroll-width: 5px;
-@scroll-height: 5px;
+@scroll-width: 3px;
+@scroll-height: 3px;
 @scroll-background: #1d1d1d;
 @scroll-thumb-radius: 2px;
 @scroll-thumb-color: #535353;
@@ -148,6 +146,12 @@ body {
   background: @scroll-thumb-color;
 }
 
+/* 滚动条右下角边角*/
+::-webkit-scrollbar-corner {
+  background-color: @scroll-background;
+}
+
+
 /*滚动条里面小方块*/
 ::-webkit-scrollbar-thumb:hover {
   background: @scroll-thumb-hover-color;
@@ -165,12 +169,36 @@ body {
   background: @scroll-background;
 }
 
+/* 去除input自动填充的背景色 */
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+  -webkit-text-fill-color: @text-color  !important;
+  transition: background-color 50000s ease-in-out 0s !important;
+}
+
+
+
+
 // 页头 菜单的分割线
 @header-menu-divider: 1px solid rgba(255, 255, 255, 0.12);
 @header-menu-divider-shadow: 0px 0px 10px 1px #3a3e3e;
 
 @layout-footer-padding: 10px 10px;
 @layout-footer-background: @component-background;
+
+
+
+.ant-modal-close-x {
+  width: 48px;
+  height: 32px;
+  line-height: 32px;
+}
+
+.ant-modal-header{
+  padding: 5px 24px;
+  height: 32px;
+  line-height: 32px;
+}
 
 
 // .ant-tooltip-content>.ant-tooltip-arrow>.ant-tooltip-arrow-content {

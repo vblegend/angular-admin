@@ -1,13 +1,9 @@
 @import 'mixin';
 
 .themeMixin( {
-        // :host {
-        //     ::ng-deep {
-        //         .ant-modal-body {
-           
-        //         }
-        //     }
-        // }
+        :host {
+            ::ng-deep {}
+        }
     }
 
 );
@@ -16,30 +12,12 @@
 
 
 ::ng-deep {
-
     .ant-modal-body {
         padding: 0px !important;
     }
 
     .xterm-viewport {
         overflow-y: hidden;
-    }
-
-    /*定义滑块*/
-    .xterm-viewport::-webkit-scrollbar-thumb {
-        background: rgba(1, 172, 213, 0.6);
-    }
-
-    /* 滑动条样式 */
-    .xterm-viewport::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    /*定义滚动条轨道*/
-    .xterm-viewport::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(159, 177, 195, 1);
     }
 
 }

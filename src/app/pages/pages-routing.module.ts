@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { ExamplesComponent } from './examples/examples.component';
+import { CodeingComponent } from './codeing/codeing.component';
 
 const routes: Routes = [{
   path: '',
@@ -17,6 +18,11 @@ const routes: Routes = [{
       path: 'dashboard',
       title: { value: 'dashboard', needsTranslator: true },
       loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+    },
+    {
+      path: 'codeing',
+      title: { value: 'codeing', needsTranslator: false },
+      component: CodeingComponent
     },
     {
       path: 'examples',

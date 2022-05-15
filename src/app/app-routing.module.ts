@@ -6,7 +6,7 @@ import { LoginPageComponent } from './@core/components/login/loginpage.component
 import { NotFoundComponent } from './@core/components/notfound/not-found.component';
 import { AuthGuardService } from './@core/services/auth.guard.service';
 import { HmiSchemaService } from './pages/dashboard/service/hmi.schema.service';
-import { EditorComponent } from './pages/editor/editor.component';
+import { CodeingComponent } from './pages/codeing/codeing.component';
 
 
 const routes: Routes = [
@@ -14,11 +14,6 @@ const routes: Routes = [
     path: 'login',
     title: { value: 'login', needsTranslator: false },
     component: LoginPageComponent
-  },
-  {
-    path: 'editor',
-    title: { value: 'editor', needsTranslator: false },
-    component: EditorComponent
   },
   {
     path: 'notfound',
