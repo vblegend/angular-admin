@@ -51,7 +51,10 @@ import { AngularSplitModule } from 'angular-split';
 import { CollapseComponent } from './components/ngx-collapse/ngx.collapse.component';
 import { TimerPoolService } from './services/timer.pool.service';
 import { NotificationService } from './services/notification.service';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpHandlerInterceptor, } from './interceptors/http.handler.interceptor';
+import { ProsmDirective } from './directives/prism.directive';
+import { IconFontService } from './services/iconfont.service';
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -61,7 +64,8 @@ const EXPORT_PIPES: Provider[] = [
 
 const EXPORT_DIRECTIVES: Provider[] = [
   HoverDirective,
-  UnSelectedDirective
+  UnSelectedDirective,
+  ProsmDirective
 ];
 
 
@@ -96,7 +100,8 @@ const PROVIDERS: Provider[] = [
   CacheService,
   EventBusService,
   TimerPoolService,
-  NotificationService
+  NotificationService,
+  IconFontService
 ];
 
 
@@ -169,7 +174,14 @@ export class CoreModule {
           provide: EVENT_MANAGER_PLUGINS,
           useClass: OutSideEventPluginService,
           multi: true
-        }
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: HttpHandlerInterceptor,
+          multi: true
+        },
+
+
       ]
     };
   }

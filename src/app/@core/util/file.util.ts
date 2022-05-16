@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export class FileUtil {
 
 
@@ -7,7 +8,7 @@ export class FileUtil {
 	 * 下载文本文件
 	 * @param filename 
 	 */
-	public static download(content: string | Blob | any, filename: string) {
+	public static download(content: string | Blob | any, filename: string): void {
 		let blob!: Blob;
 		if (content instanceof Blob) {
 			blob = content;

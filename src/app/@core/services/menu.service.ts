@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { RouteConfigure } from "../models/RouteConfigure";
+import { RouteConfigure } from "../models/route.configure";
 
 
 @Injectable({
@@ -25,7 +25,7 @@ export class MenuService {
     public menus: RouteConfigure[] = [
         {
             title: '首页',
-            icon: 'grace-iconfonticon-shouye',
+            icon: 'grace-home',
             link: 'welcome/1',
         },
         {
@@ -55,7 +55,7 @@ export class MenuService {
         },
         {
             title: '日志管理',
-            icon: 'grace-rizhi',
+            icon: 'grace-order',
             open: false,
             selected: false,
             children: [
@@ -66,7 +66,7 @@ export class MenuService {
                 },
                 {
                     title: '聊天日志',
-                    icon: 'grace-rizhi',
+                    icon: 'grace-order',
                     link: 'welcome/7',
                 }
             ]
@@ -79,7 +79,7 @@ export class MenuService {
             children: [
                 {
                     title: '数据库',
-                    icon: 'grace-database',
+                    icon: 'grace-shujuku',
                     link: 'welcome/9',
                 },
                 {
@@ -147,7 +147,7 @@ export class MenuService {
         },
         {
             title: '关于我们',
-            icon: 'grace-guanyu1',
+            icon: 'grace-about',
             link: 'welcome/4343213',
         }
     ];

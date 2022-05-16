@@ -51,7 +51,7 @@ export class TimerPoolService implements OnDestroy {
      * @param interval 间隔 毫秒
      * @returns 任务对象
      */
-    public allocTimer(callback: TimerTaskEventHandler, _this: any, interval: number): TimerTask {
+    public allocTimer(callback: TimerTaskEventHandler, _this: Object, interval: number): TimerTask {
         const task = new FixedTimerTask(this, callback, _this, interval, this.ngZone);
         this._tasks.push(task);
         return task;

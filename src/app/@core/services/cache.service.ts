@@ -18,6 +18,7 @@ export interface CacheEKeyMaps {
     providedIn: 'root'
 })
 export class CacheService {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _caches: Map<string, any> = new Map();
     constructor(protected injector: Injector) {
     }

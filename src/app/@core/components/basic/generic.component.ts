@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { Location } from '@angular/common';
@@ -30,7 +31,7 @@ import { NotificationService } from "@core/services/notification.service";
     selector: 'ngx-generic-component',
     template: '<ng-container #view></ng-container>'
 })
-export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewInit {
+export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
     @ViewChild('view', { read: ViewContainerRef })
     public view?: ViewContainerRef;
 
@@ -111,9 +112,6 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         if (GenericComponent.prototype.ngOnDestroy != this.ngOnDestroy) {
             throw new Error(`不要试图在 ${this.selector} 中重写 ngOnDestroy 方法，请重写 onDestroy 方法以实现。`);
         }
-
-
-        this.subscribe(this.activatedRoute.paramMap, this.route_updateParam);
     }
 
 
@@ -127,12 +125,12 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * 更改检测树相关
      */
-    protected attachView(): void {
+    public attachView(): void {
         this.ifDisposeThrowException();
         this.changeDetector.reattach();
     }
 
-    protected detachView(): void {
+    public detachView(): void {
         this.ifDisposeThrowException();
         this.changeDetector.detach();
     }
@@ -230,7 +228,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param fn 
      * @returns 
      */
-    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: any): T {
+    protected runOut<T>(fn: (...args: any[]) => T, thisContext?: Object): T {
         this.ifDisposeThrowException();
         return this.zone.runOutsideAngular(thisContext ? fn.bind(thisContext) : fn);
     }
@@ -243,7 +241,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
      * @param applyArgs 
      * @returns T
      */
-    protected run<T>(fn: (...args: any[]) => T, applyThis?: any, applyArgs?: any[]): T {
+    protected run<T>(fn: (...args: any[]) => T, applyThis?: Object, applyArgs?: any[]): T {
         this.ifDisposeThrowException();
         return this.zone.run(fn, applyThis, applyArgs);
     }
@@ -467,7 +465,9 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         return this._isDispose;
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
 
+    }
 
     /**
      * 组件的初始化事件\

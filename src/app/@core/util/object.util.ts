@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /**
  * 
  * 
@@ -16,7 +18,7 @@ export class ObjectUtil {
      * @param object2 
      * @returns 
      */
-    public static equals<T>(object1: T, object2: T) {
+    public static equals<T>(object1: T, object2: T): boolean {
         const entrie1 = Object.entries(object1).toString();
         const entrie2 = Object.entries(object2).toString();
         return entrie1 === entrie2;
@@ -26,14 +28,14 @@ export class ObjectUtil {
      *  deep freeze object
      * @param target 
      */
-    public static freeze<T>(target: T) {
+    public static freeze<T>(target: T): void {
         if (typeof target === 'object') {
             if (target instanceof Array) {
                 for (let i = 0; i < target.length; i++) {
                     if (typeof target[i] === 'object') this.freeze(target[i]);
                 }
             } else {
-                var keys = Object.keys(target);
+                const keys = Object.keys(target);
                 for (let i = 0; i < keys.length; i++) {
                     const key = keys[i];
                     if (typeof target[key as keyof T] === 'object') this.freeze(target[key as keyof T]);
@@ -51,13 +53,14 @@ export class ObjectUtil {
      * @param object 
      * @param override Overwrite existing options 
      */
-    public static merge<T extends Object>(target: T, object: any, override?: boolean) {
+    public static merge<T extends Object>(target: T, object: any, override?: boolean): void {
         if (target == null || object == null) return;
         const deObject = this.clone(object);
         const keys = Object.keys(deObject);
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            if (!target.hasOwnProperty(key) || override) {
+            const hasBarProperty = Object.prototype.hasOwnProperty.call(target, key);
+            if (!hasBarProperty || override) {
                 target[key as keyof T] = deObject[key];
             }
         }
@@ -78,7 +81,7 @@ export class ObjectUtil {
         if (typeof target === 'boolean') return target;
         if (typeof target === 'function') return target.bind(thisContext);
         if (target === null) return null;
-        let result : Record<string,any>;
+        let result: Record<string, any>;
         if (target instanceof Array) {
             result = [];
             for (let i = 0; i < target.length; i++) {
@@ -92,7 +95,7 @@ export class ObjectUtil {
                 result[key] = this.clone(target[key as keyof T], result);
             }
         }
-        return  <T>result
+        return <T>result
     }
 
 
@@ -119,8 +122,8 @@ export class ObjectUtil {
         }
     }
 
- 
- 
+
+
 
 
 

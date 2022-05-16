@@ -2,15 +2,16 @@ import { Component, Injector, Input } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { ObjectUtil } from '@core/util/object.util';
 import { WidgetAddCommand } from '@hmi/editor/commands/widget.add.command';
-import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
+import { DisignerCanvasComponent } from '@hmi/editor/components/disigner-canvas/disigner.canvas.component';
 import { WidgetConfigure } from '@hmi/configuration/widget.configure';
 import { WidgetSchema } from '@hmi/configuration/widget.schema';
 
 import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { HmiMath } from '@hmi/utility/hmi.math';
-import { WidgetDefaultVlaues } from '@hmi/core/widget.meta.data';
-import { DataTransferService } from '@hmi/services/data.transfer.service';
+import { WidgetDefaultVlaues } from '@hmi/configuration/widget.meta.data';
+import { DataTransferService } from '@hmi/editor/services/data.transfer.service';
+import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class WidgetListComponent extends GenericComponent {
    */
   constructor(protected injector: Injector, public provider: WidgetSchemaService, private dataTransferService: DataTransferService, public editor: HmiEditorComponent) {
     super(injector);
-    
+
   }
 
   protected onInit(): void {
@@ -44,12 +45,14 @@ export class WidgetListComponent extends GenericComponent {
   public widget_dragstart(schema: WidgetSchema, event: DragEvent) {
     event.dataTransfer!.setDragImage(new Image(), 0, 0);
     // event.dataTransfer!.setData('json/widget', schema.type!);
+    this.dataTransferService.result = false;
     this.dataTransferService.setText('json/widget', schema.type!);
     // 设置所有widget不接受鼠标事件
     this.canvas.children.map(e => {
       const element = e.location.nativeElement as HTMLElement;
       element.style.pointerEvents = 'none';
     });
+    this.editor.execute(new SelectionFillCommand(this.editor, []));
   }
 
 
@@ -60,6 +63,10 @@ export class WidgetListComponent extends GenericComponent {
       const element = e.location.nativeElement as HTMLElement;
       element.style.pointerEvents = '';
     });
+    if (!this.dataTransferService.result) {
+      this.editor.history.undoAndRemoveLast(SelectionFillCommand);
+    }
+
   }
 
   private generateName(baseName: string): string {
@@ -97,7 +104,7 @@ export class WidgetListComponent extends GenericComponent {
         width: defaultValue.size.width,
         height: defaultValue.size.height
       },
-      events:  ObjectUtil.clone(defaultValue.events)!,
+      events: ObjectUtil.clone(defaultValue.events)!,
     };
     const compRef = this.canvas.parseComponent(configure);
     if (compRef) {

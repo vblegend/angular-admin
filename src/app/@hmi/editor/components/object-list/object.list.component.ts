@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+/* eslint-disable @angular-eslint/use-lifecycle-interface */
+import { ChangeDetectorRef, Component, ComponentRef, ElementRef, HostBinding, Injector, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { BasicCommand } from '@hmi/editor/commands/basic.command';
 import { SelectionFillCommand } from '@hmi/editor/commands/selection.fill.command';
 import { SelectionToggleCommand } from '@hmi/editor/commands/selection.toggle.command';
 import { BasicWidgetComponent } from '@hmi/components/basic-widget/basic.widget.component';
-import { DisignerCanvasComponent } from '@hmi/components/disigner-canvas/disigner.canvas.component';
+import { DisignerCanvasComponent } from '@hmi/editor/components/disigner-canvas/disigner.canvas.component';
 
 import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
@@ -21,6 +22,8 @@ import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 export class ObjectListComponent extends GenericComponent {
   @Input()
   public canvas!: DisignerCanvasComponent;
+
+  public searchText: string = '';
   /**
    *
    */
@@ -29,16 +32,16 @@ export class ObjectListComponent extends GenericComponent {
   }
 
 
-
-  public getItemStyle(widget: ComponentRef<BasicWidgetComponent>): Record<string, any> {
-    const isSelected = this.editor.selection.contains(widget);
-    return {
-      'background-color': isSelected ? '#007acc' : ''
-    };
+  public filterWidgets(searchText: string): ComponentRef<BasicWidgetComponent>[] {
+    if (searchText === '') return this.editor.canvas.children;
+    const regExp = new RegExp(searchText, 'i');
+    return this.editor.canvas.children.filter(e => {
+      return regExp.test(e.instance.configure.name);
+    });
   }
 
 
-  public widget_click(event: MouseEvent, widget: ComponentRef<BasicWidgetComponent>) {
+  public widget_click(event: MouseEvent, widget: ComponentRef<BasicWidgetComponent>):void {
     let command: BasicCommand | null = null;
     const selecteds: ComponentRef<BasicWidgetComponent>[] = [widget];
     // 分组过滤选中
@@ -50,7 +53,7 @@ export class ObjectListComponent extends GenericComponent {
     if (event.ctrlKey) {
       command = new SelectionToggleCommand(this.editor, selecteds);
     } else if (event.shiftKey) {
-
+      //
     } else {
       command = new SelectionFillCommand(this.editor, selecteds);
     }
@@ -58,13 +61,8 @@ export class ObjectListComponent extends GenericComponent {
     this.canvas.selectionArea.detectChanges();
   }
 
-
-  public getIcon(widget: ComponentRef<BasicWidgetComponent>): string {
-    const schema = this.provider.getType(widget.instance.configure.type);
-    if (schema) return schema.icon;
-    return 'grace-bushu';
+  public trackByName(index: number, value: ComponentRef<BasicWidgetComponent>): any {
+    return value.instance.configure.name;
   }
-
-
 
 }

@@ -2,9 +2,9 @@ import { Component, Injector, Input, ViewChild } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { WidgetSchemaService } from './services/widget.schema.service';
 import { ViewCanvasComponent } from './components/view-canvas/view.canvas.component';
-import { MetaDataService } from './services/meta.data.service';
+import { MetaDataService } from './editor/services/meta.data.service';
 import { GraphicConfigure } from './configuration/graphic.configure';
-import { CurrentVersion, DocumentMagicCode, HmiZoomMode } from './core/common';
+import { CurrentVersion, DocumentMagicCode, HmiZoomMode } from './editor/core/common';
 import { verifyDocument } from './configuration/global.default.configure';
 
 @Component({

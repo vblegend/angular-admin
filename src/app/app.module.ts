@@ -6,7 +6,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApplicationRef, APP_BOOTSTRAP_LISTENER, APP_INITIALIZER, ChangeDetectorRef, ComponentRef, NgModule, NgZone } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -26,10 +26,11 @@ import { NzIconService } from 'ng-zorro-antd/icon';
 import { SessionService } from '@core/services/session.service';
 import { CacheService } from '@core/services/cache.service';
 import { SchedulingTask, TaskMode } from './pages/tasks/task-model/tasks.model';
-import { areAllEquivalent } from '@angular/compiler/src/output/output_ast';
-import { ObjectUtil } from '@core/util/object.util';
 import { LocalCache } from '@core/cache/local.cache';
 import { HmiModule } from 'app/@hmi/hmi.module';
+import { NgxEchartsModule } from 'ngx-echarts';
+
+
 registerLocaleData(zh);
 
 
@@ -46,6 +47,9 @@ registerLocaleData(zh);
     HmiModule.forRoot(),
     BrowserAnimationsModule,
     HttpClientModule,
+    NgxEchartsModule.forRoot({
+      echarts: import('echarts')
+    }),
     // IconsProviderModule,
   ],
   providers: [
@@ -61,6 +65,7 @@ export class AppModule {
   constructor(private bootstrapService: BootstrapService,
     private netWorkService: NetWorkService,
     private sessionService: SessionService,
+    private http: HttpClient,
     private zone: NgZone,
     private appRef: ApplicationRef,
     private themeService: ThemeService,
@@ -80,7 +85,7 @@ export class AppModule {
     if (theme) {
       themeService.changeTheme(theme);
     } else {
-      themeService.changeTheme('default');
+      themeService.changeTheme('dark');
     }
     // loading 
     bootstrapService.loadingElement = document.getElementById('global-spinner');
@@ -93,6 +98,19 @@ export class AppModule {
     this.iconService.fetchFromIconfont({
       scriptUrl: 'assets/fonts/iconfont.js'
     });
+
+    this.http.get('http://localhost:8000/assets/images/texture.png1', { responseType: 'arraybuffer' })
+      .subscribe({
+        next: (e) => {
+          console.log(e);
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
+
+
+
   }
 
 
@@ -154,19 +172,19 @@ export class AppModule {
   private async init(): Promise<void> {
     this.netWorkService.url = 'ws://127.0.0.1:8000/ws/test';
     // try {
-      // const state = await this.netWorkService.connection();
-      // if (!state) throw Exception.build('app init', 'failed to connect to server!');
-      // console.time('websocket');
-      // const list: Promise<string>[] = [];
+    // const state = await this.netWorkService.connection();
+    // if (!state) throw Exception.build('app init', 'failed to connect to server!');
+    // console.time('websocket');
+    // const list: Promise<string>[] = [];
 
-      // for (let i = 0; i < 1000; i++) {
-      //   list.push(this.networkService.send<string, string>('dasds', `data-${Math.random() * 1000000}`, 10000));
-      //   // .then(result => {
-      //   //   console.log(`result：${result}`);
-      //   // });
-      // }
-      // await Promise.all(list);
-      // console.timeEnd('websocket');
+    // for (let i = 0; i < 1000; i++) {
+    //   list.push(this.networkService.send<string, string>('dasds', `data-${Math.random() * 1000000}`, 10000));
+    //   // .then(result => {
+    //   //   console.log(`result：${result}`);
+    //   // });
+    // }
+    // await Promise.all(list);
+    // console.timeEnd('websocket');
     // } catch (e) {
     // }
   }

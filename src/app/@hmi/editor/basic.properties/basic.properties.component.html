@@ -78,7 +78,7 @@
 
 
 <ng-template hmi-properties tableName="样式" groupName="通用样式">
-    <hmi-property-element key="Background" [multiple]="true" attributePath="style/background" header="背景颜色"
+    <hmi-property-element key="style.bkColor" [multiple]="true" attributePath="style/bkColor" header="背景颜色"
         tooltip="字体颜色值">
         <hmi-select-color-property nullValue="transparent">
         </hmi-select-color-property>
@@ -87,21 +87,75 @@
 
 
 <ng-template hmi-properties tableName="样式" groupName="通用样式">
-    <hmi-property-element key="Opacity" [multiple]="true" attributePath="style/opacity" header="透明度" tooltip="字体颜色值">
+    <hmi-property-element key="style.bkImage" [multiple]="true" attributePath="style/bkImage" header="背景图片"
+        tooltip="字体颜色值">
+        <hmi-image-select-property nullValue="">
+        </hmi-image-select-property>
+    </hmi-property-element>
+</ng-template>
+
+
+<ng-template hmi-properties tableName="样式" groupName="通用样式">
+    <hmi-property-element key="style.bkSize" [multiple]="true" attributePath="style/bkSize" header="背景缩放"
+        tooltip="背景图片的拉伸方式">
+        <hmi-select-string-property [options]="[{ label: '拉伸', value: 'stretch' },{ label: '平铺', value: 'tile' }]"
+            nullValue="stretch" diffValue="stretch">
+        </hmi-select-string-property>
+    </hmi-property-element>
+</ng-template>
+
+
+
+
+
+<ng-template hmi-properties tableName="样式" groupName="通用样式">
+    <hmi-property-element key="style.border" [multiple]="false" attributePath="style/border" header="背景边框" tooltip="">
+        <hmi-text-input-property nullValue="">
+        </hmi-text-input-property>
+    </hmi-property-element>
+</ng-template>
+
+
+<ng-template hmi-properties tableName="样式" groupName="通用样式">
+    <hmi-property-element key="style.radius" [multiple]="false" attributePath="style/radius" header="边框圆角" tooltip="">
+        <hmi-text-input-property nullValue="">
+        </hmi-text-input-property>
+    </hmi-property-element>
+</ng-template>
+
+<ng-template hmi-properties tableName="样式" groupName="通用样式">
+    <hmi-property-element key="style.opacity" [multiple]="true" attributePath="style/opacity" header="透明度"
+        tooltip="字体颜色值">
         <hmi-number-slider-property [max]="1" [min]="0" [step]="0.1" unit="单位" [nullValue]="1">
         </hmi-number-slider-property>
     </hmi-property-element>
 </ng-template>
 
-<ng-template hmi-properties tableName="样式" groupName="通用样式">
-    <hmi-property-element key="Color" [multiple]="true" attributePath="style/color" header="字体颜色" tooltip="字体颜色值">
+<ng-template hmi-properties tableName="样式" groupName="字体样式">
+    <hmi-property-element key="style.color" [multiple]="true" attributePath="style/color" header="字体颜色" tooltip="字体颜色值">
         <hmi-select-color-property>
         </hmi-select-color-property>
     </hmi-property-element>
 </ng-template>
 
 
+<ng-template hmi-properties tableName="样式" groupName="字体样式">
+    <hmi-property-element key="style.fontSize" [multiple]="true" attributePath="style/fontSize" header="字体大小"
+        tooltip="默认文本字体大小">
+        <hmi-number-input-property [max]="200" [min]="6" [precision]="0" [step]="1" unit="px" [nullValue]="14">
+        </hmi-number-input-property>
+    </hmi-property-element>
+</ng-template>
 
+
+
+<ng-template hmi-properties tableName="样式" groupName="字体样式">
+    <hmi-property-element key="style.fontBold" [multiple]="true" attributePath="style/fontBold" header="显示粗体"
+        tooltip="字体是否显示为粗体">
+        <hmi-switch-boolean-property checked="" unChecked="" [nullValue]="false" [diffValue]="true">
+        </hmi-switch-boolean-property>
+    </hmi-property-element>
+</ng-template>
 
 
 <ng-template hmi-properties tableName="事件">

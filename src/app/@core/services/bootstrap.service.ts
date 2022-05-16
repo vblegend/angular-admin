@@ -19,7 +19,7 @@ export class BootstrapService {
     }
 
 
-    public runAtBootstrap(delegate: Delegate, context: any) {
+    public runAtBootstrap(delegate: Delegate, context: Object): void {
         this._bootstrapInits.push({ delegate, context });
     }
 
@@ -40,6 +40,7 @@ export class BootstrapService {
         // console.warn('initialization Bootstrap');
         const promises: Promise<void>[] = [];
         for (const init of this._bootstrapInits) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const result = <any>init.delegate.apply(init.context);
             if (result instanceof Promise) {
                 promises.push(result);
@@ -55,7 +56,7 @@ export class BootstrapService {
      * @param bootstrapService 
      * @returns 
      */
-    public static BootstrapFactory(bootstrapService: BootstrapService) {
+    public static BootstrapFactory(bootstrapService: BootstrapService): Function {
         return bootstrapService.bootstrap.bind(bootstrapService);
     }
 
@@ -64,7 +65,7 @@ export class BootstrapService {
      * @param bootstrapService 
      * @returns 
      */
-    public static InitializerFactory(bootstrapService: BootstrapService) {
+    public static InitializerFactory(bootstrapService: BootstrapService): Function {
         return bootstrapService.initializer.bind(bootstrapService);
     }
 

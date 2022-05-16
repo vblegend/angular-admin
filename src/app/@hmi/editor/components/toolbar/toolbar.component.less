@@ -1,4 +1,4 @@
-@import "../../../../../styles/themes/mixin.less";
+@import "mixin.less";
 
 .themeMixin( {
     :host {
@@ -37,7 +37,7 @@
     }
   }
   .toolbar-retracted {
-    height: 4px !important;
+    height: 15px !important;
     box-shadow: none !important;
     background-color: transparent !important;
   }
@@ -54,7 +54,7 @@
     bottom: 0px;
     margin: auto;
     width: max-content;
-    height: 64px;
+    height: 85px;
     border-radius: 5px;
     // animation: height 2s;
     transition: height 0.1s ease-in-out;
@@ -67,7 +67,8 @@
       overflow: hidden;
 
       nz-space {
-        height: 64px;
+        height: 75px;
+        margin-top: 10px;
       }
 
       .hoverline {
@@ -79,14 +80,14 @@
         margin: auto;
         left: 0;
         right: 0;
-        top: 0px;
+        top: 10px;
         cursor: pointer;
       }
 
       .toolbar-button {
         width: 48px;
         height: 48px;
-        // line-height: 48px;
+        line-height: 48px;
         margin-top: 5px;
         // background-color: #ffffff;
         border-radius: 25px;

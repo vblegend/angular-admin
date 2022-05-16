@@ -1,8 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface AnyObject {
     [key: string]: AnyObject;
 }
-
+export interface StringNameValue {
+    name: string;
+    value: string;
+}
 
 export interface nzSelectItem {
     label: string;

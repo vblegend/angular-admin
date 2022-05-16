@@ -1,5 +1,5 @@
 import { AnyObject } from "@core/common/types";
-import { Rectangle } from "@hmi/core/common";
+import { Rectangle } from "@hmi/editor/core/common";
 
 
 /**
@@ -20,7 +20,17 @@ export interface WidgetStyles {
     /**
      * 组件背景色
      */
-    background?: string;
+    bkColor?: string;
+
+    /**
+     * 背景图片
+     */
+    bkImage?: string
+
+    /**
+     * 背景大小  仅支持 拉伸 和 平铺
+     */
+    bkSize?: 'stretch' | 'tile';
 
     /**
      * 前景颜色
@@ -40,7 +50,7 @@ export interface WidgetStyles {
     /**
      * 边框圆角
      */
-    radius?: number;
+    radius?: string;
 
     /**
      * 字体
@@ -53,6 +63,13 @@ export interface WidgetStyles {
     fontSize?: number;
 
     /**
+     * 是否为粗体
+     */
+    fontBold?: boolean;
+
+
+
+    /**
      * 文本对齐方式
      */
     textAlign?: string;
@@ -62,6 +79,9 @@ export interface WidgetStyles {
      * 对象的旋转方位
      */
     rotate?: number;
+
+
+
 
 }
 

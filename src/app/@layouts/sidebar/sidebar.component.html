@@ -15,7 +15,7 @@
           <i nz-icon [nzIconfont]="menu.icon" *ngIf="menu.icon"></i>
           <span>{{ menu.title }}</span>
         </span>
-        <ul>
+        <ul>  
           <ng-container
             *ngTemplateOutlet="menuTpl; context: { $implicit: { level: data.level+1,menus: menu.children}  }">
           </ng-container>

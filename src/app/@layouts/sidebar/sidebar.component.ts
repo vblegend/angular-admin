@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { GenericComponent } from '@core/components/basic/generic.component';
-import { RouteConfigure } from '@core/models/RouteConfigure';
+import { RouteConfigure } from '@core/models/route.configure';
 import { MenuService } from '@core/services/menu.service';
 
 @Component({

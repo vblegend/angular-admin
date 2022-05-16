@@ -10,8 +10,18 @@ import zh from '@angular/common/locales/zh';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 import 'zone.js';  // Included with Angular CLI.
+
+
+
 // import { ResourceLoader } from '@angular/compiler';
 // import { PrivateResourceLoader } from '@core/private/PrivateResourceLoader';
+// import * as Prism from 'prismjs';
+
+// if you are intending to use Prism functions manually, you will need to set:
+// Prism.manual = true;
+
+// Prism.highlightAll();
+
 
 if (environment.production) {
   enableProdMode();
@@ -26,3 +36,6 @@ document.oncontextmenu = (e: MouseEvent) => {
 registerLocaleData(zh);
 
 platformBrowserDynamic().bootstrapModule(AppModule, {}).catch(err => console.error(err));
+
+
+

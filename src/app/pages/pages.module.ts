@@ -30,7 +30,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HMI_COMPONENT_SCHEMA_DECLARES, HmiModule } from 'app/@hmi/hmi.module';
 import { WidgetSchemaService } from '@hmi/services/widget.schema.service';
 import { ExamplesComponent } from './examples/examples.component';
-import { EditorComponent } from './editor/editor.component';
+import { CodeingComponent } from './codeing/codeing.component';
+import { MonacoEditorModule } from '@psukow/ngx-monaco-editor';
 
 @NgModule({
   imports: [
@@ -57,12 +58,13 @@ import { EditorComponent } from './editor/editor.component';
     NzInputModule,
     NzDividerModule,
     DragDropModule,
+    MonacoEditorModule.forRoot()
   ],
   declarations: [
     PagesComponent,
     WelcomeComponent,
     ExamplesComponent,
-    EditorComponent
+    CodeingComponent
   ],
   // providers: [
   //   {

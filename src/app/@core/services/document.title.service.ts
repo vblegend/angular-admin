@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd, RouterState, RouterStateSnapshot, RouterEvent, ActivatedRouteSnapshot, NavigationCancel, NavigationStart } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { RouteTitle } from '../models/RouteTitle';
+import { RouteTitle } from '../models/route.title';
 import { Subscription } from 'rxjs';
 
 @Injectable({
@@ -54,6 +54,7 @@ export class DocumentTitleService {
      */
     public register(): void {
         if (this.subscription == null) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             this.subscription = this.router.events.subscribe(<any>this.router_event.bind(this));
         }
     }

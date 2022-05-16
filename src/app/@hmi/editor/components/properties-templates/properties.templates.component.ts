@@ -2,7 +2,7 @@ import { Component, Host, Injector, Input, QueryList, ViewChildren } from '@angu
 import { GenericComponent } from '@core/components/basic/generic.component';
 import { PropertieDefineTemplateDirective } from '@hmi/editor/directives/properties.template.directive';
 import { HmiEditorComponent } from '@hmi/editor/hmi.editor.component';
-import { WidgetPropertiesService } from '@hmi/services/widget.properties.service';
+import { WidgetPropertiesService } from '@hmi/editor/services/widget.properties.service';
 
 /***
  * 小部件属性模板列表\
