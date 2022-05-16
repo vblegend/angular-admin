@@ -1,4 +1,12 @@
 {
     "typescript.tsdk": "./node_modules/typescript/lib",
-    "tslint.enable": true
+    "tslint.enable": true,
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/.angular": true
+    },
+    "files.associations": {
+        "*.res": "json",
+        "*.uv": "json",
+    },
 }
