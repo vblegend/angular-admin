@@ -17,7 +17,7 @@ export default (cfg: Configuration, opts: CustomWebpackBrowserSchema, targetOpti
   console.warn(`\n${logo}\n`);
   const entry = cfg.entry! as Record<string, string>;
 
-  entry['editor.worker'] = 'monaco-editor/esm/vs/editor/editor.worker.js';
+  // entry['editor.worker'] = 'monaco-editor/esm/vs/editor/editor.worker.js';
 
   cfg.module?.rules?.push({
     test: /\.(jpe?g|png|svg|gif)/i,
