@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, ApplicationRef, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, DoCheck, ElementRef, EventEmitter, Injector, NgZone, OnChanges, OnDestroy, OnInit, SimpleChanges, Type, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, NavigationExtras, ParamMap, Params, Router } from "@angular/router";
 import { Location } from '@angular/common';
 import { Observable, Subject, Subscription } from "rxjs";
@@ -59,7 +59,7 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
     public readonly viewContainerRef: ViewContainerRef;
     protected readonly eventBusService: EventBusService;
     protected readonly notification: NotificationService;
-
+    protected readonly applicationRef: ApplicationRef;
 
     /**
      * 获取定时器池
@@ -103,6 +103,8 @@ export abstract class GenericComponent implements OnInit, OnDestroy, AfterViewIn
         this.eventBusService = injector.get(EventBusService);
         this.timerPool = injector.get(TimerPoolService);
         this.notification = injector.get(NotificationService);
+        this.applicationRef = injector.get(ApplicationRef);
+
         if (GenericComponent.prototype.ngOnInit != this.ngOnInit) {
             throw new Error(`不要试图在 ${this.selector} 中重写 ngOnInit 方法，请重写 onInit 方法以实现。`);
         }

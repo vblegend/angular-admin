@@ -65,4 +65,11 @@
   <span class="none-select">{{today | date:'yyyy-MM-dd HH:mm:ss'}}</span>
 
 
+  <ng-window *ngIf="showPortal" (afterClose)="portal_Closed()">
+    <h2>Hello world from amother window!!</h2>
+    <button (click)="this.showPortal = false">Close me!</button>
+  </ng-window>
+
+
+
 </div>

@@ -30,7 +30,7 @@ export class HeaderComponent extends GenericComponent {
     for (const key in this.themeService.themes) {
       this.themes.push({ key, value: this.themeService.themes[key] })
     }
-    const timer = this.createTimer(this.timerUpdate,1000);
+    const timer = this.createTimer(this.timerUpdate, 1000);
   }
 
   private timerUpdate(task: TimerTask): void {
@@ -64,8 +64,14 @@ export class HeaderComponent extends GenericComponent {
 
 
   public systemSetting(): void {
-
+    this.showPortal = !this.showPortal;
   }
 
+  public portal_Closed(): void {
+    if (this.showPortal) this.showPortal = false;
+  }
+
+
+  public showPortal: Boolean = false;
 
 }

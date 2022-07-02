@@ -55,6 +55,9 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpHandlerInterceptor, } from './interceptors/http.handler.interceptor';
 import { ProsmDirective } from './directives/prism.directive';
 import { IconFontService } from './services/iconfont.service';
+import { WindowComponent } from './components/basic/window.component';
+import { PortalModule } from '@angular/cdk/portal';
+
 
 const EXPORT_PIPES: Provider[] = [
   DefaultPipe,
@@ -73,6 +76,7 @@ const EXPORT_DIRECTIVES: Provider[] = [
  * EXPORT CONPONENTS
  */
 const EXPORT_COMPONENTS = [
+  WindowComponent,
   LoginPageComponent,
   NotFoundComponent,
   ThemeSettingComponent,
@@ -116,6 +120,7 @@ const PROVIDERS: Provider[] = [
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
+    PortalModule,
     NzIconModule,
     NzMenuModule,
     NzLayoutModule,
